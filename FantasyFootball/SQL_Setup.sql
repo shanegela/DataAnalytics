@@ -412,3 +412,36 @@ LEFT JOIN dbo.Player pl on pl.Name = fp.Name  and pl.TeamID = COALESCE(t.TeamID,
 */
 
 
+/* Set up game schedule
+
+/****** Script for SelectTopNRows command from SSMS  ******/
+/*
+Update dbo.game_sched_temp
+set team1_abbr = 'WAS'
+where team1_abbr = 'WSH'
+
+Update dbo.game_sched_temp
+set team1_abbr = 'JAC'
+where team1_abbr = 'JAX'
+
+Update dbo.game_sched_temp
+set team2_abbr = 'WAS'
+where team2_abbr = 'WSH'
+
+Update dbo.game_sched_temp
+set team2_abbr = 'JAC'
+where team2_abbr = 'JAX'
+*/
+INSERT INTO GameSchedule (GameWeekID, GameDate, TeamID1, TeamID2)
+SELECT gw.GameWeekID
+      ,CONVERT(date, day, 101) as GameDate
+      ,t1.TeamID as TeamID1
+      ,t2.TeamID as TeamID2
+  FROM [FantasyFootball].[dbo].[game_sched_temp] g
+  left join dbo.team t1 on t1.code = g.team1_abbr
+  left join dbo.team t2 on t2.code = g.team2_abbr
+  left join GameWeek gw on g.Week = gw.Description
+
+  -- team1 is away 
+  -- team2 is home team
+*/

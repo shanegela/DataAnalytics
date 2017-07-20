@@ -10,6 +10,18 @@ left join dbo.player p on r.playerid = p.playerid
 order by t.Name, p.Name, r.[Rank]
 */
 
+select gw.Description as Week,
+	gs.GameDate,
+	t1.Name as Team1,
+	t2.Name as Team2
+from gameschedule gs
+join gameweek gw on gs.gameweekid = gw.gameweekid
+left join team t1 on gs.TeamID1 = t1.TeamID
+left join team t2 on gs.TeamID2 = t2.TeamID
+where gw.Description = 'Week 1'
+order by gs.GameDate, t1.Name
+
+
 declare @rankDate date = '07/17/2017'
 
 SELECT 
