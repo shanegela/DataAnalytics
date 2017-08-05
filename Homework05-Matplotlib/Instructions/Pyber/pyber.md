@@ -314,6 +314,7 @@ plt.title('Pyber Ride Sharing Data (2016)')
 plt.xlabel('Total Number of Rides (Per City)')
 plt.ylabel('Average Fare ($)')
 plt.grid()
+plt.savefig('pyber_2016_bubble_chart.png')
 plt.show()
 ```
 
@@ -323,7 +324,7 @@ plt.show()
 
 
 ```python
-def pie_chart(pie_labels, pie_values, chart_title):
+def pie_chart(pie_labels, pie_values, chart_title, png_name):
     colors = ["gold", "lightskyblue", "lightcoral"]
     explode = (0,0,0.05)
 
@@ -332,6 +333,7 @@ def pie_chart(pie_labels, pie_values, chart_title):
     ax.set_title(chart_title)
     ax.pie(pie_values, explode=explode,labels=pie_labels, colors=colors, autopct="%1.1f%%", shadow=False, startangle=90)
     ax.axis("equal")
+    plt.savefig(png_name)
     plt.show()
 ```
 
@@ -387,7 +389,7 @@ fares_city_type.head()
 ```python
 pie_labels = fares_city_type["type"]
 pie_values = fares_city_type["pct"]
-pie_chart(pie_labels, pie_values,"% of Total Fares by City Type")
+pie_chart(pie_labels, pie_values,"% of Total Fares by City Type",'pyber_fares.png')
 ```
 
 
@@ -446,7 +448,7 @@ riders_city_type.head()
 ```python
 pie_labels = riders_city_type["type"]
 pie_values = riders_city_type["pct"]
-pie_chart(pie_labels, pie_values,"% of Total Rides by City Type")
+pie_chart(pie_labels, pie_values,"% of Total Rides by City Type",'pyber_rides.png')
 ```
 
 
@@ -505,7 +507,7 @@ dr_city_type.head()
 ```python
 pie_labels = dr_city_type["type"]
 pie_values = dr_city_type["pct"]
-pie_chart(pie_labels, pie_values,"% of Total Drivers by City Type")
+pie_chart(pie_labels, pie_values,"% of Total Drivers by City Type",'pyber_drivers.png')
 ```
 
 
