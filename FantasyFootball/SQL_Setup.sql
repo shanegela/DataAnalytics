@@ -86,6 +86,19 @@ LEFT JOIN dbo.Team t on fp.team = t.code
 LEFT JOIN dbo.TeamTranslations tt on fp.team = tt.Translation
 LEFT JOIN dbo.Position pn on pn.Name = fp.pos
 LEFT JOIN dbo.Position pc on pc.Code = fp.pos
+
+-- make rankings more simple
+
+UPDATE d
+SET [rank] = n.[rank]
+FROM  [FantasyFootball].[dbo].[FantasyPros] d
+LEFT JOIN (
+	select 
+	team, pos, name,
+	[rank] = ROW_NUMBER() OVER(PARTITION BY pos ORDER BY [rank] ASC)
+	FROM [FantasyFootball].[dbo].[FantasyPros]
+) n ON d.team = n.team and d.pos = n.pos and d.name = n.name
+
 */
 
 /* insert player rankings
