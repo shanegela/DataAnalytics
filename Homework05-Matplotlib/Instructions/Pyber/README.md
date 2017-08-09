@@ -197,6 +197,13 @@ ride_sum.head()
 
 
 
+### Data Cleanup
+The city_data.csv has a duplicate city, Port James.
+To clean the data, the city_data was grouped by city.  
+Other columsn were aggregated as follows: t
+* the driver_count is summed 
+* the type is the minimum value.
+
 
 ```python
 city_sum = city_df.groupby(["city"],as_index=False).agg({"driver_count":"sum","type":"min"})
@@ -378,7 +385,7 @@ plt.show()
 ```
 
 
-![png](output_10_0.png)
+![png](output_11_0.png)
 
 
 ### Observations:
@@ -457,7 +464,7 @@ pie_chart(pie_labels, pie_values,"% of Total Fares by City Type",'pyber_fares.pn
 ```
 
 
-![png](output_14_0.png)
+![png](output_15_0.png)
 
 
 
@@ -516,7 +523,7 @@ pie_chart(pie_labels, pie_values,"% of Total Rides by City Type",'pyber_rides.pn
 ```
 
 
-![png](output_16_0.png)
+![png](output_17_0.png)
 
 
 
@@ -575,5 +582,5 @@ pie_chart(pie_labels, pie_values,"% of Total Drivers by City Type",'pyber_driver
 ```
 
 
-![png](output_18_0.png)
+![png](output_19_0.png)
 
