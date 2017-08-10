@@ -6,6 +6,17 @@ from lxml import html
 import requests
 from bs4 import BeautifulSoup
 
+def getTeamCode(team):
+	x = team.strip().upper()
+	if x == "SD":
+		return "LAC"
+	elif x == "LA":
+		return "LAR"
+	elif x == "JAX":
+		return "JAC"
+	else:
+		return x
+
 players_list = []
 # the lower the rank the better
 url = 'http://www.nfl.com/stats/categorystats?archive=false&conference=null&statisticPositionCategory=QUARTERBACK&season=2016&seasonType=REG&experience=&tabSeq=1&qualified=true&Submit=Go'
@@ -24,10 +35,11 @@ for table in soup.find_all('table'):
 			if idx == 1:
 				name = player.text.strip()
 			if idx == 2:
-				team = player.text.strip()
-		#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
-		player_list =[team, pos, name, rank]
-		players_list.append(player_list)
+				team = getTeamCode(player.text)
+		if rank is not None:
+			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
+			player_list =[team, pos, name, rank]
+			players_list.append(player_list)
 
 url = 'http://www.nfl.com/stats/categorystats?archive=false&conference=null&statisticPositionCategory=RUNNING_BACK&season=2016&seasonType=REG&experience=&tabSeq=1&qualified=true&Submit=Go'
 page = requests.get(url)
@@ -45,10 +57,11 @@ for table in soup.find_all('table'):
 			if idx == 1:
 				name = player.text.strip()
 			if idx == 2:
-				team = player.text.strip()
-		#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
-		player_list =[team, pos, name, rank]
-		players_list.append(player_list)
+				team = getTeamCode(player.text)
+		if rank is not None:
+			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
+			player_list =[team, pos, name, rank]
+			players_list.append(player_list)
 
 
 url = 'http://www.nfl.com/stats/categorystats?archive=false&conference=null&statisticPositionCategory=WIDE_RECEIVER&season=2016&seasonType=REG&experience=&tabSeq=1&qualified=true&Submit=Go'
@@ -67,10 +80,11 @@ for table in soup.find_all('table'):
 			if idx == 1:
 				name = player.text.strip()
 			if idx == 2:
-				team = player.text.strip()
-		#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
-		player_list =[team, pos, name, rank]
-		players_list.append(player_list)
+				team = getTeamCode(player.text)
+		if rank is not None:
+			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
+			player_list =[team, pos, name, rank]
+			players_list.append(player_list)
 
 url = 'http://www.nfl.com/stats/categorystats?archive=false&conference=null&statisticPositionCategory=TIGHT_END&season=2016&seasonType=REG&experience=&tabSeq=1&qualified=true&Submit=Go'
 page = requests.get(url)
@@ -88,10 +102,11 @@ for table in soup.find_all('table'):
 			if idx == 1:
 				name = player.text.strip()
 			if idx == 2:
-				team = player.text.strip()
-		#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
-		player_list =[team, pos, name, rank]
-		players_list.append(player_list)
+				team = getTeamCode(player.text)
+		if rank is not None:
+			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
+			player_list =[team, pos, name, rank]
+			players_list.append(player_list)
 
 url = 'http://www.nfl.com/stats/categorystats?archive=false&conference=null&statisticPositionCategory=FIELD_GOAL_KICKER&season=2016&seasonType=REG&experience=&tabSeq=1&qualified=true&Submit=Go'
 page = requests.get(url)
@@ -109,18 +124,17 @@ for table in soup.find_all('table'):
 			if idx == 1:
 				name = player.text.strip()
 			if idx == 2:
-				team = player.text.strip()
-		#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
-		player_list =[team, pos, name, rank]
-		players_list.append(player_list)
-
-
+				team = getTeamCode(player.text)
+		if rank is not None:
+			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
+			player_list =[team, pos, name, rank]
+			players_list.append(player_list)
 
 root_path = os.getcwd()
-out_file = os.path.join(root_path, 'nfl.csv')
+out_file = os.path.join(root_path, 'NFL.csv')
 with open(out_file,"w", newline="") as fh:
 	csvwriter = csv.writer(fh,delimiter=",")
-	csvwriter.writerow(["team","position","name","rank"])
+	csvwriter.writerow(["Team","Position","Name","Rank"])
 	csvwriter.writerows(players_list)
 
 

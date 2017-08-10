@@ -3,9 +3,9 @@ SELECT  r.Team, p.name as Player, p.position, r.RB_Rank, CONVERT(INT,p.[rank]) a
 FROM 
 (	SELECT SUM(RB_Rank) as RB_Rank, Team
 	From (
-		(select RB_AwayRank as RB_Rank, AwayTeam as Team from RankSummary)
+		(select RB_AwayRank as RB_Rank, AwayTeam as Team from vRankSummary)
 		union all
-		(select RB_HomeRank as RB_Rank, HomeTeam as Team from RankSummary)
+		(select RB_HomeRank as RB_Rank, HomeTeam as Team from vRankSummary)
 	) t
 	group by Team
 ) r
@@ -18,9 +18,9 @@ SELECT  r.Team, p.name as Player, p.position, r.WR_Rank, CONVERT(INT,p.[rank]) a
 FROM 
 (	SELECT SUM(WR_Rank) as WR_Rank, Team
 	From (
-		(select WR_AwayRank as WR_Rank, AwayTeam as Team from RankSummary)
+		(select WR_AwayRank as WR_Rank, AwayTeam as Team from vRankSummary)
 		union all
-		(select WR_HomeRank as WR_Rank, HomeTeam as Team from RankSummary)
+		(select WR_HomeRank as WR_Rank, HomeTeam as Team from vRankSummary)
 	) t
 	group by Team
 ) r
@@ -33,9 +33,9 @@ SELECT  r.Team, p.name as Player, p.position, r.K_Rank, CONVERT(INT,p.[rank]) as
 FROM 
 (	SELECT SUM(K_Rank) as K_Rank, Team
 	From (
-		(select K_AwayRank as K_Rank, AwayTeam as Team from RankSummary)
+		(select K_AwayRank as K_Rank, AwayTeam as Team from vRankSummary)
 		union all
-		(select K_HomeRank as K_Rank, HomeTeam as Team from RankSummary)
+		(select K_HomeRank as K_Rank, HomeTeam as Team from vRankSummary)
 	) t
 	group by Team
 ) r
@@ -48,9 +48,9 @@ SELECT  r.Team, r.DEF_Rank
 FROM 
 (	SELECT SUM(DEF_Rank) as DEF_Rank, Team
 	From (
-		(select DEF_AwayRank as DEF_Rank, AwayTeam as Team from RankSummary)
+		(select DEF_AwayRank as DEF_Rank, AwayTeam as Team from vRankSummary)
 		union all
-		(select DEF_HomeRank as DEF_Rank, HomeTeam as Team from RankSummary)
+		(select DEF_HomeRank as DEF_Rank, HomeTeam as Team from vRankSummary)
 	) t
 	group by Team
 ) r
@@ -61,9 +61,9 @@ SELECT  r.Team, p.name as Player, p.position, r.OFF_Rank, CONVERT(INT,p.[rank]) 
 FROM 
 (	SELECT SUM(OFF_Rank) as OFF_Rank, Team
 	From (
-		(select OFF_AwayRank as OFF_Rank, AwayTeam as Team from RankSummary)
+		(select OFF_AwayRank as OFF_Rank, AwayTeam as Team from vRankSummary)
 		union all
-		(select OFF_HomeRank as OFF_Rank, HomeTeam as Team from RankSummary)
+		(select OFF_HomeRank as OFF_Rank, HomeTeam as Team from vRankSummary)
 	) t
 	group by Team
 ) r
@@ -76,9 +76,9 @@ SELECT  r.Team, p.name as Player, p.position, r.TE_Rank, CONVERT(INT,p.[rank]) a
 FROM 
 (	SELECT SUM(TE_Rank) as TE_Rank, Team
 	From (
-		(select TE_AwayRank as TE_Rank, AwayTeam as Team from RankSummary)
+		(select TE_AwayRank as TE_Rank, AwayTeam as Team from vRankSummary)
 		union all
-		(select TE_HomeRank as TE_Rank, HomeTeam as Team from RankSummary)
+		(select TE_HomeRank as TE_Rank, HomeTeam as Team from vRankSummary)
 	) t
 	group by Team
 ) r

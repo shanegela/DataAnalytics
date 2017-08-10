@@ -10,6 +10,14 @@ sched_url = root_url + "/nfl/schedule"
 sched_page = requests.get(sched_url)
 sched_soup = BeautifulSoup(sched_page.text, "lxml")
 
+
+def fixTeamCode(team):
+	if team == "JAX":
+		return "JAC"
+	if team == "WSH":
+		return "WAS"
+	return team
+
 game_list =[]
 weeks = sched_soup.find("div", {"class": "mobile-dropdown dropdown-type-week"}).find_all("option")
 for week in weeks:
@@ -40,16 +48,17 @@ for week in weeks:
 				team2 = teams[1].text
 			abbrs = row.find_all("abbr")
 			if (len(abbrs) > 0):
-				team1_abbr = abbrs[0].text
-				team2_abbr = abbrs[1].text
-			#print(f"week: {the_week} Day: {game_day} team1: {team1} ({team1_abbr}) team2: {team2} ({team2_abbr})")
-			game_list.append({"week": the_week, "day": game_date_str, "team1": team1, "team1_abbr": team1_abbr, "team2": team2, "team2_abbr": team2_abbr})	
+				team1_abbr = fixTeamCode(abbrs[0].text.strip())
+				team2_abbr = fixTeamCode(abbrs[1].text.strip())
+			if the_week.startswith("Week"):
+				#print(f"week: {the_week} Day: {game_day} team1: {team1} ({team1_abbr}) team2: {team2} ({team2_abbr})")
+				game_list.append({"GameWeek": the_week, "GameDate": game_date_str, "AwayTeam": team1_abbr, "HomeTeam": team2_abbr})	
 
 #print(game_list)
 root_path = os.getcwd()
-out_file = os.path.join(root_path, 'game_sched.csv')
+out_file = os.path.join(root_path, 'GameSchedule.csv')
 with open(out_file,"w", newline="") as fh:
-	fieldnames = ["week","day","team1","team1_abbr","team2","team2_abbr"]
+	fieldnames = ["GameWeek","GameDate","AwayTeam","HomeTeam"]
 	csvwriter = csv.DictWriter(fh, fieldnames=fieldnames)
 	csvwriter.writeheader()
 	for game in game_list:

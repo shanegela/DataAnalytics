@@ -6,6 +6,17 @@ from lxml import html
 import requests
 from bs4 import BeautifulSoup
 
+def getTeamCode(team):
+	x = team.strip().upper()
+	if x == "SD":
+		return "LAC"
+	elif x == "LA":
+		return "LAR"
+	elif x == "JAX":
+		return "JAC"
+	else:
+		return x
+
 players_list = []
 # the lower the rank the better
 url = 'http://www.footballdb.com/fantasy-football/index.html?pos=QB&yr=2016&wk=all&rules=1'
@@ -26,7 +37,7 @@ for table in soup.find_all('table'):
 				#print(f"name: {player_name.text}")
 				x = player_name.text.split(', ')
 				name= x[0]
-				team = x[1]
+				team = getTeamCode(x[1])
 		if name != None:
 			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
 			player_list =[team, pos, name, rank]
@@ -50,7 +61,7 @@ for table in soup.find_all('table'):
 				#print(f"name: {player_name.text}")
 				x = player_name.text.split(', ')
 				name= x[0]
-				team = x[1]
+				team = getTeamCode(x[1])
 		if name != None:
 			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
 			player_list =[team, pos, name, rank]
@@ -75,7 +86,7 @@ for table in soup.find_all('table'):
 				#print(f"name: {player_name.text}")
 				x = player_name.text.split(', ')
 				name= x[0]
-				team = x[1]
+				team = getTeamCode(x[1])
 		if name != None:
 			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
 			player_list =[team, pos, name, rank]
@@ -99,7 +110,7 @@ for table in soup.find_all('table'):
 				#print(f"name: {player_name.text}")
 				x = player_name.text.split(', ')
 				name= x[0]
-				team = x[1]
+				team = getTeamCode(x[1])
 		if name != None:
 			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
 			player_list =[team, pos, name, rank]
@@ -123,7 +134,7 @@ for table in soup.find_all('table'):
 				#print(f"name: {player_name.text}")
 				x = player_name.text.split(', ')
 				name= x[0]
-				team = x[1]
+				team = getTeamCode(x[1])
 		if name != None:
 			#print(f"team: {team} position: {pos} player name: {name} rank: {rank}")
 			player_list =[team, pos, name, rank]
@@ -131,10 +142,10 @@ for table in soup.find_all('table'):
 
 
 root_path = os.getcwd()
-out_file = os.path.join(root_path, 'footballdb.csv')
+out_file = os.path.join(root_path, 'FootballDB.csv')
 with open(out_file,"w", newline="") as fh:
 	csvwriter = csv.writer(fh,delimiter=",")
-	csvwriter.writerow(["team","position","name","rank"])
+	csvwriter.writerow(["Team","Position","Name","Rank"])
 	csvwriter.writerows(players_list)
 
 

@@ -2,14 +2,14 @@ DROP VIEW vPlayerAvgRank
 GO
 
 CREATE VIEW vPlayerAvgRank AS
-select team, position, name, avg(CONVERT(INT,[rank])) as [rank], COUNT([rank]) as counter
+select Team, Position, Name, avg(CONVERT(INT,[Rank])) as [Rank], COUNT([Rank]) as counter
 from  (
-	select team, position, name, [rank] from nfl
+	select Team, Position, Name, [Rank] from NFL
 	union all
-	select team, position, name, [rank]  from footballdb
+	select Team, Position, Name, [Rank] from FootballDB
 ) t
-group by team, position, name
-having COUNT([rank]) >= 2
+group by Team, Position, Name
+having COUNT([Rank]) >= 2
 --order by team, position, name
 
 Go
