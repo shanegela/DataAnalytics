@@ -1,4 +1,12 @@
 
+### Student: Angela Shane
+#### Homework 05: Pyber
+
+### Observations:
+1. The number of drivers and number of riders are directly proportional.
+2. Rural areas have a larger variance in average fare.
+3. Urban areas have a larger variance in total number of rides.
+
 
 ```python
 import pandas as pd
@@ -385,13 +393,8 @@ plt.show()
 ```
 
 
-![png](output_11_0.png)
+![png](output_13_0.png)
 
-
-### Observations:
-1. The number of drivers and number of riders are directly proportional.
-2. Rural areas have a larger variance in average fare.
-3. Urban areas have a larger variance in total number of rides.
 
 
 ```python
@@ -464,7 +467,7 @@ pie_chart(pie_labels, pie_values,"% of Total Fares by City Type",'pyber_fares.pn
 ```
 
 
-![png](output_15_0.png)
+![png](output_16_0.png)
 
 
 
@@ -523,7 +526,7 @@ pie_chart(pie_labels, pie_values,"% of Total Rides by City Type",'pyber_rides.pn
 ```
 
 
-![png](output_17_0.png)
+![png](output_18_0.png)
 
 
 
@@ -582,5 +585,5 @@ pie_chart(pie_labels, pie_values,"% of Total Drivers by City Type",'pyber_driver
 ```
 
 
-![png](output_19_0.png)
+![png](output_20_0.png)
 
