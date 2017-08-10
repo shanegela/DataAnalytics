@@ -36,3 +36,9 @@ select f.Team, f.Position, f.Name, f.Rank, t.Name
 from NFL f
 left join Team t on f.Team = t.Code
 where t.Code is null
+
+-- Bye Week
+select b.Team, b.ByeWeek, t.Name
+from ByeWeek b
+left join Team t on b.Team = t.Code
+--where t.Code is null
