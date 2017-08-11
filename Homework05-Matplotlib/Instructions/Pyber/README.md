@@ -12,6 +12,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 ```
 
 
@@ -376,18 +377,17 @@ rural_series = plot_series(rural_df,'gold')
 
 
 ```python
-plt.legend((urban_series, suburban_series, rural_series),
-           series,
-           title = 'City Types',
-           scatterpoints=1,
-           labelspacing=2,
-           loc=1,
-           ncol=1,
-           fontsize=8)
+legend = plt.legend((urban_series, suburban_series, rural_series),
+            series, fontsize="small", mode="Expanded", labelspacing=0.5,
+            numpoints=1, scatterpoints=1, loc="best", title="City Types")
+legend.legendHandles[0]._sizes = [90]
+legend.legendHandles[1]._sizes = [90]
+legend.legendHandles[2]._sizes = [90]
+
 plt.title('Pyber Ride Sharing Data (2016)')
 plt.xlabel('Total Number of Rides (Per City)')
 plt.ylabel('Average Fare ($)')
-plt.grid()
+sns.set()
 plt.savefig('pyber_2016_bubble_chart.png')
 plt.show()
 ```
