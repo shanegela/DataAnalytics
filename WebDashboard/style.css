@@ -1,0 +1,46 @@
+body {
+	background: #eee;
+	color: #282828;
+}
+
+.navbar {
+	margin-bottom: 20px;
+	background: white;
+	padding: 0rem 1rem;
+}
+
+.navbar-light .navbar-brand {
+	background: teal;
+	padding: .25rem .25rem;
+	color: white;
+}
+
+div.dropdown-menu {
+	border-radius: 0px;
+}
+.navbar-light .navbar-nav .nav-link, a.dropdown-item {
+	color: teal;
+}
+
+
+.navbar-light .navbar-toggler {
+	padding: .2rem .7rem;
+}
+
+.navbar-light .navbar-toggler:focus {
+	outline: none;
+}
+
+.navbar-toggler-right{
+	position:absolute;
+	right: 1rem;
+	top: 0rem;
+}
+
+.thumbnail-row {
+	margin-bottom: 1rem;
+}
+
+.card-header > h3 {
+	color: teal;
+}
