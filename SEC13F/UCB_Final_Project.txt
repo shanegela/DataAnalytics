@@ -1,4 +1,8 @@
 ﻿Final Project:
+
+Sector Lookup
+https://www.barchart.com/stocks/sectors/rankings?symbol=AAPL
+
 https://whalewisdom.com/filer/berkshire-hathaway-inc#/tabholdings_tab_link
 Berkshire Hathaway, run by legendary billionaire investor Warren Buffett, is a holding company engaged in a number of diverse business activities. Buffett is regarded as the ultimate value investor following the Benjamin Graham approach to finding value. Berkshire's 13F holdings are often held for years and even decades at a time. With low turnover and high conviction top holdings, Berkshire's portfolio is a popular investment model for backtesting and copying. Berkshire Hathaway has met the qualifications for inclusion in our WhaleScore system. Whalewisdom has at least 148 13F filings, 23 13D filings, 104 13G filings, and 18 Form 4 filings Their last reported 13F filing for Q2 2017 included $162,143,689,000 in managed 13F securities and a top 10 holdings concentration of 79.48%. Berkshire Hathaway's largest holding is Kraft Heinz Co. The with shares held of 325,634,818.
 
@@ -30,8 +34,8 @@ Peter's daughter Shana Madoff, as the firm's rules and compliance officer and at
 Peter has since been sentenced to 10 years in prison[9] and Mark committed suicide by hanging exactly two years after his father's arrest.[10][11][12] 
 Andrew died of lymphoma on September 3, 2014.[13]
 
-1. scrape web
-2. save data to csv
+1. DONE: scrape web - xml files only from 06/30/2013
+2. DONE: save data to csv
 3. clean data in python
 4. save to sqlite3 database
 5. create api (flask)
