@@ -1,0 +1,40 @@
+﻿Final Project:
+https://whalewisdom.com/filer/berkshire-hathaway-inc#/tabholdings_tab_link
+Berkshire Hathaway, run by legendary billionaire investor Warren Buffett, is a holding company engaged in a number of diverse business activities. Buffett is regarded as the ultimate value investor following the Benjamin Graham approach to finding value. Berkshire's 13F holdings are often held for years and even decades at a time. With low turnover and high conviction top holdings, Berkshire's portfolio is a popular investment model for backtesting and copying. Berkshire Hathaway has met the qualifications for inclusion in our WhaleScore system. Whalewisdom has at least 148 13F filings, 23 13D filings, 104 13G filings, and 18 Form 4 filings Their last reported 13F filing for Q2 2017 included $162,143,689,000 in managed 13F securities and a top 10 holdings concentration of 79.48%. Berkshire Hathaway's largest holding is Kraft Heinz Co. The with shares held of 325,634,818.
+
+SEC filings for Berkshire Hathaway
+https://www.sec.gov/edgar/searchedgar/accessing-edgar-data.htm
+Trends over time of allocation holdings
+
+https://www.sec.gov/fast-answers/answers-form13fhtm.html
+
+The SEC Form 13F is a filing with the Securities and Exchange Commission (SEC) also known as the Information Required of Institutional Investment Managers Form. 
+It is a quarterly filing required of institutional investment managers with over $100 million in qualifying assets. 
+Companies required to file SEC Form 13F may include insurance companies, banks, pension funds, investment advisers and broker-dealers.
+
+SEC Form 13F, which must be filed within 45 days of the end of each quarter, 
+contains information about the investment manager and potentially a list of their recent investment holdings. 
+The form was made famous by investment con artist Bernie Madoff. 
+It provides investors with an inside look at the holdings of Wall Street's largest investment managers.
+
+Bernard Lawrence "Bernie" Madoff (/ˈmeɪdɒf/;[1] born April 29, 1938) is an American fraudster and a former stockbroker, investment advisor, and financier. 
+He is the former non-executive chairman of the NASDAQ stock market,[2] and the admitted operator of a Ponzi scheme that is considered the largest financial 
+fraud in U.S. history.[3] Prosecutors estimated the size of the fraud to be $64.8 billion, based on the amounts in the accounts of 
+Madoff's 4,800 clients as of November 30, 2008.[4]
+
+Madoff founded the Wall Street firm Bernard L. Madoff Investment Securities LLC in 1960, and was its 
+chairman until his arrest on December 11, 2008.[5][6] The firm was one of the top market maker businesses on 
+Wall Street,[7] which bypassed "specialist" firms by directly executing orders over the counter from retail 
+brokers.[8] At the firm, he employed his brother Peter as senior managing director and chief compliance officer, 
+Peter's daughter Shana Madoff, as the firm's rules and compliance officer and attorney, and his sons Andrew and Mark. 
+Peter has since been sentenced to 10 years in prison[9] and Mark committed suicide by hanging exactly two years after his father's arrest.[10][11][12] 
+Andrew died of lymphoma on September 3, 2014.[13]
+
+1. scrape web
+2. save data to csv
+3. clean data in python
+4. save to sqlite3 database
+5. create api (flask)
+6. web dashboard to query api and show as charts
+
+
