@@ -49,8 +49,12 @@ div.dropdown-menu {
 	float: left;
 	width: 150px;
 	height: 150px;
-	padding: 5px;
-	margin: 15px;
+	margin: 0px 15px 15px 15px;
 	border: solid 1px lightgrey;
 	border-radius: .25rem;
+}
+
+.card-section {
+	display: inline-block;
+	margin-bottom: 2rem;
 }
