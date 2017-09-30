@@ -11,7 +11,7 @@ body {
 
 .navbar-light .navbar-brand {
 	background: teal;
-	padding: .25rem .25rem;
+	padding: .30rem .25rem;
 	color: white;
 }
 
@@ -43,4 +43,14 @@ div.dropdown-menu {
 
 .card-header > h3 {
 	color: teal;
+}
+
+.summary-img {
+	float: left;
+	width: 150px;
+	height: 150px;
+	padding: 5px;
+	margin: 15px;
+	border: solid 1px lightgrey;
+	border-radius: .25rem;
 }
