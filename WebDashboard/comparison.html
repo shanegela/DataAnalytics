@@ -46,118 +46,20 @@
 
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-8">
+				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<h3>Summary: Yelp Rating vs. X</h3>
+							<h3>Comparison: Yelp Rating vs. X</h3>
 						</div>
 						<div class="card-body">
-							<div class="card-section">
-									<h3 class="card-title">Yelp Rating Distribution</h3>
-									<img class="summary-img" src="images/distribution.png" alt="Yelp Rating Distribution" data-toggle="modal" data-target="#imgModal">
-		
-									<div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title" id="imgModalLabel">Yelp Rating Distribution</h5>
-													<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div class="modal-body">
-													<img style="width:100%" src="images/distribution.png" alt="Yelp Rating Distribution">
-												</div>
-											</div>
-										</div>
-									</div>
-		
-									<p class="card-text">This plot shows the Yelp rating distribution.  We analyzed 300 restuarants where a majority or restaurants had over 3.0 Yelp rating.  This was a surprise because we though we would see lower yelp ratings for closed busineses.
-									</p>
+							<div>
+								<p>Click on any plot to get an in-depth analysis.</p>
 							</div>
-							<div class="card-section">
-								<h3 class="card-title">Yelp Rating vs. Vader Compound Score</h3>
-								<img class="summary-img" src="images/compound.png" alt="Yelp Rating vs. Vader Compound Score" data-toggle="modal" data-target="#imgModal">
-	
-								<div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="imgModalLabel">Yelp Rating vs. Vader Compound Score</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												<img style="width:100%" src="images/compound.png" alt="Yelp Rating vs. Vader Compound Score">
-											</div>
-										</div>
-									</div>
-								</div>
-	
-								<p class="card-text">This plot shows the Yelp rating and Vader Compound Score.  There is no correlation.
-								</p>
-							</div>
-							<div class="card-section">
-								<h3 class="card-title">Yelp Rating vs. Vader Positive Score</h3>
-								<img class="summary-img" src="images/positive.png" alt="Yelp Rating vs. Vader Positive Score" data-toggle="modal" data-target="#imgModal">
-	
-								<div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="imgModalLabel">Yelp Rating vs. Vader Positive Score</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												<img style="width:100%" src="images/positive.png" alt="Yelp Rating vs. Vader Positive Score">
-											</div>
-										</div>
-									</div>
-								</div>
-	
-								<p class="card-text">This plot shows the Yelp rating and Vader Positive Score.  There is no correlation.
-								</p>
-							</div>
-							<div class="card-section">
-								<h3 class="card-title">Yelp Rating vs. Vader Negative Score</h3>
-								<img class="summary-img" src="images/negative.png" alt="Yelp Rating vs. Vader Negative Score" data-toggle="modal" data-target="#imgModal">
-
-								<div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h5 class="modal-title" id="imgModalLabel">Yelp Rating vs. Vader Negative Score</h5>
-												<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-													<span aria-hidden="true">&times;</span>
-												</button>
-											</div>
-											<div class="modal-body">
-												<img style="width:100%" src="images/negative.png" alt="Yelp Rating vs. Vader Negative Score">
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<p class="card-text">This plot shows the Yelp rating and Vader Negative Score.  There is no correlation.
-								</p>
-							</div>
-						</div>							
-					</div>
-				</div>
-				<div class="col-sm-4">
-					<div class="card">
-						<div class="card-header">
-							<h3>Visualizations</h3>
-						</div>
-						<div class="card-body">
-							<div class="row thumbnail-row">
+							<div class="row comparison-row">
 								<div class="col-sm-6">
 									<div class="card">
 										<a href="distribution.html">
-											<img class="card-img" src="images/distribution.png" alt="Yelp Rating Distribution"
+											<img class="card-img comparison-img" src="images/distribution.png" alt="Yelp Rating Distribution"
 												data-toggle="tooltip" data-placement="top" title="Yelp Rating Distribution">
 										</a>
 									</div>
@@ -165,17 +67,17 @@
 								<div class="col-sm-6">
 									<div class="card">
 										<a href="compound.html">
-											<img class="card-img" src="images/compound.png" alt="Yelp Rating vs. Vader Compound Score"
+											<img class="card-img comparison-img" src="images/compound.png" alt="Yelp Rating vs. Vader Compound Score"
 												data-toggle="tooltip" data-placement="top" title="Vader Compound Score">
 										</a>
 									</div>
 								</div>
 							</div>
-							<div class="row thumbnail-row">
+							<div class="row comparison-row">
 								<div class="col-sm-6">
 									<div class="card">
 										<a href="negative.html">
-											<img class="card-img" src="images/negative.png" alt="Yelp Rating vs. Vader Negative Score"
+											<img class="card-img comparison-img" src="images/negative.png" alt="Yelp Rating vs. Vader Negative Score"
 												data-toggle="tooltip" data-placement="top" title="Vader Negative Score">
 										</a>
 									</div>
@@ -183,7 +85,7 @@
 								<div class="col-sm-6">
 									<div class="card">
 										<a href="positive.html">
-											<img class="card-img" src="images/positive.png" alt="Yelp Rating vs.Vader Positive Score"
+											<img class="card-img comparison-img" src="images/positive.png" alt="Yelp Rating vs.Vader Positive Score"
 												data-toggle="tooltip" data-placement="top" title="Vader Positive Score">
 										</a>
 									</div>

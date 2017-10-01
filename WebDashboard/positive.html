@@ -46,82 +46,20 @@
 
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-sm-8">
+				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<h3>Summary: Yelp Rating vs. X</h3>
+							<h3>Yelp Rating vs. Vader Positive Score</h3>
 						</div>
 						<div class="card-body">
-							<h3 class="card-title">Yelp Rating vs. Vader Positive Score</h3>
-							<img class="summary-img" src="images/positive.png" alt="Yelp Rating vs. Vader Positive Score" data-toggle="modal" data-target="#imgModal">
-
-							<div class="modal fade" id="imgModal" tabindex="-1" aria-labelledby="imgModalLabel" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header">
-											<h5 class="modal-title" id="imgModalLabel">Yelp Rating vs. Vader Positive Score</h5>
-											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-										<div class="modal-body">
-											<img style="width:100%" src="images/positive.png" alt="Yelp Rating vs. Vader Positive Score">
-										</div>
-									</div>
-								</div>
-							</div>
-
-							<p class="card-text">This plot shows the Yelp rating and Vader Positive Score.  There is no correlation.
+							<img class="img-fluid" src="images/positive.png" alt="Yelp Rating vs. Vader Positive Score" data-toggle="modal" data-target="#imgModal">
+							<br><br>
+							<p class="card-text text-left">
+								This plot shows the Yelp rating and Vader positive score.  The Vader positive score ranges from 0 to 1.  A majority of the scores between .1 and .25, which is low.  This fell in line with our expectations.
 							</p>
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-4">
-					<div class="card">
-						<div class="card-header">
-							<h3>Visualizations</h3>
-						</div>
-						<div class="card-body">
-							<div class="row thumbnail-row">
-								<div class="col-sm-6">
-									<div class="card">
-										<a href="distribution.html">
-											<img class="card-img" src="images/distribution.png" alt="Yelp Rating Distribution"
-												data-toggle="tooltip" data-placement="top" title="Yelp Rating Distribution">
-										</a>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="card">
-										<a href="compound.html">
-											<img class="card-img" src="images/compound.png" alt="Yelp Rating vs. Vader Compound Score"
-												data-toggle="tooltip" data-placement="top" title="Vader Compound Score">
-										</a>
-									</div>
-								</div>
-							</div>
-							<div class="row thumbnail-row">
-								<div class="col-sm-6">
-									<div class="card">
-										<a href="negative.html">
-											<img class="card-img" src="images/negative.png" alt="Yelp Rating vs. Vader Negative Score"
-												data-toggle="tooltip" data-placement="top" title="Vader Negative Score">
-										</a>
-									</div>
-								</div>
-								<div class="col-sm-6">
-									<div class="card">
-										<a href="positive.html">
-											<img class="card-img" src="images/positive.png" alt="Yelp Rating vs.Vader Positive Score"
-												data-toggle="tooltip" data-placement="top" title="Vader Positive Score">
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

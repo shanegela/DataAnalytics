@@ -1,4 +1,10 @@
+html,body {
+	height:100%;
+}
+
 body {
+	padding:0;
+	margin:0;
 	background: #eee;
 	color: #282828;
 }
@@ -37,14 +43,6 @@ div.dropdown-menu {
 	top: 0rem;
 }
 
-.thumbnail-row {
-	margin-bottom: 1rem;
-}
-
-.card-header > h3 {
-	color: teal;
-}
-
 .summary-img {
 	float: left;
 	width: 150px;
@@ -54,7 +52,66 @@ div.dropdown-menu {
 	border-radius: .25rem;
 }
 
+
+.card {
+	margin: 5px;
+	border: none;
+}
+
+.card-header > h3 {
+	color: teal;
+}
+
+
+
 .card-section {
 	display: inline-block;
 	margin-bottom: 2rem;
+}
+
+.img-fluid {
+	margin: 0 auto; 
+	display: block;
+}
+
+.img-thumbnail {
+	max-width: 100px;
+}
+
+.data-table {
+	overflow-x: auto;
+	overflow-y: auto;
+	max-height: 550px;
+	background: white;
+}
+
+@media screen and (max-width: 768px) {
+	.data-table {
+		overflow-x: auto;
+		overflow-y: auto;
+		max-height: 800px;
+		background: white;
+	}
+}
+
+@media screen and (max-width: 320px) {
+	.data-table {
+		overflow-x: auto;
+		overflow-y: auto;
+		max-height: 400px;
+		background: white;
+	}
+}
+
+.table thead th {
+	vertical-align: top;
+}
+
+.comparison-row {
+	margin-bottom: 1rem;
+}
+
+.comparison-img {
+	max-height: 300px;
+	max-width: 300px;
 }
