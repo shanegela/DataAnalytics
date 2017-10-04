@@ -1,7 +1,7 @@
 
 # Angela Shane
 
-## SQL Homework 1
+## Pagila Anaysis
 
 ### Database Setup
 The following queries run against the [Pagila database](https://www.postgresql.org/ftp/projects/pgFoundry/dbsamples/pagila/pagila/).  Run the following steps to setup the database
