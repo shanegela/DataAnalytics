@@ -1,4 +1,4 @@
-## Option 4: PyParagraph
+# Paragraph Analysis: PyParagraph Challenge
 
 In this challenge, you get to play the role of chief linguist at a local learning academy. As chief linguist, you are responsible for assessing the complexity of various passages of writing, ranging from the sophomoric Twilight novel to the nauseatingly high-minded research article. Having read so many passages, you've since come up with a fairly simple set of metrics for assessing complexity.
 
