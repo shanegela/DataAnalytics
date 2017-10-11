@@ -75,6 +75,7 @@ Some CUSIP have missing Industry Sector or Industry Group because they are no lo
 
 This notebook identifies CUSIP with missing industry sector and/or industry group.  A manual intervention is done to lookup the missing information.  The research information is then put into a dictionary which is then used to update the indsectorindgroup table in the SQLite database.
 
+### Step 7: Analyze data in Python
 
-
+Jupyter Notebook [SEC13F_STEP7_AnalyzeData](http://localhost:8888/notebooks/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb)
 
