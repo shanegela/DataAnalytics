@@ -5,12 +5,16 @@
 
 ### Data Engineering
 
+[data_engineering.ipynb](https://github.com/shanegela/DataAnalytics/blob/gh-pages/HawaiiSurfAnalysis/data_engineering.ipynb)
+
 * Uses Pandas to read in the measurement and station CSV files as DataFrames.
 * Inspects the data for NaNs and missing values and replaces them with 0 values.
 * Saves the cleaned CSV files with the prefix clean_.
 
 
 ### Database Engineering
+
+[databae_engineering.ipynb](https://github.com/shanegela/DataAnalytics/blob/gh-pages/HawaiiSurfAnalysis/database_engineering.ipynb)
 
 * Uses Pandas to read the cleaned measurements and stations CSV data.
 * Uses the SQLAlchemy engine and connection string to create a database called hawaii.sqlite.
@@ -20,6 +24,7 @@
 
 ### Climate Analysis
 
+[climate_analysis.ipynb](https://github.com/shanegela/DataAnalytics/blob/gh-pages/HawaiiSurfAnalysis/climate_analysis.ipynb)
 
 ```python
 import datetime as dt
