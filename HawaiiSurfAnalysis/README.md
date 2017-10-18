@@ -172,6 +172,7 @@ df.head()
 
 ```python
 prcp = df[(df.date >= '2011-02-01') & (df.date <= '2012-01-31')].groupby(['date']).sum()
+prcp.drop('tobs',inplace=True, axis=1)
 prcp.sort_index()
 prcp.head()
 ```
@@ -185,11 +186,9 @@ prcp.head()
     <tr style="text-align: right;">
       <th></th>
       <th>prcp</th>
-      <th>tobs</th>
     </tr>
     <tr>
       <th>date</th>
-      <th></th>
       <th></th>
     </tr>
   </thead>
@@ -197,27 +196,22 @@ prcp.head()
     <tr>
       <th>2011-02-01</th>
       <td>0.25</td>
-      <td>599</td>
     </tr>
     <tr>
       <th>2011-02-02</th>
       <td>0.01</td>
-      <td>612</td>
     </tr>
     <tr>
       <th>2011-02-03</th>
       <td>0.00</td>
-      <td>610</td>
     </tr>
     <tr>
       <th>2011-02-04</th>
       <td>0.02</td>
-      <td>576</td>
     </tr>
     <tr>
       <th>2011-02-05</th>
       <td>0.00</td>
-      <td>399</td>
     </tr>
   </tbody>
 </table>
@@ -233,7 +227,7 @@ x_lbls = [value for idx, value in enumerate(prcp.index) if idx % 28 == 0]
 
 
 ```python
-plt.bar(x_axis,prcp.prcp)
+prcp.plot.bar()
 tick_locations = [value + 0.1 for idx, value in enumerate(x_axis) if idx % 28 == 0]
 plt.xticks(tick_locations, x_lbls, rotation=45)
 plt.title("Precipitation From " + prcp.index[0] + " To " + prcp.index[-1])
