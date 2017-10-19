@@ -88,3 +88,9 @@ This python script uses Flask to create an API to retrieve data from SEC13F.
 ### Step 9: Web Dashboard
 
 [index.html](http://localhost:8888/notebooks/SEC13F/index.html) and [index.js](http://localhost:8888/notebooks/SEC13F/index.js) uses bootstrap, D3, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathway according to the SEC13F form filed.
+
+**Issue**
+Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
+
+**Solution**
+Enabled CORS through Chrome extension: Allow-Control-Allow-Origin
