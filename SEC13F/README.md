@@ -79,3 +79,12 @@ This notebook identifies CUSIP with missing industry sector and/or industry grou
 
 Jupyter Notebook [SEC13F_STEP7_AnalyzeData](http://localhost:8888/notebooks/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb)
 
+### Step 8: Create API 
+
+This python script uses Flask to create an API to retrieve data from SEC13F.
+
+[SEC13F_STEP8_API](http://localhost:8888/notebooks/SEC13F/SEC13F_STEP8_API.py)
+
+### Step 9: Web Dashboard
+
+[index.html](http://localhost:8888/notebooks/SEC13F/index.html) and [index.js](http://localhost:8888/notebooks/SEC13F/index.js) uses bootstrap, D3, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathway according to the SEC13F form filed.
