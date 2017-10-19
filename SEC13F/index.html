@@ -11,7 +11,11 @@
 	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<!-- load D3 -->
+	<script src="https://d3plus.org/js/d3.js"></script>
+	<!-- load D3plus after D3js -->
+	<script src="https://d3plus.org/js/d3plus.js"></script>
+	<!-- load DataTables -->
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 	
 </head>
@@ -22,12 +26,16 @@
 			<div class="form-group row">
 				<label for="date1" class="col-sm-2 col-form-label">Select date:</label>
 				<div class="col-sm-10">
-						<select class="form-control" id="date1" onchange="populateTable(this)">
+						<select class="form-control" id="date1" onchange="selectFileDateHandler(this)">
 						</select>
 				</div>
 			</div>
 		</form>
 		<div class="row">
+			<div class="col-md-12" id="chart-mval" style="height:350px;">
+			</div>
+		</div>
+		<div class="row" style="margin-top: 40px; padding-top: 40px; border-top: solid 1px grey;">
 			<div class="col-md-12">
 				<table id="data_table" class="display">
 				</table>
