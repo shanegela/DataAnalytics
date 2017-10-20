@@ -5,16 +5,12 @@
 
 ### Data Engineering
 
-[data_engineering.ipynb](https://github.com/shanegela/DataAnalytics/blob/gh-pages/HawaiiSurfAnalysis/data_engineering.ipynb)
-
 * Uses Pandas to read in the measurement and station CSV files as DataFrames.
 * Inspects the data for NaNs and missing values and replaces them with 0 values.
 * Saves the cleaned CSV files with the prefix clean_.
 
 
 ### Database Engineering
-
-[databae_engineering.ipynb](https://github.com/shanegela/DataAnalytics/blob/gh-pages/HawaiiSurfAnalysis/database_engineering.ipynb)
 
 * Uses Pandas to read the cleaned measurements and stations CSV data.
 * Uses the SQLAlchemy engine and connection string to create a database called hawaii.sqlite.
@@ -24,7 +20,6 @@
 
 ### Climate Analysis
 
-[climate_analysis.ipynb](https://github.com/shanegela/DataAnalytics/blob/gh-pages/HawaiiSurfAnalysis/climate_analysis.ipynb)
 
 ```python
 import datetime as dt
@@ -405,6 +400,110 @@ plt.savefig('average_trip_temperature.png')
 
 ![png](output_26_0.png)
 
+
+## Step 4 - Climate App
+Now that you have completed your initial analysis, design a Flask api based on the queries that you have just developed.
+
+Routes
+* /api/v1.0/precipitation
+    * Query for the dates and temperature observations from the last year.
+    * Convert the query results to a Dictionary using date as the key and tobs as the value.
+    * Return the json representation of your dictionary.
+* /api/v1.0/stations
+    * Return a json list of stations from the dataset.
+* /api/v1.0/tobs
+    * Return a json list of Temperature Observations (tobs) for the previous year
+* /api/v1.0/<start> and /api/v1.0/<start>/<end>
+    * Return a json list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end * range.
+    * When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
+    * When given the start and the end date, calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive.
+
+
+```python
+from flask import Flask, jsonify
+import datetime as dt
+
+#################################################
+# Flask Setup
+#################################################
+app = Flask(__name__)
+
+```
+
+
+```python
+# /api/v1.0/precipitation
+# Query for the dates and temperature observations from the last year.
+# Convert the query results to a Dictionary using date as the key and tobs as the value.
+# Return the json representation of your dictionary.
+@app.route("/api/v1.0/precipitation")
+def precipitation():
+    today = dt.date.today()
+    prev_year = today - dt.timedelta(days=365)
+    dict = {}
+    data = df[(df.date >= str(prev_year)) & (df.date <= str(today))].groupby(['date']).sum()
+    for index, row in df.iterrows():
+        dict[row.date] = row.prcp
+    return jsonify(dict)
+```
+
+
+```python
+# /api/v1.0/stations
+# Return a json list of stations from the dataset.
+@app.route("/api/v1.0/stations")
+def stations():
+    stations = list(df.station.unique())
+    return jsonify(stations)
+```
+
+
+```python
+# /api/v1.0/tobs
+# Return a json list of Temperature Observations (tobs) for the previous year
+@app.route("/api/v1.0/tobs")
+def tobs():
+    today = dt.date.today()
+    prev_year = today - dt.timedelta(days=365)
+    return jsonify(list( str(x) for x in df[(df.date >= str(prev_year)) & (df.date <= str(today))]['tobs']))
+```
+
+
+```python
+# /api/v1.0/<start> and /api/v1.0/<start>/<end>
+# Return a json list of the minimum temperature, the average temperature, and the max temperature for a given start or start-end * range.
+# When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
+# When given the start and the end date, calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive.
+
+# http://127.0.0.1:5000/api/v1.0/2011-06-30
+@app.route("/api/v1.0/<start>")
+def temp_summary_start(start):
+    temps = df[(df.date >= start)]
+    min_temp = temps.tobs.min()
+    max_temp = temps.tobs.max()
+    mean_temp = temps.tobs.mean()
+    return jsonify({"min_temp": str(min_temp), "max_temp": str(max_temp), "mean_temp": str(mean_temp)})
+```
+
+
+```python
+#http://127.0.0.1:5000/api/v1.0/2011-06-30/2011-12-31
+@app.route("/api/v1.0/<start>/<end>")
+def temp_summary_range(start, end):
+    temps = df[(df.date >= start) & (df.date <= end)]
+    min_temp = temps.tobs.min()
+    max_temp = temps.tobs.max()
+    mean_temp = temps.tobs.mean()
+    return jsonify({"min_temp": str(min_temp), "max_temp": str(max_temp), "mean_temp": str(mean_temp)})
+```
+
+
+```python
+# With debug=True, Flask server will auto-reload 
+# when there are code changes
+if __name__ == '__main__':
+	app.run(debug=False)
+```
 
 
 ```python
