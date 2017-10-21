@@ -234,7 +234,11 @@ plt.show()
 ```
 
 
-![png](output_16_0.png)
+    <matplotlib.figure.Figure at 0x22bc5d577b8>
+
+
+
+![png](output_16_1.png)
 
 
 ## Station Analysis
@@ -465,7 +469,7 @@ def stations():
 def tobs():
     today = dt.date.today()
     prev_year = today - dt.timedelta(days=365)
-    return jsonify(list( str(x) for x in df[(df.date >= str(prev_year)) & (df.date <= str(today))]['tobs']))
+    return jsonify(list( int(x) for x in df[(df.date >= str(prev_year)) & (df.date <= str(today))]['tobs']))
 ```
 
 
@@ -482,7 +486,7 @@ def temp_summary_start(start):
     min_temp = temps.tobs.min()
     max_temp = temps.tobs.max()
     mean_temp = temps.tobs.mean()
-    return jsonify({"min_temp": str(min_temp), "max_temp": str(max_temp), "mean_temp": str(mean_temp)})
+    return jsonify({"min_temp": int(min_temp), "max_temp": int(max_temp), "mean_temp": int(mean_temp)})
 ```
 
 
@@ -494,7 +498,7 @@ def temp_summary_range(start, end):
     min_temp = temps.tobs.min()
     max_temp = temps.tobs.max()
     mean_temp = temps.tobs.mean()
-    return jsonify({"min_temp": str(min_temp), "max_temp": str(max_temp), "mean_temp": str(mean_temp)})
+    return jsonify({"min_temp": int(min_temp), "max_temp": int(max_temp), "mean_temp": int(mean_temp)})
 ```
 
 
@@ -503,9 +507,4 @@ def temp_summary_range(start, end):
 # when there are code changes
 if __name__ == '__main__':
 	app.run(debug=False)
-```
-
-
-```python
-
 ```
