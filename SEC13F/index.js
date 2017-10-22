@@ -1,29 +1,56 @@
-
 // Get references to the tbody element, input field and button
 var $tbody = document.querySelector("tbody");
 var $thead = document.querySelector("thead");
 var $date1 = document.querySelector("#date1");
 
-//initialize table styles
-$(document).ready( function () {
+// bubble_visualization and hbar_visualization are declared without var to create global variables
+
+//initialize table
+$(document).ready(function () {
 	$('#data_table').DataTable( {
 		data: [],
 		columns: [
-			{ title: "Name" },
-			{ title: "CUSIP" },
-			{ title: "Market Value" },
-			{ title: "Shares" }
+			{ title: "Name", data:"name" },
+			{ title: "Ticker", data: "ticker" },
+			{ title: "Market Value", data: "mval", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
+			{ title: "Change in Market Value", data: "cmval", render: function(number){return number? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
+			{ title: "Shares", data: "shares", render: function(number){return number? number.toLocaleString(): null} },
+			{ title: "Change in Shares", data: "cshares", render: function(number){return number? number.toLocaleString(): null}}
 		]
-	} );
-} );
+	});
+	
+	bubble_visualization = d3plus.viz()
+		.container("#bubble-chart")
+		.data([])
+		.type("bubbles")
+		.id(["","name"])
+		.depth(1)
+		.size("shares")
+		.color("")
+		.title("Securities by Shares")
+		.draw();
 
+	hbar_visualization = d3plus.viz()
+		.container("#hbar-chart")  // container DIV to hold the visualization
+		.title("Top 10 Securities by Market Value")
+		.data([])  // data to use with the visualization
+		.type("bar")       // visualization type
+		.id("name")         // key for which our data is unique on
+		.text("name")       // key to use for display text
+		.y({"scale": "discrete", "value": "name", "label": "Security Name"})         // key to use for y-axis
+		.x({"value": "mval", "label": "Market Value"})          // key to use for x-axis
+		.draw()             // finally, draw the visualization!
 
+});
+
+// get available dates
 var queryURL = "http://localhost:5000/api/v1.0/dates";
 d3.json(queryURL, function(error, response) {
 	if (error) return console.warn(error);
 	setSelection(response);
 });
 
+// function to set date input to latest available file date
 function setSelection(response) {
 	var lastDate = "";
 	for (var i = 0; i < response.length; i++) {
@@ -38,67 +65,74 @@ function setSelection(response) {
 	$date1.value = lastDate;
 }
 
+// click event handler to update data
 function selectFileDateHandler(e) {
-	//console.log(`selected ${e.value}`);
 	populateTable(e.value);
 }
 
+// updates the data in the table and charts
 function populateTable(date) {
 	var queryURL = "http://localhost:5000/api/v1.0/positions/" + date;
 	d3.json(queryURL, function(error, response) {
+
 		if (error) return console.warn(error);
 
-		var chartData = [];
-		var datatable = $('#data_table').DataTable();
-		datatable.clear();
-		datatable.rows.add(response);
-		datatable.draw();
-		
-		for (var x in response) {
-			console.log(response[x]);
-			chartData.push({
-				"name": response[x][0], 
-				"cusip": response[x][1], 
-				"mval": response[x][2], 
-				"shares": response[x][3]
+		var holdings = [];
+		for (var i=0; i < response.length; i++) {
+			item = response[i];
+			console.log(item);
+			holdings.push({
+				"name": item[0],
+				"ticker": item[1],
+				"cusip": item[2],
+				"mval": parseFloat(item[3]),
+				"cmval":  parseFloat(item[4]),
+				"shares":  parseFloat(item[5]),
+				"cshares":  parseFloat(item[6])
 			});
 		}
+		
+		var datatable = $('#data_table').DataTable();
+		datatable.clear();
+		datatable.rows.add(holdings);
+		datatable.draw();
 
-		drawBubbleChart(chartData);
+		var top10 = holdings.sort(function(a, b) { return b.mval - a.mval })
+		.slice(0, 10);
 
+		drawHorizontalBarChart(top10);
+
+		drawBubbleChart(holdings);
 	});
 }
 
-//------------------------------------------------------------
-// D3 PLUS BUBBLE CHAR
-// // instantiate d3plus
-// var visualization = d3plus.viz()
-// 	.container("#chart-mval")     // container DIV to hold the visualization
-// 	.data(sample_data)     // data to use with the visualization
-// 	.type("bubbles")       // visualization type
-// 	.id(["group", "name"]) // nesting keys
-// 	.depth(1)              // 0-based depth
-// 	.size("value")         // key name to size bubbles
-// 	.color("group")        // color by each group
-// 	.draw();               // finally, draw the visualization!
-
-// var sample_data = [
-// 	{"value": 100, "name": "alpha", "group": "group 1"},
-// 	{"value": 70, "name": "beta", "group": "group 2"},
-// 	{"value": 40, "name": "gamma", "group": "group 2"},
-// 	{"value": 15, "name": "delta", "group": "group 2"},
-// 	{"value": 5, "name": "epsilon", "group": "group 1"},
-// 	{"value": 1, "name": "zeta", "group": "group 1"}
-// ];
-
 function drawBubbleChart(data) {
-	var visualization = d3plus.viz()
-		.container("#chart-mval")
+	bubble_visualization
 		.data(data)
 		.type("bubbles")
 		.id(["","name"])
 		.depth(1)
 		.size("shares")
 		.color("")
+		.title("Securities by Shares")
 		.draw();
+}
+
+
+function drawHorizontalBarChart(data) {
+	var order = data.map(function(d){ return d.marketvalue; });
+
+	hbar_visualization
+		.title("Top 10 Securities by Market Value")
+		.data(data)  // data to use with the visualization
+		.type("bar")       // visualization type
+		.id("name")         // key for which our data is unique on
+		.text("name")       // key to use for display text
+		.y({"scale": "discrete", "value": "name", "label": "Security Name"})         // key to use for y-axis
+		.x({"value": "mval", "label": "Market Value"})          // key to use for x-axis
+		.order({
+			"sort": "asc",
+			"value": function(d) { return order.indexOf(d); }
+		})
+		.draw()             // finally, draw the visualization!
 }
