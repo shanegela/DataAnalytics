@@ -28,7 +28,6 @@ $(document).ready(function () {
 		.size("shares")
 		.color("")
 		.title("Securities by Shares")
-		.draw();
 
 	hbar_visualization = d3plus.viz()
 		.container("#hbar-chart")  // container DIV to hold the visualization
@@ -39,7 +38,6 @@ $(document).ready(function () {
 		.text("name")       // key to use for display text
 		.y({"scale": "discrete", "value": "name", "label": "Security Name"})         // key to use for y-axis
 		.x({"value": "mval", "label": "Market Value"})          // key to use for x-axis
-		.draw()             // finally, draw the visualization!
 
 });
 
@@ -80,7 +78,7 @@ function populateTable(date) {
 		var holdings = [];
 		for (var i=0; i < response.length; i++) {
 			item = response[i];
-			console.log(item);
+			//console.log(item);
 			holdings.push({
 				"name": item[0],
 				"ticker": item[1],

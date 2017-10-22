@@ -1,0 +1,117 @@
+html,body {
+	height:100%;
+}
+
+body {
+	padding:0;
+	margin:0;
+	background: #eee;
+	color: #282828;
+}
+
+.navbar {
+	margin-bottom: 20px;
+	background: white;
+	padding: 0rem 1rem;
+}
+
+.navbar-light .navbar-brand {
+	background: teal;
+	padding: .30rem .25rem;
+	color: white;
+}
+
+div.dropdown-menu {
+	border-radius: 0px;
+}
+.navbar-light .navbar-nav .nav-link, a.dropdown-item {
+	color: teal;
+}
+
+
+.navbar-light .navbar-toggler {
+	padding: .2rem .7rem;
+}
+
+.navbar-light .navbar-toggler:focus {
+	outline: none;
+}
+
+.navbar-toggler-right{
+	position:absolute;
+	right: 1rem;
+	top: 0rem;
+}
+
+.summary-img {
+	float: left;
+	width: 150px;
+	height: auto;
+	margin: 0px 15px 15px 15px;
+	border: solid 1px lightgrey;
+	border-radius: .25rem;
+}
+
+
+.card {
+	margin: 5px;
+	border: none;
+}
+
+.card-header > h3 {
+	color: teal;
+}
+
+
+
+.card-section {
+	display: inline-block;
+	margin-bottom: 2rem;
+}
+
+.img-fluid {
+	margin: 0 auto; 
+	display: block;
+}
+
+.img-thumbnail {
+	max-width: 100px;
+}
+
+.data-table {
+	overflow-x: auto;
+	overflow-y: auto;
+	max-height: 550px;
+	background: white;
+}
+
+@media screen and (max-width: 768px) {
+	.data-table {
+		overflow-x: auto;
+		overflow-y: auto;
+		max-height: 800px;
+		background: white;
+	}
+}
+
+@media screen and (max-width: 320px) {
+	.data-table {
+		overflow-x: auto;
+		overflow-y: auto;
+		max-height: 400px;
+		background: white;
+	}
+}
+
+.table thead th {
+	vertical-align: top;
+}
+
+.comparison-row {
+	margin-bottom: 1rem;
+}
+
+.comparison-img {
+	max-height: 300px;
+	max-width: 300px;
+}
