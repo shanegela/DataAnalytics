@@ -15,14 +15,14 @@ Companies submit their SEC13F filings using the [EDGAR System](https://www.sec.g
 Berkshire Hathaway is a holding company run by Warren Buffett.  Warren Buffett is one of the most successful investors of all time, with $32 billion in assets.  He regarded as the ultimate value investor following the Benjamin Graham approach to finding value. Berkshire's 13F holdings are often held for years and even decades at a time. With low turnover and high conviction top holdings, Berkshire's portfolio is a popular investment model for backtesting and copying.
 
 
-### Step 0: SEC13F API
+### Investigate SEC13F API
 
 The EDGAR system also has an [API](http://developer.edgar-online.com/).
 
 Jupyter Notebok: [SEC13F_API](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_API.ipynb)
 This notebook was developed to explore the API.
 
-**Limitation**  The API only has current holdings available.  My communications with the API contact confirmed that no historical data is available and the request is not on their roadmap.  So using the API for information was not a possibility.
+**API Limitation**  The API only has current holdings available.  My communications with the API contact confirmed that no historical data is available and the request is not on their roadmap.  So using the API for information was not a possibility.
 
 ### Step 1: Save SEC13F Filings
 
@@ -30,7 +30,7 @@ Jupyter Notebook: [SEC13F_STEP1_SaveFilings](https://github.com/shanegela/DataAn
 
 Since all the SEC13F filings are available online.  I used BeautifulSoup to save the xml filings from onine to the filings directory.
 
-**Limitation** 
+**Limitations** 
 * XML formation for SEC13F submission was implemented as of 06/30/2013.  Prior filings are in a text fixed width submission.  This project will only analyze xml submissions.
 * SEC13F amendments are not analyzed
 
@@ -77,20 +77,20 @@ This notebook identifies CUSIP with missing industry sector and/or industry grou
 
 ### Step 7: Analyze data in Python
 
-Jupyter Notebook [SEC13F_STEP7_AnalyzeData](http://localhost:8888/notebooks/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb)
+Jupyter Notebook [SEC13F_STEP7_AnalyzeData](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb)
 
 ### Step 8: Create API 
 
 This python script uses Flask to create an API to retrieve data from SEC13F.
 
-[SEC13F_STEP8_API](http://localhost:8888/notebooks/SEC13F/SEC13F_STEP8_API.py)
+[SEC13F_STEP8_API](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP8_API.py)
 
 ### Step 9: Web Dashboard
 
-[index.html](http://localhost:8888/notebooks/SEC13F/index.html) and [index.js](http://localhost:8888/notebooks/SEC13F/index.js) uses bootstrap, D3, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathway according to the SEC13F form filed.
+[index.html](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.html) and [index.js](hhttps://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.js) uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathway according to the SEC13F form filed.
 
 **Issue**
 Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
 
 **Solution**
-Enabled CORS through Chrome extension: Allow-Control-Allow-Origin
+Enabled CORS through Chrome extension: [Allow-Control-Allow-Origin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en)

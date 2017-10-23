@@ -39,15 +39,185 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
+
 					<div class="card">
 						<div class="card-header">
 							<h3>About</h3>
 						</div>
 						<div class="card-body">
 							<p class="card-text">
+									The purpose of this project was to analyze the holdings of Berkshire Hathaway to determine what securities and classifications the the company is invested in.
+							</p>
+							<h4>Form SEC13F</h4>
+							<p class="card-text">
+							The SEC Form 13F is a filing with the Securities and Exchange Commission (SEC) also known as the Information Required of Institutional Investment Managers Form. It is a quarterly filing required of institutional investment managers with over $100 million in qualifying assets. Companies required to file SEC Form 13F may include insurance companies, banks, pension funds, investment advisers and broker-dealers.
+							<br><br>
+							SEC Form 13F, which must be filed within 45 days of the end of each quarter, contains information about the investment manager and potentially a list of their recent investment holdings. **It provides investors with an inside look at the holdings of Wall Street's largest investment managers.**
+							<br><br>
+							Companies submit their SEC13F filings using the <a href="https://www.sec.gov/page/everythingedgar">EDGAR System</a>.  These filings are made public on the <a href="https://www.sec.gov/edgar/searchedgar/companysearch.html">SEC website</a>.
+							</p>
+
+							<h4>Berkshire Hathaway</h4>
+							<p class="card-text">
+							Warren Buffett is one of the most successful investors of all time, with $81 billion in assets. Warren Buffet's majority net worth is mainly wrapped up in the company he built, Berkshire Hathaway, Inc. Berkshire Hathaway, Inc. engages in the provision of property and casualty insurance and reinsurance, utilities and energy, freight rail transportation, finance, manufacturing, retailing, and services. 
 							</p>
 						</div>
 					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Investigate SEC13F API</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							The EDGAR system also has an <a href="http://developer.edgar-online.com/">API</a>
+							<br><br>
+							Jupyter Notebok: <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_API.ipynb">SEC13F_API</a>
+							This notebook was developed to explore the API.
+							<br><br>
+							<strong>API Limitation</strong> The API only has current holdings available.  My communications with the API contact confirmed that no historical data is available and the request is not on their roadmap.  So using the API for information was not a possibility.
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 1: Save SEC13F Filings</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP1_SaveFilings.ipynb">SEC13F_STEP1_SaveFilings</a>
+							<br><br>
+							Since all the SEC13F filings are available online.  I used BeautifulSoup to save the xml filings from onine to the filings directory.
+							<br><br>
+							<strong>API Limitations</strong>
+							<ul>
+								<li>XML formation for SEC13F submission was implemented as of 06/30/2013.  Prior filings are in a text fixed width submission.  This project will only analyze xml submissions.</li>
+								<li>SEC13F amendments are not analyzed</li>
+							</ul>
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 2: Parse and Clean SEC13F Filings</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP2_CleanFilings.ipynb">SEC13F_STEP2_CleanFilings</a>
+							<br><br>
+							This notebook opens each xml file and parses the data for the following fields
+							<ul>
+								<li>file date: SEC13F quarter end submission date</li>
+								<li>name: security name</li>
+								<li>cusip: cusip of the security</li>
+								<li>mval: market value of the shares held</li>
+								<li>shares: shares or principal held</li>
+							</ul>
+							<br>
+							The aggregate data for all xml files is saved to a csv file, sec13f_clean_data.csv.
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 3: Save SEC13F Information to Database</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP3_SaveDataToDB.ipynb">SEC13F_STEP3_SaveDataToDB</a>
+							<br><br>
+							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a SQLite database.  The csv data is saved to a positions table.
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 4: Get Industry Sector and Industry Group for Securities</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP4_GetDecoratedData.ipynb">SEC13F_STEP4_GetDecoratedData</a>
+							<br><br>
+							This notebook reads the positions table in the SQLite database: sec13f.sqlite to get a unique list of CUSIP.  The notebook then scrapes the <a href="https://search13f.com/securities/neighbors/">Search13F</a> website to get decorated information such as the Industry Sector and Industry Group.
+							<br><br>
+							The CUSIP, Industry Sector, and Industry Group data are then stored into a csv file, decorated_data.csv
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 5: Save Industry Sector and Industry Group to Database</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP5_SaveDecoratedDataToDB.ipynb">SEC13F_STEP5_SaveDecoratedDataToDB</a>
+							<br><br>
+							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a SQLite database.  The csv data is saved to a indsectorindgroup table.
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 6: Handle missing data</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP6_HandleMissingData.ipynb">SEC13F_STEP6_HandleMissingData</a>
+							<br><br>
+							Some CUSIP have missing Industry Sector or Industry Group because they are no longer traded due to corporation reorganizations like mergers, exchanges, or spinoffs.
+							<br><br>
+							This notebook identifies CUSIP with missing industry sector and/or industry group.  A manual intervention is done to lookup the missing information.  The research information is then put into a dictionary which is then used to update the indsectorindgroup table in the SQLite database.
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 7: Analyze data in Python</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+								Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb">SEC13F_STEP7_AnalyzeData</a>
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 8: Create API</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+								This python script uses Flask to create an API to retrieve data from SEC13F.
+								<br><br>
+								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP8_API.py">SEC13F_STEP8_API</a>
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 9: Web Dashboard</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+							<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.html">index.html</a> and <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.js">index.js</a> uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathway according to the SEC13F form filed.
+							<br><br>
+							<strong>Issue</strong>
+							Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
+							<br><br>
+							<strong>Solution</strong>
+							Enabled CORS through Chrome extension: <a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en">Allow-Control-Allow-Origin</a>
+							</p>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>
