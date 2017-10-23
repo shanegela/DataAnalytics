@@ -38,26 +38,83 @@
 			</div>
 		</nav>
 
-		<div class="container">
-			<form>
-				<div class="form-group row">
-					<label for="date1" class="col-sm-2 col-form-label">Select date:</label>
-					<div class="col-sm-10">
-							<select class="form-control" id="date1" onchange="selectFileDateHandler(this)">
-							</select>
+		<div style="margin: 20px;">
+			<div class="row form-group">
+				<label for="date1" class="col-sm-2 col-form-label">Select date:</label>
+				<div class="col-sm-3">
+						<select class="form-control" id="date1" onchange="selectFileDateHandler(this)">
+						</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4" style="padding-left:0px">
+					<div class="card">
+						<div class="card-header">
+							<h3>Chart Options</h3>
+						</div>
+						<div class="card-body">
+							<fieldset class="form-group">
+								<legend>Chart Type</legend>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="chartTypeRadio" id="chartTypeRadio1" value="bubble" onclick="drawChart(this)" checked>
+										Bubble Chart
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="chartTypeRadio" id="chartTypeRadio2" value="bar" onclick="drawChart(this)">
+										Bar Chart
+									</label>
+								</div>
+							</fieldset>
+							<fieldset class="form-group">
+								<legend>Chart Value</legend>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio1" value="mval" onclick="drawChart(this)">
+										Market Value
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio2" value="cmval" onclick="drawChart(this)">
+										Change in Market Value
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio3" value="shares" onclick="drawChart(this)" checked>
+										Shares Held
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio4" value="cshares" onclick="drawChart(this)">
+										Change in Shares Held
+									</label>
+								</div>
+							</fieldset>
+						</div>
 					</div>
 				</div>
-			</form>
-			<div class="row">
-				<div class="col-md-12" id="bubble-chart" style="height:550px;">
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-header">
+							<h3 id="chartTitle"></h3>
+						</div>
+						<div class="card-body">
+							<div id="chart" style="height:500px;">
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-12" id="hbar-chart" style="height:550px;">
+			<div class="card">
+				<div class="card-header">
+					<h3>SEC13F Data</h3>
 				</div>
-			</div>
-			<div class="row" style="margin-top: 40px; padding-top: 40px; border-top: solid 1px grey;">
-				<div class="col-md-12">
+				<div class="card-body">
 					<table id="data_table" class="display">
 					</table>
 				</div>

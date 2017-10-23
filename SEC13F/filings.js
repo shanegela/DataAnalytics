@@ -19,25 +19,14 @@ $(document).ready(function () {
 		]
 	});
 	
-	bubble_visualization = d3plus.viz()
-		.container("#bubble-chart")
+	chart_visualization = d3plus.viz()
+		.container("#chart")
 		.data([])
 		.type("bubbles")
 		.id(["","name"])
 		.depth(1)
 		.size("shares")
 		.color("")
-		.title("Securities by Shares")
-
-	hbar_visualization = d3plus.viz()
-		.container("#hbar-chart")  // container DIV to hold the visualization
-		.title("Top 10 Securities by Market Value")
-		.data([])  // data to use with the visualization
-		.type("bar")       // visualization type
-		.id("name")         // key for which our data is unique on
-		.text("name")       // key to use for display text
-		.y({"scale": "discrete", "value": "name", "label": "Security Name"})         // key to use for y-axis
-		.x({"value": "mval", "label": "Market Value"})          // key to use for x-axis
 
 });
 
@@ -75,7 +64,7 @@ function populateTable(date) {
 
 		if (error) return console.warn(error);
 
-		var holdings = [];
+		holdings = [];
 		for (var i=0; i < response.length; i++) {
 			item = response[i];
 			//console.log(item);
@@ -95,42 +84,84 @@ function populateTable(date) {
 		datatable.rows.add(holdings);
 		datatable.draw();
 
-		var top10 = holdings.sort(function(a, b) { return b.mval - a.mval })
-		.slice(0, 10);
-
-		drawHorizontalBarChart(top10);
-
-		drawBubbleChart(holdings);
+		drawChart();
 	});
 }
 
-function drawBubbleChart(data) {
-	bubble_visualization
+
+function drawBubbleChart(data, value="shares") {
+	chart_visualization
 		.data(data)
 		.type("bubbles")
 		.id(["","name"])
 		.depth(1)
-		.size("shares")
+		.size(value)
 		.color("")
-		.title("Securities by Shares")
+		.shape("circle")
 		.draw();
 }
 
+function drawHorizontalBarChart(data, value="mval") {
 
-function drawHorizontalBarChart(data) {
-	var order = data.map(function(d){ return d.marketvalue; });
+	top10 = data.sort(function(a, b) { return b.mval - a.mval })
+	.slice(0, 10);
 
-	hbar_visualization
-		.title("Top 10 Securities by Market Value")
-		.data(data)  // data to use with the visualization
+	var order = top10.map(function(d){ return d[value]; });
+
+	chart_visualization
+		.data(top10)  // data to use with the visualization
 		.type("bar")       // visualization type
 		.id("name")         // key for which our data is unique on
 		.text("name")       // key to use for display text
 		.y({"scale": "discrete", "value": "name", "label": "Security Name"})         // key to use for y-axis
-		.x({"value": "mval", "label": "Market Value"})          // key to use for x-axis
+		.x({"value": value, "label":""})          // key to use for x-axis
 		.order({
 			"sort": "asc",
 			"value": function(d) { return order.indexOf(d); }
 		})
+		.shape("square")
 		.draw()             // finally, draw the visualization!
+}
+
+function setChartTitle(title, value) {
+	switch (value) {
+		case "mval":
+			title += " Market Value";
+			break;
+		case "cmval":
+			title += " Change in Market Value";
+			break;
+		case "shares":
+			title += " Shares Held";
+			break;
+		default: //"cshares"
+			title += " Change in Shares Held";
+	}
+	d3.select("#chartTitle").text(title);
+}
+
+function getChartTypeValue(){
+	var chartTypeRadios = document.getElementsByName('chartTypeRadio');
+	var chartValueRadios = document.getElementsByName('chartValueRadio');
+	var chartType = 'bubble';
+	for (var i = 0; i < chartTypeRadios.length; i++) {
+		if (chartTypeRadios[i].checked) { chartType = chartTypeRadios[i].value }
+	}
+	var chartValue = 'mval';
+	for (var i = 0; i < chartValueRadios.length; i++) {
+		if (chartValueRadios[i].checked) { chartValue = chartValueRadios[i].value }
+	}
+	return {type: chartType, value: chartValue}
+}
+
+function drawChart(e) {
+	var chart = getChartTypeValue();
+	//console.log("chart type: ", chart.type, " chart value: ", chart.value);
+	if (chart.type === "bar") {
+		setChartTitle("Top 10 Securities by", chart.value);
+		drawHorizontalBarChart(holdings, chart.value);
+	} else {
+		setChartTitle("Securities by", chart.value);
+		drawBubbleChart(holdings, chart.value);
+	}
 }
