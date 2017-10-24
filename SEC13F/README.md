@@ -87,7 +87,7 @@ SEC13F data from sec13f.xml filings only include name, cusip, market value and s
 
 This notebook uses Pandas Dataframes to join data to get the prior quarter filing to get derived values for change in market value and change in shares held.  These values are not available for the first date, 2013-06-30.
 
-### Step 9*: Create API 
+### Step 9: Create API 
 
 [SEC13F_STEP9_API](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP9_API.py)
 
