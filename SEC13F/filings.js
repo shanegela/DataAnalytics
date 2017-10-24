@@ -59,6 +59,8 @@ function selectFileDateHandler(e) {
 
 // updates the data in the table and charts
 function populateTable(date) {
+	setRadioButtons(date);
+
 	var queryURL = "http://localhost:5000/api/v1.0/positions/" + date;
 	d3.json(queryURL, function(error, response) {
 
@@ -163,5 +165,30 @@ function drawChart(e) {
 	} else {
 		setChartTitle("Securities by", chart.value);
 		drawBubbleChart(holdings, chart.value);
+	}
+}
+
+function setRadioButtons(date) {
+	var dateLimit = "2017-06-30"
+	var radio2 = document.querySelector("#chartValueRadio2");
+	var radio4 = document.querySelector("#chartValueRadio4");
+	
+	if (date < dateLimit) {
+		console.log('disabled')
+		radio2.disabled = true;
+		radio4.disabled = true;
+	} else {
+		radio2.disabled = false;
+		radio4.disabled = false;
+	}
+
+	var chart = getChartTypeValue();
+	if (chart.value == "cmval") {
+		var chartRadio1 = document.querySelector("#chartValueRadio1");
+		charttRadio1.checked = true;
+	}
+	if (chart.value == "cshares") {
+		var chartRadio3 = document.querySelector("#chartValueRadio3");
+		chartRadio3.checked = true;
 	}
 }
