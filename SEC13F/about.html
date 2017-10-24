@@ -190,20 +190,35 @@
 
 					<div class="card">
 						<div class="card-header">
-							<h3>Step 8: Create API</h3>
+							<h3>Step 8: Process Positions</h3>
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								This python script uses Flask to create an API to retrieve data from SEC13F.
+								SEC13F data from sec13f.xml filings only include name, cusip, market value and shares held.  Where as, data attained from the SEC13F API is more comprehensive and includes derived values like change in market value and change in shares held.
 								<br><br>
-								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP8_API.py">SEC13F_STEP8_API</a>
+								This notebook uses Pandas Dataframes to join data to get the prior quarter filing to get derived values for change in market value and change in shares held.  These values are not available for the first date, 2013-06-30.
+								<br><br>
+								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP8_ProcessPositions.py">SEC13F_STEP8_ProcessPositions</a>
 							</p>
 						</div>
 					</div>
 
 					<div class="card">
 						<div class="card-header">
-							<h3>Step 9: Web Dashboard</h3>
+							<h3>Step 9: Create API</h3>
+						</div>
+						<div class="card-body">
+							<p class="card-text">
+								This python script uses Flask to create an API to retrieve data from SEC13F.
+								<br><br>
+								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API</a>
+							</p>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-header">
+							<h3>Step 10: Web Dashboard</h3>
 						</div>
 						<div class="card-body">
 							<p class="card-text">

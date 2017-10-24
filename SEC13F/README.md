@@ -79,13 +79,21 @@ This notebook identifies CUSIP with missing industry sector and/or industry grou
 
 Jupyter Notebook [SEC13F_STEP7_AnalyzeData](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb)
 
-### Step 8: Create API 
+### Step 8: Process Positions
+
+[SEC13F_STEP8_ProcessPositions](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP8_ProcessPositions.py)
+
+SEC13F data from sec13f.xml filings only include name, cusip, market value and shares held.  Where as, data attained from the SEC13F API is more comprehensive and includes derived values like change in market value and change in shares held.
+
+This notebook uses Pandas Dataframes to join data to get the prior quarter filing to get derived values for change in market value and change in shares held.  These values are not available for the first date, 2013-06-30.
+
+### Step 9*: Create API 
+
+[SEC13F_STEP9_API](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP9_API.py)
 
 This python script uses Flask to create an API to retrieve data from SEC13F.
 
-[SEC13F_STEP8_API](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP8_API.py)
-
-### Step 9: Web Dashboard
+### Step 10: Web Dashboard
 
 [index.html](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.html) and [index.js](hhttps://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.js) uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathway according to the SEC13F form filed.
 
@@ -93,4 +101,4 @@ This python script uses Flask to create an API to retrieve data from SEC13F.
 Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
 
 **Solution**
-Enabled CORS through Chrome extension: [Allow-Control-Allow-Origin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en)
+Enabled CORS through Chrome extension: [Allow-Control-Allow-Origin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en).  Note that Jupyter Notebook does not work well with CORS enabled.
