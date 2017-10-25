@@ -14,6 +14,8 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Numeric, Text, Float
 
+import sqlite3
+
 from flask import Flask, jsonify
 
 #################################################
@@ -28,6 +30,7 @@ def reformat_date(str_date):
 # Database Setup
 #################################################
 engine = create_engine("sqlite:///sec13f.sqlite")
+db = sqlite3.connect("sec13f.sqlite")
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -63,6 +66,9 @@ def welcome():
 
 		f"/api/v1.0/positions/<date>"
 		f"- List of holdings on file date<br/>"
+
+		f"/api/v1.0/srr/<start_date>/<end_date>"
+		f"- List of holdings on end_date with a simple rate of return<br/>"
 	)
 
 #################################################
@@ -82,8 +88,88 @@ def getDates():
 	return jsonify(dates_list)
 
 #################################################
+# SELECT file_date, name, ticker, mval, cmval, shares, cshares,                  
+#   case when pprice == 0 then 0                                                 
+#        when shares == 0 then 0                                                 
+#        else ((price-pprice)/(pprice*1.0))*100 end as srr, price, pprice
+# FROM (                                                                         
+#   SELECT file_date, name, ticker, SUM(mval) as mval, SUM(cmval) as cmval,      
+#     SUM(shares) as shares, SUM(cshares) as cshares, MIN(price) as price,       
+#     MIN(pprice) as pprice                                                      
+#   FROM (                                                                       
+#     SELECT p.file_date, p.name, s.ticker, CAST(p.mval AS NUMERIC) as mval,     
+#       CAST(p.cmval AS NUMERIC) as cmval, CAST(p.shares AS NUMERIC) as shares,  
+#       CAST(p.cshares AS NUMERIC) as cshares, CAST(p.price AS NUMERIC) as price,
+#       CAST(p.prior_price AS NUMERIC) as pprice                                 
+#     FROM processed_positions p                                                 
+#     LEFT JOIN securitiesex s ON p.cusip = s.cusip                              
+#     WHERE '2016-09-30' <= p.file_date AND p.file_date <= '2017-06-30'
+#   ) x                                                                         
+#   GROUP BY file_date, name, ticker                                             
+#   UNION ALL                                                                    
+                                                                               
+#   SELECT lp.currentreportdate, lp.companyname, lp.ticker,                      
+#     CAST(lp.marketvalue AS NUMERIC), CAST(lp.marketvaluechange AS NUMERIC),    
+#     CAST(lp.sharesheld AS NUMERIC), CAST(lp.sharesheldchange AS NUMERIC),       
+#     CAST(lp.price AS NUMERIC), 0
+#   FROM latest_positions lp                                                     
+#   WHERE '2016-09-30' <= lp.currentreportdate AND lp.currentreportdate <= '2017-06-30'
+#   );
+
+@app.route("/api/v1.0/srr/<start_date>/<end_date>")
+def getSRR(start_date, end_date):
+	## List of holdings on end_date with a simple rate of return
+	sql = ('SELECT file_date, name, ticker, mval, cmval, shares, cshares,                   ' +
+		'  case when pprice == 0 then 0                                                     ' +
+		'       when shares == 0 then 0                                                     ' +
+		'       else ((price-pprice)/(pprice*1.0))*100 end as srr, price, pprice            ' +
+		'FROM (                                                                             ' +
+		'  SELECT file_date, name, ticker, SUM(mval) as mval, SUM(cmval) as cmval,          ' +
+		'    SUM(shares) as shares, SUM(cshares) as cshares, MIN(price) as price,           ' +
+		'    MIN(pprice) as pprice                                                          ' +
+		'  FROM (                                                                           ' +
+		'    SELECT p.file_date, p.name, s.ticker, CAST(p.mval AS NUMERIC) as mval,         ' +
+		'      CAST(p.cmval AS NUMERIC) as cmval, CAST(p.shares AS NUMERIC) as shares,      ' +
+		'      CAST(p.cshares AS NUMERIC) as cshares, CAST(p.price AS NUMERIC) as price,    ' +
+		'      CAST(p.prior_price AS NUMERIC) as pprice                                     ' +
+		'    FROM processed_positions p                                                     ' +
+		'    LEFT JOIN securitiesex s ON p.cusip = s.cusip                                  ' +
+		'    WHERE "' + start_date + '" <= p.file_date AND p.file_date <= "' + end_date       +
+		'  ") x                                                                             ' +
+		'  GROUP BY file_date, name, ticker                                                 ' +
+		'  UNION ALL                                                                        ' +
+		'                                                                                   ' +
+		'  SELECT lp.currentreportdate, lp.companyname, lp.ticker,                          ' +
+		'    CAST(lp.marketvalue AS NUMERIC), CAST(lp.marketvaluechange AS NUMERIC),        ' +
+		'    CAST(lp.sharesheld AS NUMERIC), CAST(lp.sharesheldchange AS NUMERIC),          ' +
+		'    CAST(lp.price AS NUMERIC), 0                     ' +
+		'  FROM latest_positions lp                                                         ' +
+		'  WHERE ' + start_date + ' <= lp.currentreportdate AND lp.currentreportdate <=     ' + 
+		end_date + ');')
+
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		positions.append({
+			"name": record[1],
+			"ticker": record[2],
+			"mval": record[3],
+			"cmval": record[4],
+			"shares": record[5],
+			"cshares": record[6],
+			"srr": record[7],
+			"price": record[8],
+			"pprice": record[9],
+		})
+
+	return jsonify(positions)
+
+
+#################################################
 @app.route("/api/v1.0/positions/<date>")
-def postal_codes(date=''):
+def getHoldings(date):
 	## Get current holdings
 
 	# Use `declarative_base` from SQLAlchemy to connect your class to your sqlite database
