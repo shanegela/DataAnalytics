@@ -8,13 +8,15 @@ $(document).ready(function () {
 		columns: [
 			{ title: "Name", data:"name" },
 			{ title: "Ticker", data: "ticker" },
+			{ title: "Beginning Date", data:"file_date1"},
+			{ title: "Ending Date", date:"file_date2"},
+			{ title: "Beginning Market Value", data: "mval1", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
+			{ title: "Beginning Price", data: "price1", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
+			{ title: "Ending Market Value", data: "mval2", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
+			{ title: "Ending Price", data: "price2", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
+			{ title: "Beginning Shares", data: "shares1", render: function(number){return number? number.toLocaleString(): null} },
+			{ title: "Ending Shares", data: "shares2", render: function(number){return number? number.toLocaleString(): null} },
 			{ title: "Simple Rate of Return", data:"srr", render: function(number){return number? number.toLocaleString(undefined, { minimumFractionDigits: 2 }): null}},
-			{ title: "Price", data:"price", render: function(number){return number? number.toLocaleString(undefined, { minimumFractionDigits: 2 }): null}},
-			{ title: "Prior Price", data:"pprice", render: function(number){return number? number.toLocaleString(undefined, { minimumFractionDigits: 2 }): null}},
-			{ title: "Market Value", data: "mval", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
-			{ title: "Change in Market Value", data: "cmval", render: function(number){return number? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
-			{ title: "Shares", data: "shares", render: function(number){return number? number.toLocaleString(): null} },
-			{ title: "Change in Shares", data: "cshares", render: function(number){return number? number.toLocaleString(): null}}
 		]
 	});
 });

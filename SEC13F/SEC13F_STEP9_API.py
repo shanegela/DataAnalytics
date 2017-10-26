@@ -65,7 +65,10 @@ def welcome():
 		f"/api/v1.0/dates - List available dates<br/>"
 
 		f"/api/v1.0/positions/<date>"
-		f"- List of holdings on file date<br/>"
+		f"- List of holdings from file date<br/>"
+
+		f"/api/v1.0/positions/<start_date>/<end_date>"
+		f"- List of holdings from filings in the date range<br/>"
 
 		f"/api/v1.0/srr/<start_date>/<end_date>"
 		f"- List of holdings on end_date with a simple rate of return<br/>"
@@ -88,64 +91,23 @@ def getDates():
 	return jsonify(dates_list)
 
 #################################################
-# SELECT file_date, name, ticker, mval, cmval, shares, cshares,                  
-#   case when pprice == 0 then 0                                                 
-#        when shares == 0 then 0                                                 
-#        else ((price-pprice)/(pprice*1.0))*100 end as srr, price, pprice
-# FROM (                                                                         
-#   SELECT file_date, name, ticker, SUM(mval) as mval, SUM(cmval) as cmval,      
-#     SUM(shares) as shares, SUM(cshares) as cshares, MIN(price) as price,       
-#     MIN(pprice) as pprice                                                      
-#   FROM (                                                                       
-#     SELECT p.file_date, p.name, s.ticker, CAST(p.mval AS NUMERIC) as mval,     
-#       CAST(p.cmval AS NUMERIC) as cmval, CAST(p.shares AS NUMERIC) as shares,  
-#       CAST(p.cshares AS NUMERIC) as cshares, CAST(p.price AS NUMERIC) as price,
-#       CAST(p.prior_price AS NUMERIC) as pprice                                 
-#     FROM processed_positions p                                                 
-#     LEFT JOIN securitiesex s ON p.cusip = s.cusip                              
-#     WHERE '2016-09-30' <= p.file_date AND p.file_date <= '2017-06-30'
-#   ) x                                                                         
-#   GROUP BY file_date, name, ticker                                             
-#   UNION ALL                                                                    
-                                                                               
-#   SELECT lp.currentreportdate, lp.companyname, lp.ticker,                      
-#     CAST(lp.marketvalue AS NUMERIC), CAST(lp.marketvaluechange AS NUMERIC),    
-#     CAST(lp.sharesheld AS NUMERIC), CAST(lp.sharesheldchange AS NUMERIC),       
-#     CAST(lp.price AS NUMERIC), 0
-#   FROM latest_positions lp                                                     
-#   WHERE '2016-09-30' <= lp.currentreportdate AND lp.currentreportdate <= '2017-06-30'
-#   );
 
 @app.route("/api/v1.0/srr/<start_date>/<end_date>")
 def getSRR(start_date, end_date):
 	## List of holdings on end_date with a simple rate of return
-	sql = ('SELECT file_date, name, ticker, mval, cmval, shares, cshares,                   ' +
-		'  case when pprice == 0 then 0                                                     ' +
-		'       when shares == 0 then 0                                                     ' +
-		'       else ((price-pprice)/(pprice*1.0))*100 end as srr, price, pprice            ' +
-		'FROM (                                                                             ' +
-		'  SELECT file_date, name, ticker, SUM(mval) as mval, SUM(cmval) as cmval,          ' +
-		'    SUM(shares) as shares, SUM(cshares) as cshares, MIN(price) as price,           ' +
-		'    MIN(pprice) as pprice                                                          ' +
-		'  FROM (                                                                           ' +
-		'    SELECT p.file_date, p.name, s.ticker, CAST(p.mval AS NUMERIC) as mval,         ' +
-		'      CAST(p.cmval AS NUMERIC) as cmval, CAST(p.shares AS NUMERIC) as shares,      ' +
-		'      CAST(p.cshares AS NUMERIC) as cshares, CAST(p.price AS NUMERIC) as price,    ' +
-		'      CAST(p.prior_price AS NUMERIC) as pprice                                     ' +
-		'    FROM processed_positions p                                                     ' +
-		'    LEFT JOIN securitiesex s ON p.cusip = s.cusip                                  ' +
-		'    WHERE "' + start_date + '" <= p.file_date AND p.file_date <= "' + end_date       +
-		'  ") x                                                                             ' +
-		'  GROUP BY file_date, name, ticker                                                 ' +
-		'  UNION ALL                                                                        ' +
-		'                                                                                   ' +
-		'  SELECT lp.currentreportdate, lp.companyname, lp.ticker,                          ' +
-		'    CAST(lp.marketvalue AS NUMERIC), CAST(lp.marketvaluechange AS NUMERIC),        ' +
-		'    CAST(lp.sharesheld AS NUMERIC), CAST(lp.sharesheldchange AS NUMERIC),          ' +
-		'    CAST(lp.price AS NUMERIC), 0                     ' +
-		'  FROM latest_positions lp                                                         ' +
-		'  WHERE ' + start_date + ' <= lp.currentreportdate AND lp.currentreportdate <=     ' + 
-		end_date + ');')
+	sql = ('SELECT p2.name as name, p2.ticker as ticker, ' +
+			'p1.file_date as date1, p2.file_date as date2, ' +
+			'p1.mval as mval1, p1.shares as shares1, p1.price as price1, ' +
+			'p2.mval as mval2, p2.shares as shares2, p2.price as price2, ' +
+			'case when p1.price = 0 then 0 ' +
+			'	when p2.shares = 0 then 0 ' +
+			'	else p2.price-p1.price/p1.price end as SSR ' +
+			'FROM vPositions as p2 ' +
+			'LEFT JOIN vPositions as p1 ON ' +
+			'p1.name = p2.name AND ' +
+			'p1.ticker = p2.ticker AND ' +
+			'p1.file_date = "' + start_date + '" ' +
+			'WHERE p2.file_date = "' + end_date + '";')
 
 	cursor = db.cursor()
 	cursor.execute(sql)
@@ -153,23 +115,50 @@ def getSRR(start_date, end_date):
 	positions = []
 	for record in response:
 		positions.append({
-			"name": record[1],
-			"ticker": record[2],
-			"mval": record[3],
-			"cmval": record[4],
-			"shares": record[5],
-			"cshares": record[6],
-			"srr": record[7],
-			"price": record[8],
-			"pprice": record[9],
+			"name": record[0],
+			"ticker": record[1],
+			"file_date1": record[2],
+			"file_date2": record[3],
+			"mval1": record[4],
+			"shares1": record[5],
+			"price1": record[6],
+			"mval2": record[7],
+			"shares2": record[8],
+			"price2": record[9],
+			"srr": record[10]
 		})
 
 	return jsonify(positions)
 
+#################################################
+
+@app.route("/api/v1.0/positions/<start_date>/<end_date>")
+def getPositionsOverTime(start_date, end_date):
+	## List of holdings from start date to end date
+	sql = ('SELECT file_date, name, ticker, mval, shares, price ' +
+			'FROM vPositions ' +
+			'WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date +
+			'" ORDER BY file_date; ')
+
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		positions.append({
+			"file_date": record[0],
+			"name": record[1],
+			"ticker": record[2],
+			"mval": record[3],
+			"shares": record[4],
+			"price": record[5]
+		})
+
+	return jsonify(positions)
 
 #################################################
 @app.route("/api/v1.0/positions/<date>")
-def getHoldings(date):
+def getPositions(date):
 	## Get current holdings
 
 	# Use `declarative_base` from SQLAlchemy to connect your class to your sqlite database
@@ -422,3 +411,30 @@ def getHoldings(date):
 #################################################
 if __name__ == '__main__':
     app.run()
+
+
+#################################################
+# SQLITE3 VIEW
+#################################################
+# CREATE VIEW vPositions
+# AS
+# SELECT file_date, name, ticker, mval, cmval, shares, cshares, price                 
+# FROM (                                                           
+#   SELECT file_date, name, ticker, SUM(mval) as mval, SUM(cmval) as cmval,      
+#     SUM(shares) as shares, SUM(cshares) as cshares, MIN(price) as price       
+#   FROM (                                                                       
+#     SELECT p.file_date, p.name, s.ticker, CAST(p.mval AS NUMERIC) as mval,     
+#       CAST(p.cmval AS NUMERIC) as cmval, CAST(p.shares AS NUMERIC) as shares,  
+#       CAST(p.cshares AS NUMERIC) as cshares, CAST(p.price AS NUMERIC) as price,
+#       CAST(p.prior_price AS NUMERIC) as pprice                                 
+#     FROM processed_positions p                                                 
+#     LEFT JOIN securitiesex s ON p.cusip = s.cusip
+#   ) x                                                                         
+#   GROUP BY file_date, name, ticker                                             
+#   UNION ALL                                                                    
+#   SELECT lp.currentreportdate, lp.companyname, lp.ticker,                      
+#     CAST(lp.marketvalue AS NUMERIC), CAST(lp.marketvaluechange AS NUMERIC),    
+#     CAST(lp.sharesheld AS NUMERIC), CAST(lp.sharesheldchange AS NUMERIC),       
+#     case when lp.sharesheld = 0 then 0 else lp.marketvalue/(lp.sharesheld * 1.0) end
+#   FROM latest_positions lp                                                     
+# );
