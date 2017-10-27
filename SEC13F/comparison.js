@@ -1,9 +1,13 @@
 var $date1 = document.querySelector("#date1");
 var $date2 = document.querySelector("#date2");
+var $top_chart = document.querySelector("#top_chart");
+var $bot_chart = document.querySelector("#bottom_chart");
+var $rng_chart = document.querySelector("#range_chart");
+var $data_tbl = document.querySelector("#data_table");
 
 //initialize table
 $(document).ready(function () {
-	$('#data_table').DataTable( {
+	$data_tbl.DataTable( {
 		data: [],
 		columns: [
 			{ title: "Name", data:"name" },
@@ -61,7 +65,7 @@ function btnSubmitHandler() {
 			holdings.push(item);
 		}
 
-		var datatable = $('#data_table').DataTable();
+		var datatable = $data_tbl.DataTable();
 		datatable.clear();
 		datatable.rows.add(holdings);
 		datatable.draw();
