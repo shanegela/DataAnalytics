@@ -7,7 +7,7 @@ var $data_tbl = document.querySelector("#data_table");
 
 //initialize table
 $(document).ready(function () {
-	$data_tbl.DataTable( {
+	$('#data_table').DataTable( {
 		data: [],
 		columns: [
 			{ title: "Name", data:"name" },
@@ -23,6 +23,20 @@ $(document).ready(function () {
 			{ title: "Simple Rate of Return", data:"srr", render: function(number){return number? number.toLocaleString(undefined, { minimumFractionDigits: 2 }): null}},
 		]
 	});
+
+	topchart_visualization = d3plus.viz()
+	.container("#top_chart")
+	.data([])
+	.type("bar")
+	.id(["name"])
+	.text("name");
+
+	botchart_visualization = d3plus.viz()
+	.container("#bottom_chart")
+	.data([])
+	.type("bar")
+	.id(["name"])
+	.text("name");
 });
 
 
@@ -61,13 +75,71 @@ function btnSubmitHandler() {
 		holdings = [];
 		for (var i=0; i < response.length; i++) {
 			item = response[i];
-			//console.log(item);
+			console.log(item);
 			holdings.push(item);
 		}
 
-		var datatable = $data_tbl.DataTable();
+		var datatable = $('#data_table').DataTable();
 		datatable.clear();
 		datatable.rows.add(holdings);
 		datatable.draw();
+	
+		drawCharts();
+	
 	});
 }
+
+function drawCharts() {
+
+	top10 = holdings.sort(sort_order(false)).slice(0, 10);
+	bot10 = holdings.sort(sort_order(true)).slice(0, 10);
+
+	var top_order = top10.map(function(d){ return d["srr"]; });
+	var bot_order = bot10.map(function(d){ return d["srr"]; });
+
+	topchart_visualization
+		.data(top10)  // data to use with the visualization
+		.x({"value": "srr", "label":""})
+		.y({"scale": "discrete", "value": "name", "label": "Security Name"})
+		.shape("square")
+		.order({
+			"sort": "asc",
+			"value": function(d) { return top_order.indexOf(d); }
+		})
+		.draw();
+
+	botchart_visualization
+		.data(bot10)  // data to use with the visualization
+		.x({"value": "srr", "label":""})
+		.y({"scale": "discrete", "value": "name", "label": "Security Name"})
+		.shape("square")
+		.order({
+			"sort": "asc",
+			"value": function(d) { return bot_order.indexOf(d); }
+		})
+		.draw();
+
+}
+
+var sort_order = function(ascending){
+	
+	  return function(a,b){ 
+	
+		if(a["srr"] === null){
+		  return 1;
+		}
+		else if(b["srr"]=== null){
+		  return -1;
+		}
+		else if(a["srr"] === b["srr"]){
+		  return 0;
+		}
+		else if(ascending) {
+		  return a["srr"] < b["srr"] ? -1 : 1;
+		}
+		else if(!ascending) {
+		  return a["srr"] < b["srr"] ? 1 : -1;
+		}
+	  };
+	}
+	
