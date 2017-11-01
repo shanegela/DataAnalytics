@@ -4,23 +4,28 @@ var $top_chart = document.querySelector("#top_chart");
 var $bot_chart = document.querySelector("#bottom_chart");
 var $rng_chart = document.querySelector("#range_chart");
 var $data_tbl = document.querySelector("#data_table");
+var $errmsg = document.querySelector("#errmsg");
 
 //initialize table
 $(document).ready(function () {
 	$('#data_table').DataTable( {
 		data: [],
+		columnDefs: [{
+			"defaultContent": "-",
+			"targets": "_all"
+		  }],
 		columns: [
-			{ title: "Name", data:"name" },
-			{ title: "Ticker", data: "ticker" },
+			{ title: "Name", data:"name"},
+			{ title: "Ticker", data: "ticker"},
 			{ title: "Beginning Date", data:"file_date1"},
-			{ title: "Ending Date", date:"file_date2"},
-			{ title: "Beginning Market Value", data: "mval1", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
-			{ title: "Beginning Price", data: "price1", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
-			{ title: "Ending Market Value", data: "mval2", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
-			{ title: "Ending Price", data: "price2", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
-			{ title: "Beginning Shares", data: "shares1", render: function(number){return number? number.toLocaleString(): null} },
-			{ title: "Ending Shares", data: "shares2", render: function(number){return number? number.toLocaleString(): null} },
-			{ title: "Simple Rate of Return", data:"srr", render: function(number){return number? number.toLocaleString(undefined, { minimumFractionDigits: 2 }): null}},
+			{ title: "Ending Date", data:"file_date2"},
+			{ title: "Beginning Market Value", data: "mval1", render: function(number){return number === null ? null : number.toLocaleString("en-US", { style: "currency", currency: "USD" })}},
+			{ title: "Beginning Price", data: "price1", render: function(number){return number === null ? null: number.toLocaleString("en-US", { style: "currency", currency: "USD" })}},
+			{ title: "Ending Market Value", data: "mval2", render: function(number){return number === null? null : number.toLocaleString("en-US", { style: "currency", currency: "USD" })}},
+			{ title: "Ending Price", data: "price2", render: function(number){return number === null ? null: number.toLocaleString("en-US", { style: "currency", currency: "USD" })}},
+			{ title: "Beginning Shares", data: "shares1", render: function(number){return number === null ? null: number.toLocaleString()}},
+			{ title: "Ending Shares", data: "shares2", render: function(number){return number === null ? null : number.toLocaleString()}},
+			{ title: "Simple Rate of Return", data:"srr", render: function(number){return number === null ? null : number.toLocaleString(undefined, { minimumFractionDigits: 2 })}}
 		]
 	});
 
@@ -68,25 +73,43 @@ function setDateRange(response) {
 function btnSubmitHandler() {
 	var start_date = $date1.value;
 	var end_date = $date2.value;
-	var queryURL = "http://localhost:5000/api/v1.0/srr/" + start_date + "/" + end_date;
-	d3.json(queryURL, function(error, response) {
-		if (error) return console.warn(error);
-		
-		holdings = [];
-		for (var i=0; i < response.length; i++) {
-			item = response[i];
-			console.log(item);
-			holdings.push(item);
-		}
+	if (start_date > end_date) {
+		$errmsg.innerText ="The from date must be prior to the to date.";
+		$errmsg.style.display = "block";
+		$errmsg.style.color = "red";
+	} else {
+		$errmsg.innerText = "";
+		$errmsg.style.display = "none";
+		var queryURL = "http://localhost:5000/api/v1.0/srr/" + start_date + "/" + end_date;
+		d3.json(queryURL, function(error, response) {
+			if (error) return console.warn(error);
+			
+			holdings = [];
+			$.each(response, function(index, item) {
+				holdings.push({
+					"name": item.name,
+					"ticker": item.ticker,
+					"file_date1": item.file_date1,
+					"file_date2": item.file_date2,
+					"mval1": item.mval1,
+					"price1": item.price1,
+					"mval2": item.mval2,
+					"price2": item.price2,
+					"shares1": item.shares1,
+					"shares2": item.shares2,
+					"srr": item.srr
+				})
+			})
 
-		var datatable = $('#data_table').DataTable();
-		datatable.clear();
-		datatable.rows.add(holdings);
-		datatable.draw();
-	
-		drawCharts();
-	
-	});
+			var datatable = $('#data_table').DataTable();
+			datatable.clear();
+			datatable.rows.add(holdings);
+			datatable.draw();
+		
+			drawCharts();
+		
+		});
+	}
 }
 
 function drawCharts() {
