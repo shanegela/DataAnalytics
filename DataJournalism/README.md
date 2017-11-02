@@ -6,3 +6,9 @@ Depression
 
 
 correlation = .575218
+
+HC04_EST_VC01
+Unemployment rate; Estimate; Population 16 years and over
+
+HC03_EST_VC01
+Percent Uninsured; Estimate; Total civilian noninstitutionalized population

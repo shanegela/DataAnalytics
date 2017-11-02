@@ -5,7 +5,7 @@
 var svgWidth = 600
 var svgHeight = 400;
 
-var margin = { top: 20, right: 40, bottom: 80, left: 100 };
+var margin = { top: 20, right: 40, bottom: 100, left: 120 };
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
 
@@ -13,7 +13,7 @@ redraw();
 
 function redraw() {
 	// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
-	var svg = d3		
+	var svg = d3
 		.select(".chart")
 		.append("svg")
 		//responsive SVG needs these 2 attributes and no width and height attr
@@ -40,7 +40,11 @@ function redraw() {
 		stateData.forEach(function(data) {
 			data.id = +data.id;
 			data.depression = +data.depression;
+			data.smokes = +data.smokes;
+			data.obese = +data.obese;
+			data.unemployment = +data.unemployment;
 			data.poverty = +data.poverty;
+			data.uninsured = +data.uninsured;
 		});
 
 		// Create scale functions
@@ -59,7 +63,7 @@ function redraw() {
 
 		// This function identifies the minimum and maximum values in a column in data.csv
 		// and assign them to xMin and xMax variables, which will define the axis domain
-		function findMinAndMax(dataColumnX) {
+		function findMinAndMax(dataColumnX, dataColumnY) {
 			xMin = d3.min(stateData, function(data) {
 			return +data[dataColumnX] * 0.8;
 			});
@@ -69,17 +73,18 @@ function redraw() {
 			});
 
 			yMax = d3.max(stateData, function(data) {
-			return +data.depression * 1.1;
+			return +data[dataColumnY] * 1.1;
 			});
 		}
 
-		// The default x-axis is 'poverty'
+		// The default x-axis is 'poverty', y-axis is 'depression'
 		// Another axis can be assigned to the variable during an onclick event.
 		// This variable is key to the ability to change axis/data column
 		var currentAxisLabelX = "poverty";
+		var currentAxisLabelY = "depression"
 
 		// Call findMinAndMax() with 'poverty' as default
-		findMinAndMax(currentAxisLabelX);
+		findMinAndMax(currentAxisLabelX, currentAxisLabelY);
 
 		// Set the domain of an axis to extend from the min to the max value of the data column
 		xLinearScale.domain([xMin, xMax]);
@@ -95,13 +100,32 @@ function redraw() {
 			.html(function(data) {
 			var stateName = data.state;
 			var depression = +data.depression;
+			var smokes = +data.smokes;
+			var obese = +data.obese;
+			var unemployment = +data.unemployment;
 			var poverty = +data.poverty;
-			return stateName +
-				"<br> In Poverty (%): " +
-				poverty +
-				"<br> Depression (%): " +
-				depression;
-			});
+			var uninsured = +data.uninsured;
+
+			var xString;
+			if (currentAxisLabelX === "poverty") {
+				xString = "<br> In Poverty (%): " + poverty;
+			} else if (currentAxisLabelX === "uninsured") {
+				xString ="<br> Uninsured (%): " + uninsured;
+			}  else {
+				xString ="<br> Unemployment (%): " + unemployment;
+			}
+
+			var yString;
+			if (currentAxisLabelY === "depression") {
+				yString = "<br> Depression (%): " + depression;
+			} else if (currentAxisLabelY === "smokes") {
+				yString ="<br> Smokes (%): " + smokes;
+			}  else {
+				yString ="<br> Obese (%): " + obese;
+			}
+
+			return stateName + xString + yString;
+		});
 
 		// Create tooltip
 		chart.call(toolTip);
@@ -112,10 +136,10 @@ function redraw() {
 			.enter()
 			.append("circle")
 			.attr("cx", function(data, index) {
-			return xLinearScale(data.poverty);
+			return xLinearScale(+data[currentAxisLabelX]);
 			})
 			.attr("cy", function(data, index) {
-			return yLinearScale(data.depression);
+			return yLinearScale(+data[currentAxisLabelY]);
 			})
 			.attr("r", "15")
 			.attr("fill", "#E75480")
@@ -137,15 +161,13 @@ function redraw() {
 
 		var textLabels = text
 			.attr("x", function(data, index) {
-				return xLinearScale(data.poverty)-6;
+				return xLinearScale(+data[currentAxisLabelX])-6;
 			})
 			.attr("y", function(data, index) {
-				return yLinearScale(data.depression)+4;
+				return yLinearScale(+data[currentAxisLabelY])+4;
 			})
 			.text( function (data) {return data.abbr})
-			.attr("font-family", "sans-serif")
-			.attr("font-size", "10px")
-			.attr("fill", "black")
+			.attr("class","circle-text");
 
 		// Append an SVG group for the x-axis, then display the x-axis
 		chart
@@ -162,12 +184,33 @@ function redraw() {
 		chart
 			.append("text")
 			.attr("transform", "rotate(-90)")
+			.attr("y", 0 - margin.left + 60)
+			.attr("x", 0 - height / 2)
+			.attr("dy", "1em")
+			.attr("class", "yaxis-text yactive")
+			.attr("data-axis-name", "depression")
+			.text("Depression (%)");
+
+		chart
+			.append("text")
+			.attr("transform", "rotate(-90)")
 			.attr("y", 0 - margin.left + 40)
 			.attr("x", 0 - height / 2)
 			.attr("dy", "1em")
-			.attr("class", "axis-text")
-			.attr("data-axis-name", "depression")
-			.text("Suffers from Depression (%)");
+			.attr("class", "yaxis-text yinactive")
+			.attr("data-axis-name", "smokes")
+			.text("Smokes (%)");
+
+		chart
+			.append("text")
+			.attr("transform", "rotate(-90)")
+			.attr("y", 0 - margin.left + 20)
+			.attr("x", 0 - height / 2)
+			.attr("dy", "1em")
+			.attr("class", "yaxis-text yinactive")
+			.attr("data-axis-name", "obese")
+			.text("Obese (%)");
+
 
 		// Append x-axis labels
 		chart
@@ -176,35 +219,64 @@ function redraw() {
 			"transform",
 			"translate(" + width / 2 + " ," + (height + margin.top + 20) + ")"
 			)
-			// This axis label is active by default
-			.attr("class", "axis-text active")
+			.attr("class", "xaxis-text xactive")
 			.attr("data-axis-name", "poverty")
 			.text("In Poverty (%)");
 
+		chart
+			.append("text")
+			.attr(
+			  "transform",
+			  "translate(" + width / 2 + " ," + (height + margin.top + 40) + ")"
+			)
+			.attr("class", "xaxis-text xinactive")
+			.attr("data-axis-name", "unemployment")
+			.text("Unemployment (%)");
+
+		chart
+			.append("text")
+			.attr(
+			  "transform",
+			  "translate(" + width / 2 + " ," + (height + margin.top + 60) + ")"
+			)
+			.attr("class", "xaxis-text xinactive")
+			.attr("data-axis-name", "uninsured")
+			.text("Uninsured (%)");
 
 		// Change an axis's status from inactive to active when clicked (if it was inactive)
 		// Change the status of all active axes to inactive otherwise
-		function labelChange(clickedAxis) {
+		function xlabelChange(clickedAxis) {
 			d3
-			.selectAll(".axis-text")
-			.filter(".active")
+			.selectAll(".xaxis-text")
+			.filter(".xactive")
 			// An alternative to .attr("class", <className>) method. Used to toggle classes.
-			.classed("active", false)
-			.classed("inactive", true);
+			.classed("xactive", false)
+			.classed("xinactive", true);
 
-			clickedAxis.classed("inactive", false).classed("active", true);
+			clickedAxis.classed("xinactive", false).classed("xactive", true);
 		}
 
-		d3.selectAll(".axis-text").on("click", function() {
+		function ylabelChange(clickedAxis) {
+			d3
+			.selectAll(".yaxis-text")
+			.filter(".yactive")
+			// An alternative to .attr("class", <className>) method. Used to toggle classes.
+			.classed("yactive", false)
+			.classed("yinactive", true);
+
+			clickedAxis.classed("yinactive", false).classed("yactive", true);
+		}
+
+		d3.selectAll(".xaxis-text").on("click", function() {
 			// Assign a variable to current axis
 			var clickedSelection = d3.select(this);
 			// "true" or "false" based on whether the axis is currently selected
-			var isClickedSelectionInactive = clickedSelection.classed("inactive");
+			var isClickedSelectionInactive = clickedSelection.classed("xinactive");
 			// console.log("this axis is inactive", isClickedSelectionInactive)
 			// Grab the data-attribute of the axis and assign it to a variable
 			// e.g. if data-axis-name is "poverty," var clickedAxis = "poverty"
 			var clickedAxis = clickedSelection.attr("data-axis-name");
-			console.log("current axis: ", clickedAxis);
+			console.log("current x-axis: ", clickedAxis);
 
 			// The onclick events below take place only if the x-axis is inactive
 			// Clicking on an already active axis will therefore do nothing
@@ -212,7 +284,7 @@ function redraw() {
 			// Assign the clicked axis to the variable currentAxisLabelX
 			currentAxisLabelX = clickedAxis;
 			// Call findMinAndMax() to define the min and max domain values.
-			findMinAndMax(currentAxisLabelX);
+			findMinAndMax(currentAxisLabelX, currentAxisLabelY);
 			// Set the domain for the x-axis
 			xLinearScale.domain([xMin, xMax]);
 			// Create a transition effect for the x-axis
@@ -235,8 +307,73 @@ function redraw() {
 				.duration(1800);
 			});
 
+			d3.selectAll(".circle-text").each(function(){
+				d3
+				.select(this)
+				.transition()
+				.attr("x", function(data, index) {
+					return xLinearScale(+data[currentAxisLabelX])-6;
+				})
+				.duration(1800);
+			});
+
 			// Change the status of the axes. See above for more info on this function.
-			labelChange(clickedSelection);
+			xlabelChange(clickedSelection);
+			}
+		});
+
+		d3.selectAll(".yaxis-text").on("click", function() {
+			// Assign a variable to current axis
+			var clickedSelection = d3.select(this);
+			// "true" or "false" based on whether the axis is currently selected
+			var isClickedSelectionInactive = clickedSelection.classed("yinactive");
+			// console.log("this axis is inactive", isClickedSelectionInactive)
+			// Grab the data-attribute of the axis and assign it to a variable
+			// e.g. if data-axis-name is "poverty," var clickedAxis = "poverty"
+			var clickedAxis = clickedSelection.attr("data-axis-name");
+			console.log("current y-axis: ", clickedAxis);
+
+			// The onclick events below take place only if the x-axis is inactive
+			// Clicking on an already active axis will therefore do nothing
+			if (isClickedSelectionInactive) {
+			// Assign the clicked axis to the variable currentAxisLabelX
+			currentAxisLabelY = clickedAxis;
+			// Call findMinAndMax() to define the min and max domain values.
+			findMinAndMax(currentAxisLabelX, currentAxisLabelY);
+			// Set the domain for the y-axis
+			yLinearScale.domain([0, yMax]);
+			// Create a transition effect for the x-axis
+			svg
+				.select(".y-axis")
+				.transition()
+				// .ease(d3.easeElastic)
+				.duration(1800)
+				.call(leftAxis);
+			// Select all circles to create a transition effect, then relocate its horizontal location
+			// based on the new axis that was selected/clicked
+			d3.selectAll("circle").each(function() {
+				d3
+				.select(this)
+				.transition()
+				// .ease(d3.easeBounce)
+				.attr("cy", function(data) {
+					return yLinearScale(+data[currentAxisLabelY]);
+				})
+				.duration(1800);
+			});
+
+			d3.selectAll(".circle-text").each(function(){
+				d3
+				.select(this)
+				.transition()
+				.attr("y", function(data, index) {
+					return yLinearScale(+data[currentAxisLabelY])+4;
+				})
+				.duration(1800);
+			});
+
+			// Change the status of the axes. See above for more info on this function.
+			ylabelChange(clickedSelection);
 			}
 		});
 	});
@@ -252,3 +389,4 @@ function resize() {
 	redraw();
 
 }
+

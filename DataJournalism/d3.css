@@ -1,18 +1,8 @@
 
-.chart::before {
-  position: absolute;
-  top: 50px;
-  left: 300px;
-  z-index: -1;
-  display: block;
-  width: 400px;
-  height: 300px;
-  content: " ";
-  background-image: url("maxresdefault.jpg");
-  background-repeat: no-repeat;
-  background-position: 50% 0;
-  background-size: cover;
-  opacity: 0.3;
+.circle-text {
+	font-family: sans-serif;
+	font-size: 10px;
+	fill: black;
 }
 
 .tooltip {
@@ -29,14 +19,14 @@
   border-radius: 10px;
 }
 
-.axis-text {
+.xaxis-text, .yaxis-text {
   font-family: sans-serif;
   font-weight: bold;
   fill: #cc0099;
   text-anchor: middle;
 }
 
-.active {
+.xactive, .yactive{
   font-weight: bold;
   fill: #000;
   fill: #cc0099;
@@ -44,14 +34,14 @@
   text-anchor: middle;
 }
 
-.inactive {
+.xinactive, .yinactive {
   font-weight: lighter;
   fill: #cc0099;
   transition: fill 0.3s ease-out;
   text-anchor: middle;
 }
 
-.inactive:hover {
+.xinactive:hover, .yinactive:hover {
   fill: #e75480;
   cursor: pointer;
 }
