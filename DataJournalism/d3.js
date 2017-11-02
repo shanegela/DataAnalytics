@@ -15,7 +15,6 @@ function redraw() {
 	// Create an SVG wrapper, append an SVG group that will hold our chart, and shift the latter by left and top margins.
 	var svg = d3		
 		.select(".chart")
-		.classed("svg-container", true) //container class to make it responsive
 		.append("svg")
 		//responsive SVG needs these 2 attributes and no width and height attr
 		.attr("preserveAspectRatio", "xMinYMin meet")
