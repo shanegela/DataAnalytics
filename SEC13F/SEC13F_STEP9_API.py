@@ -131,14 +131,56 @@ def getSRR(start_date, end_date):
 	return jsonify(positions)
 
 #################################################
+# WITH data AS
+# ( SELECT file_date, name, ticker, mval, shares, price
+#   FROM vPositions
+#   WHERE '2015-06-30' <= file_date and file_date <= '2017-06-30'
+# ), all_dates AS 
+# (
+#   SELECT DISTINCT file_date
+#   FROM vPositions
+#   WHERE '2015-06-30' <= file_date and file_date <= '2017-06-30'
+# ), all_secs AS 
+# (
+#   SELECT DISTINCT ticker, name
+#   FROM vPositions
+#   WHERE '2015-06-30' <= file_date and file_date <= '2017-06-30'
+# )
+# SELECT x.ticker, x.file_date, x.name, data.mval, data.shares, data.price
+# from (
+#   SELECT file_date, ticker, name
+#   FROM all_dates
+#   CROSS JOIN all_secs
+# ) x
+# LEFT JOIN data on x.file_date = data.file_date AND x.ticker = data.ticker
+# ORDER BY x.ticker, x.file_date;
 
 @app.route("/api/v1.0/positions/<start_date>/<end_date>")
 def getPositionsOverTime(start_date, end_date):
 	## List of holdings from start date to end date
-	sql = ('SELECT file_date, name, ticker, mval, shares, price ' +
-			'FROM vPositions ' +
-			'WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date +
-			'" ORDER BY file_date; ')
+	sql = ('WITH data AS                                                             ' +
+			'( SELECT file_date, name, ticker, mval, shares, price                    ' +
+			'  FROM vPositions                                                        ' +
+			'  WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date + '"' +
+			'), all_dates AS                                                          ' +
+			'(                                                                        ' +
+			'  SELECT DISTINCT file_date                                              ' +
+			'  FROM vPositions                                                        ' +
+			'  WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date + '"' +
+			'), all_secs AS                                                           ' +
+			'(                                                                        ' +
+			'  SELECT DISTINCT ticker, name                                           ' +
+			'  FROM vPositions                                                        ' +
+			'  WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date + '"' +
+			')                                                                        ' +
+			'SELECT x.ticker, x.file_date, x.name, data.mval, data.shares, data.price ' +
+			'from (                                                                   ' +
+			'  SELECT file_date, ticker, name                                         ' +
+			'  FROM all_dates                                                         ' +
+			'  CROSS JOIN all_secs                                                    ' +
+			') x                                                                      ' +
+			'LEFT JOIN data on x.file_date = data.file_date AND x.ticker = data.ticker' +
+			' ORDER BY x.ticker, x.file_date;')
 
 	cursor = db.cursor()
 	cursor.execute(sql)
@@ -146,9 +188,9 @@ def getPositionsOverTime(start_date, end_date):
 	positions = []
 	for record in response:
 		positions.append({
-			"file_date": record[0],
-			"name": record[1],
-			"ticker": record[2],
+			"ticker": record[0],
+			"file_date": record[1],
+			"name": record[2],
 			"mval": record[3],
 			"shares": record[4],
 			"price": record[5]

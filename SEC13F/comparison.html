@@ -82,26 +82,36 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<div card="class">
+				<div class="card">
 					<div class="card-header">
-						<h3>Chart Over Time</h3>
+						<h3 id="lineChartTitle">Market Value Over Time</h3>
+						<div>
+							<fieldset class="form-group">
+								<label style="float:left; padding: 0px 5px;font-weight:bold;">Chart Options:</label>
+								<div class="form-check" style="padding: 0px 5px; display: inline;">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="lineChartValueRadio" id="lineChartValueRadio1" value="mval" onclick="drawChart(this)" checked>
+										Market Value
+									</label>
+								</div>
+								<div class="form-check" style="padding: 0px 5px; display: inline;">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="lineChartValueRadio" id="lineChartValueRadio2" value="shares" onclick="drawChart(this)">
+										Shares
+									</label>
+								</div>
+								<div class="form-check" style="padding: 0px 5px; display: inline;">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="lineChartValueRadio" id="lineChartValueRadio3" value="price" onclick="drawChart(this)">
+										Price
+									</label>
+								</div>
+							</fieldset>
+						</div>
 					</div>
 					<div class="card-body">
-						<div id="range_chart"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="row">
-			<div class="col-md-12">
-				<div card="class">
-					<div class="card-header">
-						<h3>Data Over Time</h3>
-					</div>
-					<div class="card-body">
-						<table id="data_table" class="display">
-						</table>
+						<div id="line_chart" style="height:500px;">
+						</div>
 					</div>
 				</div>
 			</div>
