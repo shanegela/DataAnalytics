@@ -1,100 +1,217 @@
-<!--
-# Activity 1 - Student Bio Page
-
-* Create a simple bio page for yourself using the following HTML elements:
-
-  * A header containing your name
-  * An image for your picture (a placeholder is fine for now. include a basic description using the `alt` attribute)
-  * Two paragraphs with text describing who you are
-  * An unordered list of links to your social media pages
-  * A table with three columns and some data on your favorite movies, songs, books, or activities
-
-### Hints
-
-* Dummy images can be found at [lorempixel.com](http://lorempixel.com/) and dummy text can be found at [lipsum.com](http://www.lipsum.com/). Focus on getting the entire page working before diving into more specific text and images.
-
-### Bonuses
-
-* Investigate how to link custom-made HTML pages to each other. Try creating a link from your newly-created bio page to one of the pages you created last class.
--->
 <!DOCTYPE html>
+<!-- boostrap template: https://startbootstrap.com/template-overviews/resume/-->
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Angela Shane</title>
-	<style>
-		header{
-			text-align:center;
-		}
-		img{
-			border-radius:100%;
-			border:2px solid lightgrey;
-		}
-		main{
-			border:2px solid darkcyan;
-			border-radius:10px;
-			margin:50px;
-			padding:10px 20px;
-			background-color:white;
-			box-shadow: 0px 0px 30px slategray;
-			max-width:660px;
-			margin-left:auto;
-			margin-right:auto;
-		}
-	</style>
-</head>
-<body>
-	<header>
-		<h1>Angela Shane</h1>
-		<img src="images/AngelaShane.jpg" alt="Angela Shane">
-	</header>
-	<main>
-		<p>
-		Report developer in the financial software industry with over ten years experience generating visualizations for financial data using SSRS or Replang. I’m always ready for a report challenge and finding the right solution.
-		<ul>
-			<li>Proficiencies: proprietary language development (Replang), Microsoft SSRS, SQL, Word, Excel, Visual Basic, Access, PowerPoint, Jira, Confluence, and basic HTML.</li>
-			<li>Experience developing software in an Agile and SCRUM environment.</li>
-			<li>Excel working independently or within a small team; strong problem solving skills and technical background.</li>
-		</ul>
-		</p>
 
-		<h3>Social Media</h3>
-		<ul>
-			<li><strong>Email: </strong><a href="mailto:shanegela@gmail.com">shanegela@gmail.com</a></li>
-			<li><strong>Linked In: </strong><a href="https://www.linkedin.com/in/angelashane/" target="_blank">Angela Shane</a></li>
-			<li><strong>Github: </strong><a href="https://github.com/shanegela/DataAnalytics/" target="_blank">Data Analytics</a></li>
-		</ul>
+  <head>
 
-		<h3>Projects</h3>
-		<ul>
-			<li><a target="_blank" href="https://shanegela.github.io/DataAnalytics/WebDashboard/">Web Dashboard: Yelp Review Analysis</a></li>
-			<li><a target="_blank" href="https://shanegela.github.io/DataAnalytics/DataJournalism/">Data Journalism: 2014 by State Analysis</a></li>
-			<li><a target="_blank" href="https://shanegela.github.io/DataAnalytics/SEC13F/">SEC13F Analysis: Berkshire Hathaway</a></li>
-		</ul>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-		<h3>Favorites</h3>
-		<table border="1">
-			<thead>
-				<tr>
-					<th>Movies</th>
-					<th>Books</th>
-					<th>Music</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>American History X</td>
-					<td>The Fountain Head</td>
-					<td>Soulshine</td>
-				</tr>
-				<tr>
-					<td>Meet the Fockers</td>
-					<td>Whitney, My Love</td>
-					<td>Going to California</td>
-				</tr>
-			</tbody>
-		</table>
-	</main>
-</body>
+    <title>Angela Shane</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i" rel="stylesheet">
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="vendor/devicons/css/devicons.min.css" rel="stylesheet">
+    <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/resume.min.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+      <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <span class="d-block d-lg-none">Angela Shane</span>
+        <span class="d-none d-lg-block">
+          <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="img/profile.jpg" alt="">
+        </span>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#experience">Experience</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#education">Education</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#skills">Skills</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link js-scroll-trigger" href="#projects">Projects</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container-fluid p-0">
+
+      <section class="resume-section p-3 p-lg-5 d-flex d-column" id="about">
+        <div class="my-auto">
+          <h1 class="mb-0">Angela
+            <span class="text-primary">Shane</span>
+          </h1>
+          <div class="subheading mb-5">San Francisco, CA 94109
+            <a href="mailto:name@email.com">shanegela@gmail.com</a>
+          </div>
+          <p class="mb-5">Report developer in the financial software industry with over ten years experience generating visualizations for financial data using SSRS or Replang. I’m always ready for a report challenge and finding the right solution.</p>
+          <ul class="list-inline list-social-icons mb-0">
+            <li class="list-inline-item">
+              <a href="https://www.linkedin.com/in/angelashane/" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+            <li class="list-inline-item">
+              <a href="https://github.com/shanegela/DataAnalytics/" target="_blank">
+                <span class="fa-stack fa-lg">
+                  <i class="fa fa-circle fa-stack-2x"></i>
+                  <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="experience">
+        <div class="my-auto">
+          <h2 class="mb-5">Experience</h2>
+
+          <div class="resume-item d-flex flex-column flex-md-row mb-5">
+            <div class="resume-content mr-auto">
+              <h3 class="mb-0">Senior Software Engineer</h3>
+              <div class="subheading mb-3">SS&C Technologies</div>
+              <ul>
+				  <li>Work directly with Business Analysts to analyze and understand reporting requirements and workflows.</li>
+				  <li>Assist in the development of project tasks, including proposals, estimates, planning and documentation.</li>
+				  <li>Scrum master for Accounting and Reporting</li> team in an Agile and SCRUM development framework.
+				  <li> Able to identify appropriate testing approaches for each report, and works effectively with Quality Assurance engineers to support testing.</li>
+				  <li>Collaborate with Technical Writers to develop first class client documentation, help, and case studies.</li>
+				  <li>Train report engineers to support and create Replang and SSRS reports in both APX and Axys.</li>
+				  <li>Maintain and develop product reports in Replang, SSRS, and SQL. </li>
+				  <li>Lead BI developer in creating a new portfolio reporting API using SQL and SSRS (SQL Server Reporting Services). </li>				  
+			  </ul>
+            </div>
+            <div class="resume-date text-md-right">
+              <span class="text-primary">March 2005 - Present</span>
+            </div>
+          </div>
+
+      </section>
+
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="education">
+        <div class="my-auto">
+          <h2 class="mb-5">Education</h2>
+
+          <div class="resume-item d-flex flex-column flex-md-row mb-5">
+            <div class="resume-content mr-auto">
+              <h3 class="mb-0">University of California,Berkeley</h3>
+              <div class="subheading mb-3">Data Analytics Bootcamp</div>
+              <div>An intensive 24-week long boot camp dedicated to Data Mining Methods and Techniques, Data Preparation for Data Mining and Advanced Methods and Applications, utilizing technologies such as Python, JavaScript, Advanced Excel, SQL Database.</div>
+            </div>
+            <div class="resume-date text-md-right">
+              <span class="text-primary">June 2017 - Dec 2017</span>
+            </div>
+          </div>
+
+          <div class="resume-item d-flex flex-column flex-md-row">
+            <div class="resume-content mr-auto">
+              <h3 class="mb-0">General Assembly</h3>
+			  <div class="subheading mb-3">Front End Web Development</div>
+			  <div>10-week course dedicated to learning websites using HTML, CSS, and Javascript.
+				</div>
+            </div>
+            <div class="resume-date text-md-right">
+              <span class="text-primary">March 2015 - June 2015</span>
+            </div>
+		  </div>
+
+          <div class="resume-item d-flex flex-column flex-md-row">
+			<div class="resume-content mr-auto">
+				<h3 class="mb-0">Georgia Institute of Technology</h3>
+				<div class="subheading mb-3">Bachelor of Science</div>
+				<div>Computer Science</div>
+			</div>
+			<div class="resume-date text-md-right">
+				<span class="text-primary">Aug 1995 - Dec 1999</span>
+			</div>
+		</div>
+
+        </div>
+      </section>
+
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="skills">
+        <div class="my-auto">
+          <h2 class="mb-5">Skills</h2>
+
+		  <div class="subheading mb-3">Core Competencies</div>
+		  <ul class="fa-ul mb-0">
+			<li>
+				<i class="fa-li fa fa-check"></i>
+				Extensive experience in designing and developing client-facing reports for APX (Advent Portfolio Exchange), an industry-leading, multi-asset-class portfolio management and CRM software product.  These reports provide clients with clarity and insight into their portfolio's performance measurement (IRRs & TWRs), performance attribution, ex-post risk, asset allocation, holdings and transactions.</li>
+			<li>
+				<i class="fa-li fa fa-check"></i>
+				Demonstrated experience working independently or within a small team; strong problem solving skills and technical background.</li>
+			<li>
+				<i class="fa-li fa fa-check"></i>
+				Proficient in proprietary language development (Replang), Microsoft SSRS, SQL, Word, Excel, Visual Basic, Access, PowerPoint, Jira, Confluence, basic HTML, Python, Javascript, Bootstrap, CSS, C++, Angular RC.</li>
+			</ul>
+      </section>
+
+      <section class="resume-section p-3 p-lg-5 d-flex flex-column" id="projects">
+        <div class="my-auto">
+          <h2 class="mb-5">Projects</h2>
+		  <ul class="fa-ul mb-0">
+				<li>
+					<i class="fa-li fa fa-trophy text-warning"></i>
+					<a target="_blank" href="http://shanegela.github.io/FEWD/RetirementPlanB/index.html">California Lottery</a>
+				</li>
+				<li>
+					<i class="fa-li fa fa-trophy text-warning"></i>
+					<a target="_blank" href="https://shanegela.github.io/DataAnalytics/WebDashboard/">Web Dashboard: Yelp Review Analysis</a>
+				</li>
+				<li>
+					<i class="fa-li fa fa-trophy text-warning"></i>
+					<a target="_blank" href="https://shanegela.github.io/DataAnalytics/DataJournalism/">Data Journalism: 2014 by State Analysis</a>
+				</li>
+				<li>
+					<i class="fa-li fa fa-trophy text-warning"></i>
+					<a target="_blank" href="https://shanegela.github.io/DataAnalytics/SEC13F/">SEC13F Analysis: Berkshire Hathaway</a>
+				</li>
+			</ul>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/resume.min.js"></script>
+
+  </body>
+
 </html>
-
