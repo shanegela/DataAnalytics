@@ -42,3 +42,5 @@ Andrew died of lymphoma on September 3, 2014.[13]
 6. web dashboard to query api and show as charts
 
 
+Save postgressql dump
+pg_dump -U postgres -sec13f > sec13f.sql
