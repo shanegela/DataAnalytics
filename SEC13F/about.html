@@ -129,7 +129,7 @@
 							<p class="card-text">
 							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP3_SaveDataToDB.ipynb">SEC13F_STEP3_SaveDataToDB</a>
 							<br><br>
-							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a SQLite database.  The csv data is saved to a positions table.
+							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a positions table.
 							</p>
 						</div>
 					</div>
@@ -142,7 +142,7 @@
 							<p class="card-text">
 							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP4_GetDecoratedData.ipynb">SEC13F_STEP4_GetDecoratedData</a>
 							<br><br>
-							This notebook reads the positions table in the SQLite database: sec13f.sqlite to get a unique list of CUSIP.  The notebook then scrapes the <a href="https://search13f.com/securities/neighbors/">Search13F</a> website to get decorated information such as the Industry Sector and Industry Group.
+							This notebook reads the positions table in the PostgreSQL database: sec13f to get a unique list of CUSIP.  The notebook then scrapes the <a href="https://search13f.com/securities/neighbors/">Search13F</a> website to get decorated information such as the Industry Sector and Industry Group.
 							<br><br>
 							The CUSIP, Industry Sector, and Industry Group data are then stored into a csv file, decorated_data.csv
 							</p>
@@ -157,7 +157,7 @@
 							<p class="card-text">
 							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP5_SaveDecoratedDataToDB.ipynb">SEC13F_STEP5_SaveDecoratedDataToDB</a>
 							<br><br>
-							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a SQLite database.  The csv data is saved to a indsectorindgroup table.
+							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a indsectorindgroup table.
 							</p>
 						</div>
 					</div>
@@ -172,7 +172,7 @@
 							<br><br>
 							Some CUSIP have missing Industry Sector or Industry Group because they are no longer traded due to corporation reorganizations like mergers, exchanges, or spinoffs.
 							<br><br>
-							This notebook identifies CUSIP with missing industry sector and/or industry group.  A manual intervention is done to lookup the missing information.  The research information is then put into a dictionary which is then used to update the indsectorindgroup table in the SQLite database.
+							This notebook identifies CUSIP with missing industry sector and/or industry group.  A manual intervention is done to lookup the missing information.  The research information is then put into a dictionary which is then used to update the indsectorindgroup table in the PostgreSQL database.
 							</p>
 						</div>
 					</div>

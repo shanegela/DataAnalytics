@@ -14,8 +14,7 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Numeric, Text, Float
 
-import sqlite3
-
+import psycopg2
 from flask import Flask, jsonify
 
 #################################################
@@ -29,8 +28,21 @@ def reformat_date(str_date):
 #################################################
 # Database Setup
 #################################################
-engine = create_engine("sqlite:///sec13f.sqlite")
-db = sqlite3.connect("sec13f.sqlite")
+# create an engine to postgresql db
+user = config['psql_user']
+password = config['psql_pwd']
+host = 'localhost'
+port = '5432'
+db = config['psql_db']
+url = 'postgresql://{}:{}@{}:{}/{}'
+url = url.format(user, password, host, port, db)
+
+# The return value of create_engine() is our connection object
+engine = sqlalchemy.create_engine(url, client_encoding='utf8')
+
+dburl = 'dbname={} user={} password={}'
+dburl = dburl.format(db, user, password)
+db = psycopg2.connect(dburl)
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -106,26 +118,54 @@ def getSRR(start_date, end_date):
 			'LEFT JOIN vPositions as p1 ON ' +
 			'p1.name = p2.name AND ' +
 			'p1.ticker = p2.ticker AND ' +
-			'p1.file_date = "' + start_date + '" ' +
-			'WHERE p2.file_date = "' + end_date + '";')
-
+			"p1.file_date = '" + start_date + "' " +
+			"WHERE p2.file_date = '" + end_date + "';")
+	print(sql)
 	cursor = db.cursor()
 	cursor.execute(sql)
 	response = cursor.fetchall()
 	positions = []
 	for record in response:
+		if record[4] is None: 
+			mval1 = None 
+		else: 
+			mval1 = int(record[4])
+		if record[5] is None: 
+			shares1 = None 
+		else: 
+			shares1 = int(record[5])
+		if record[6] is None: 
+			price1 = None 
+		else: 
+			price1 = float(record[6])
+		if record[7] is None: 
+			mval2 = None 
+		else: 
+			mval2 = int(record[7])
+		if record[8] is None: 
+			shares2 =None 
+		else: 
+			shares2 = int(record[8])
+		if record[9] is None: 
+			price2 = None 
+		else: 
+			price2 = float(record[9])
+		if record[10] is None: 
+			srr = None 
+		else: 
+			srr = float(record[10])
 		positions.append({
 			"name": record[0],
 			"ticker": record[1],
 			"file_date1": record[2],
 			"file_date2": record[3],
-			"mval1": record[4],
-			"shares1": record[5],
-			"price1": record[6],
-			"mval2": record[7],
-			"shares2": record[8],
-			"price2": record[9],
-			"srr": record[10]
+			"mval1": mval1,
+			"shares1": shares1,
+			"price1": price1,
+			"mval2": mval2,
+			"shares2": shares2,
+			"price2": price2,
+			"srr": srr
 		})
 
 	return jsonify(positions)
@@ -161,17 +201,17 @@ def getPositionsOverTime(start_date, end_date):
 	sql = ('WITH data AS                                                             ' +
 			'( SELECT file_date, name, ticker, mval, shares, price                    ' +
 			'  FROM vPositions                                                        ' +
-			'  WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date + '"' +
+			"  WHERE '" + start_date + "' <= file_date and file_date <= '" + end_date + "' " +
 			'), all_dates AS                                                          ' +
 			'(                                                                        ' +
 			'  SELECT DISTINCT file_date                                              ' +
 			'  FROM vPositions                                                        ' +
-			'  WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date + '"' +
+			"  WHERE '" + start_date + "' <= file_date and file_date <= '" + end_date + "' " +
 			'), all_secs AS                                                           ' +
 			'(                                                                        ' +
 			'  SELECT DISTINCT ticker, name                                           ' +
 			'  FROM vPositions                                                        ' +
-			'  WHERE "' + start_date + '" <= file_date and file_date <= "' + end_date + '"' +
+			"  WHERE '" + start_date + "' <= file_date and file_date <= '" + end_date + "' " +
 			')                                                                        ' +
 			'SELECT x.ticker, x.file_date, x.name, data.mval, data.shares, data.price ' +
 			'from (                                                                   ' +
@@ -187,13 +227,25 @@ def getPositionsOverTime(start_date, end_date):
 	response = cursor.fetchall()
 	positions = []
 	for record in response:
+		if record[3] is None:
+			mval = None
+		else:
+			mval = float(record[3])
+		if record[4] is None:
+			shares = None
+		else:
+			shares = float(record[4])
+		if record[5] is None:
+			price = None
+		else:
+			price = float(record[5])
 		positions.append({
 			"ticker": record[0],
 			"file_date": record[1],
 			"name": record[2],
-			"mval": record[3],
-			"shares": record[4],
-			"price": record[5]
+			"mval": mval,
+			"shares": shares,
+			"price": price
 		})
 
 	return jsonify(positions)
@@ -203,7 +255,7 @@ def getPositionsOverTime(start_date, end_date):
 def getPositions(date):
 	## Get current holdings
 
-	# Use `declarative_base` from SQLAlchemy to connect your class to your sqlite database
+	# Use `declarative_base` from SQLAlchemy to connect your class to your PostgreSQL database
 	Base2 = declarative_base()
 
 	class Lastest_Positions(Base2):
@@ -412,11 +464,11 @@ def getPositions(date):
 			LatestPositions.companyname,\
 			LatestPositions.ticker,\
 			sqlalchemy.sql.expression.literal_column("''").label("cusip"),\
-			LatestPositions.marketvalue,\
-			LatestPositions.marketvaluechange,\
-			LatestPositions.sharesheld,\
-			LatestPositions.sharesheldchange)\
-		.group_by(LatestPositions.ticker)\
+			func.sum(func.cast(LatestPositions.marketvalue, Float)).label('mval'),\
+			func.sum(func.cast(LatestPositions.marketvaluechange, Float)).label('cmval'),\
+			func.sum(func.cast(LatestPositions.sharesheld, Float)).label('shares'),\
+			func.sum(func.cast(LatestPositions.sharesheldchange, Float)).label('cshares'))\
+		.group_by(LatestPositions.companyname, LatestPositions.ticker)\
 		.filter(LatestPositions.currentreportdate == file_date).all()
 
 	if (len(results) == 0):
@@ -436,17 +488,41 @@ def getPositions(date):
 				ProcessedPositions.name,\
 				sqlalchemy.sql.expression.literal_column("''").label("ticker"),\
 				ProcessedPositions.cusip,\
-				ProcessedPositions.mval,\
-				ProcessedPositions.cmval,\
-				ProcessedPositions.shares,\
-				ProcessedPositions.cshares)\
-			.group_by(ProcessedPositions.cusip)\
+				func.sum(ProcessedPositions.mval).label('mval'),\
+				func.sum(ProcessedPositions.cmval).label('cmval'),\
+				func.sum(ProcessedPositions.shares).label('shares'),\
+				func.sum(ProcessedPositions.cshares).label('chares'))\
+			.group_by(ProcessedPositions.name, ProcessedPositions.cusip)\
 			.filter(ProcessedPositions.file_date == date).all()
 
 	# Create a dictionary from the row data and append to a list of all_passengers
 	positions = []
 	for result in results:
-		positions.append(result)
+		if result[3] is None:
+			mval = None
+		else:
+			mval = float(result[3])
+		if result[4] is None:
+			cmval = None
+		else:
+			cmval = float(result[4])
+		if result[5] is None:
+			shares = None
+		else:
+			shares = float(result[5])
+		if result[6] is None:
+			cshares = None
+		else:
+			cshares = float(result[6])
+		positions.append({
+			"name": result[0],
+			"ticker": result[1],
+			"cusip": result[2],
+			"mval": mval,
+			"cmval": cmval,
+			"shares": shares,
+			"cshares": cshares
+		})
 
 	return jsonify(positions)
 
@@ -456,7 +532,7 @@ if __name__ == '__main__':
 
 
 #################################################
-# SQLITE3 VIEW
+# POSTGRESQL VIEW
 #################################################
 # CREATE VIEW vPositions
 # AS
@@ -477,6 +553,6 @@ if __name__ == '__main__':
 #   SELECT lp.currentreportdate, lp.companyname, lp.ticker,                      
 #     CAST(lp.marketvalue AS NUMERIC), CAST(lp.marketvaluechange AS NUMERIC),    
 #     CAST(lp.sharesheld AS NUMERIC), CAST(lp.sharesheldchange AS NUMERIC),       
-#     case when lp.sharesheld = 0 then 0 else lp.marketvalue/(lp.sharesheld * 1.0) end
+#     case when CAST(lp.sharesheld AS NUMERIC) = 0 then 0 else  CAST(lp.marketvalue AS NUMERIC)/( CAST(lp.sharesheld AS NUMERIC) * 1.0) end
 #   FROM latest_positions lp                                                     
-# );
+# ) t;

@@ -1,74 +1,76 @@
 ticker,cusip,indsec,indgrp
-T,00206R102,Public Utilities,Telecommunications Equipment
-AAL,02376R102,Transportation,Air Freight/Delivery Services
-AXP,025816109,Finance,Finance: Consumer Services
-AAPL,037833100,Technology,Computer Manufacturing
-BK,064058100,Finance,Major Banks
-LBRDA,16117M305,Consumer Services,Television Services
-,16119P108,None,None
-CBI,167250109,Basic Industries,Engineering & Construction
-KO,191216100,Consumer Non-Durables,Beverages (Production/Distribution)
 COP,20825C104,Energy,Integrated oil Companies
-COST,22160K105,Consumer Services,Department/Specialty Retail Stores
+JNJ,478160104,Health Care,Major Pharmaceuticals
+,58441K100,,
+ESRX,30219G108,Health Care,Medical/Nursing Services
+SATS,25470M109,Technology,Radio And Television Broadcasting And Communications Equipment
+VZ,92343V104,Public Utilities,Telecommunications Equipment
+,531229607,None,None
 DVA,23918K108,Health Care,Hospital/Nursing Management
 DE,244199105,Capital Goods,Industrial Machinery/Components
-DAL,247361702,Transportation,Air Freight/Delivery Services
-SATS,25470M109,Technology,Radio And Television Broadcasting And Communications Equipment
-,25490A309,,
-ESRX,30219G108,Health Care,Medical/Nursing Services
-XOM,30231G102,Energy,Integrated oil Companies
-GE,369604103,Energy,Consumer Electronics/Appliances
-GM,37045V100,Capital Goods,Auto Manufacturing
-GSK,37733W105,Health Care,Major Pharmaceuticals
-GS,38141G104,Finance,Investment Bankers/Brokers/Service
-GHC,384637104,Consumer Services,Other Consumer Services
-IBM,459200101,Technology,Computer Manufacturing
-JNJ,478160104,Health Care,Major Pharmaceuticals
-KMI,49456B101,Public Utilities,Natural Gas Distribution
-KHC,500754106,Consumer Non-Durables,Packaged Foods
-,50076Q106,None,None
-LEE,523768109,Consumer Services,Newspapers/Magazines
-,531229102,,
-,531229300,,
-,531229409,None,None
-,531229607,None,None
-,531229854,None,None
-,531229870,None,None
-MTB,55261F104,Finance,Major Banks
-MA,57636Q104,Miscellaneous,Business Services
-,584404107,,
-,58441K100,,
-MDLZ,609207105,Consumer Non-Durables,Packaged Foods
-MON,61166W101,Basic Industries,Agricultural Chemicals
-MCO,615369105,Finance,Finance: Consumer Services
-NOV,637071101,Energy,Metal Fabrications
-DNOW,67011P100,Energy,Metal Fabrications
-PSX,718546104,Energy,Integrated oil Companies
-,740189105,,
-PG,742718109,Basic Industries,Package Goods/Cosmetics
-QSR,76131D103,Consumer Services,Restaurants
-,80105N105,None,None
-SIRI,82968B103,Consumer Services,Broadcasting
-LUV,844741108,Transportation,Air Freight/Delivery Services
-,85571Q102,,
-SU,867224107,Energy,Integrated oil Companies
-TMK,891027104,Finance,Life Insurance
-FOXA,90130A101,Consumer Services,Television Services
-USB,902973304,Finance,Major Banks
 USG,903293405,Capital Goods,Building Materials
-UAL,910047109,Transportation,Air Freight/Delivery Services
-UPS,911312106,Transportation,Trucking Freight/Courier Services
-VRSN,92343E102,Technology,EDP Services
-VZ,92343V104,Public Utilities,Telecommunications Equipment
+STOR,862121100,Consumer Services,Real Estate Investment Trusts
+PSX,718546104,Energy,Integrated oil Companies
 VRSK,92345Y106,Technology,EDP Services
+CBI,167250109,Basic Industries,Engineering & Construction
+MON,61166W101,Basic Industries,Agricultural Chemicals
 VIAB,92553P201,Consumer Services,Television Services
-V,92826C839,Miscellaneous,Business Services
-WBC,92927K102,Capital Goods,Auto Manufacturing
-WMT,931142103,Consumer Services,Department/Specialty Retail Stores
-,939640108,,
+,531229870,None,None
+GS,38141G104,Finance,Investment Bankers/Brokers/Service
+AXP,025816109,Finance,Finance: Consumer Services
+,740189105,,
+TMK,891027104,Finance,Life Insurance
+LBRDA,16117M305,Consumer Services,Television Services
 WFC,949746101,Finance,Major Banks
-AXTA,G0750C108,Basic Industries,Paints/Coatings
-LBTYA,G5480U104,Consumer Services,Television Services
-LBTYK,G5480U120,Consumer Services,Television Services
 LILA,G5480U138,Consumer Services,Television Services
+,531229854,None,None
+,16119P108,None,None
+KMI,49456B101,Public Utilities,Natural Gas Distribution
+GSK,37733W105,Health Care,Major Pharmaceuticals
+UPS,911312106,Transportation,Trucking Freight/Courier Services
+MCO,615369105,Finance,Finance: Consumer Services
+IBM,459200101,Technology,Computer Manufacturing
+,50076Q106,None,None
+DNOW,67011P100,Energy,Metal Fabrications
+FOXA,90130A101,Consumer Services,Television Services
+LEE,523768109,Consumer Services,Newspapers/Magazines
+NOV,637071101,Energy,Metal Fabrications
+XOM,30231G102,Energy,Integrated oil Companies
+,25490A309,,
+VRSN,92343E102,Technology,EDP Services
+KHC,500754106,Consumer Non-Durables,Packaged Foods
+PG,742718109,Basic Industries,Package Goods/Cosmetics
+AAPL,037833100,Technology,Computer Manufacturing
+MDLZ,609207105,Consumer Non-Durables,Packaged Foods
+QSR,76131D103,Consumer Services,Restaurants
+,939640108,,
+,584404107,,
+,80105N105,None,None
+COST,22160K105,Consumer Services,Department/Specialty Retail Stores
+T,00206R102,Public Utilities,Telecommunications Equipment
+AAL,02376R102,Transportation,Air Freight/Delivery Services
+,531229409,None,None
+,531229102,,
+DAL,247361702,Transportation,Air Freight/Delivery Services
+UAL,910047109,Transportation,Air Freight/Delivery Services
+LBTYA,G5480U104,Consumer Services,Television Services
+GHC,384637104,Consumer Services,Other Consumer Services
+V,92826C839,Miscellaneous,Business Services
+GM,37045V100,Capital Goods,Auto Manufacturing
+MA,57636Q104,Miscellaneous,Business Services
+WMT,931142103,Consumer Services,Department/Specialty Retail Stores
+AXTA,G0750C108,Basic Industries,Paints/Coatings
 LILAK,G5480U153,Consumer Services,Television Services
+LUV,844741108,Transportation,Air Freight/Delivery Services
+SIRI,82968B103,Consumer Services,Broadcasting
+MTB,55261F104,Finance,Major Banks
+WBC,92927K102,Capital Goods,Auto Manufacturing
+,85571Q102,,
+SYF,87165B103,Finance,Finance: Consumer Services
+SU,867224107,Energy,Integrated oil Companies
+USB,902973304,Finance,Major Banks
+LBTYK,G5480U120,Consumer Services,Television Services
+BK,064058100,Finance,Major Banks
+KO,191216100,Consumer Non-Durables,Beverages (Production/Distribution)
+,531229300,,
+GE,369604103,Energy,Consumer Electronics/Appliances

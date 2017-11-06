@@ -71,15 +71,16 @@ function populateTable(date) {
 			item = response[i];
 			//console.log(item);
 			holdings.push({
-				"name": item[0],
-				"ticker": item[1],
-				"cusip": item[2],
-				"mval": parseFloat(item[3]),
-				"cmval":  parseFloat(item[4]),
-				"shares":  parseFloat(item[5]),
-				"cshares":  parseFloat(item[6])
+				"name": item.name,
+				"ticker": item.ticker,
+				"cusip": item.cusip,
+				"mval": parseFloat(item.mval),
+				"cmval":  parseFloat(item.cmval),
+				"shares":  parseFloat(item.shares),
+				"cshares":  parseFloat(item.cshares)
 			});
 		}
+		//console.log(holdings)
 		
 		var datatable = $('#data_table').DataTable();
 		datatable.clear();

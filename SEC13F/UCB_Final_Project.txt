@@ -37,7 +37,7 @@ Andrew died of lymphoma on September 3, 2014.[13]
 1. DONE: scrape web - xml files only from 06/30/2013
 2. DONE: save data to csv
 3. clean data in python
-4. save to sqlite3 database
+4. save to postgresql database
 5. create api (flask)
 6. web dashboard to query api and show as charts
 
