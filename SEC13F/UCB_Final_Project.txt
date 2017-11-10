@@ -43,4 +43,7 @@ Andrew died of lymphoma on September 3, 2014.[13]
 
 
 Save postgressql dump
-pg_dump -U postgres -sec13f > sec13f.sql
+pg_dump -U postgres -sec13f > sec13f.dump
+PGPASSWORD=Advent1! pg_dump -Fc --no-acl --no-owner -h localhost -U postgres sec13f >sec13f.dump
+
+heroku pg:backups:restore 'https://s3.amazonaws.com/me/items/3H0q/sec13f.dump' DATABASE_URL
