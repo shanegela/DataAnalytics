@@ -89,7 +89,7 @@ This notebook uses Pandas Dataframes to join data to get the prior quarter filin
 
 ### Step 9: Create API 
 
-[SEC13F_STEP9_API](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP9_API.py)
+[app](https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/app.py)
 
 This python script uses Flask to create an API to retrieve data from SEC13F.
 
@@ -102,3 +102,5 @@ Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
 
 **Solution**
 Enabled CORS through Chrome extension: [Allow-Control-Allow-Origin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en).  Note that Jupyter Notebook does not work well with CORS enabled.
+
+### Step 11: Deploy App to Heroku

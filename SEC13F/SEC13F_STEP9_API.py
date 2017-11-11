@@ -18,6 +18,33 @@ import psycopg2
 from flask import Flask, jsonify
 
 #################################################
+# Flask Setup
+#################################################
+app = Flask(__name__)
+
+#################################################
+# Flask Routes
+#################################################
+
+@app.route("/")
+def welcome():
+	"""List all available api routes."""
+	return (
+		f"Avalable Routes:<br/>"
+		f"/api/v1.0/dates - List available dates<br/>"
+
+		f"/api/v1.0/positions/<date>"
+		f"- List of holdings from file date<br/>"
+
+		f"/api/v1.0/positions/<start_date>/<end_date>"
+		f"- List of holdings from filings in the date range<br/>"
+
+		f"/api/v1.0/srr/<start_date>/<end_date>"
+		f"- List of holdings on end_date with a simple rate of return<br/>"
+	)
+
+
+#################################################
 # Reformat date from 6/30/2017 12:00 AM to 2017-06-30
 #################################################
 
@@ -60,31 +87,6 @@ session = Session(engine)
 # Create a connection to the engine called conn
 conn = engine.connect()
 
-#################################################
-# Flask Setup
-#################################################
-app = Flask(__name__)
-
-#################################################
-# Flask Routes
-#################################################
-
-@app.route("/")
-def welcome():
-	"""List all available api routes."""
-	return (
-		f"Avalable Routes:<br/>"
-		f"/api/v1.0/dates - List available dates<br/>"
-
-		f"/api/v1.0/positions/<date>"
-		f"- List of holdings from file date<br/>"
-
-		f"/api/v1.0/positions/<start_date>/<end_date>"
-		f"- List of holdings from filings in the date range<br/>"
-
-		f"/api/v1.0/srr/<start_date>/<end_date>"
-		f"- List of holdings on end_date with a simple rate of return<br/>"
-	)
 
 #################################################
 @app.route("/api/v1.0/dates")
