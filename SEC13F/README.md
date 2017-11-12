@@ -102,5 +102,3 @@ Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
 
 **Solution**
 Enabled CORS through Chrome extension: [Allow-Control-Allow-Origin](https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en).  Note that Jupyter Notebook does not work well with CORS enabled.
-
-### Step 11: Deploy App to Heroku
