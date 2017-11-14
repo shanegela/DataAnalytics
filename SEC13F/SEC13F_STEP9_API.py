@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime
 import os
+from urllib.parse import urlparse
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -26,13 +27,13 @@ database_url = "postgres://ojlfjznfjutcuy:b34c1967c47a5f3749aca820c904a971165105
 sec13f_appkey = os.environ.get("SEC13F_APPKEY")
 sec13f_brkcik = os.environ.get("SEC13F_BRKCIK")
 
-#connection_params = urlparse.urlparse(os.environ["DATABASE_URL"])
-connection_params = urlparse.urlparse(database_url)
+#connection_params = urlparse(os.environ["DATABASE_URL"])
+connection_params = urlparse(database_url)
 db = connection_params.path[1:]
 user = connection_params.username
 password = connection_params.password
 host = connection_params.hostname
-port = connection_params.port)
+port = connection_params.port
   
 #################################################
 # Flask Routes
