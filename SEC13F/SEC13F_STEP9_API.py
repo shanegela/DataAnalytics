@@ -4,7 +4,7 @@ import json
 import numpy as np
 import pandas as pd
 from datetime import datetime
-from config import *
+import os
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -22,6 +22,18 @@ from flask import Flask, jsonify
 #################################################
 app = Flask(__name__)
 
+database_url = "postgres://ojlfjznfjutcuy:b34c1967c47a5f3749aca820c904a9711651057d596aacbb1d902b7d65536bfa@ec2-54-163-255-181.compute-1.amazonaws.com:5432/d9hv65hdijka83"
+sec13f_appkey = os.environ.get("SEC13F_APPKEY")
+sec13f_brkcik = os.environ.get("SEC13F_BRKCIK")
+
+#connection_params = urlparse.urlparse(os.environ["DATABASE_URL"])
+connection_params = urlparse.urlparse(database_url)
+db = connection_params.path[1:]
+user = connection_params.username
+password = connection_params.password
+host = connection_params.hostname
+port = connection_params.port)
+  
 #################################################
 # Flask Routes
 #################################################
@@ -56,19 +68,15 @@ def reformat_date(str_date):
 # Database Setup
 #################################################
 # create an engine to postgresql db
-user = config['psql_user']
-password = config['psql_pwd']
-host = 'localhost'
-port = '5432'
-db = config['psql_db']
+
 url = 'postgresql://{}:{}@{}:{}/{}'
 url = url.format(user, password, host, port, db)
 
 # The return value of create_engine() is our connection object
 engine = sqlalchemy.create_engine(url, client_encoding='utf8')
 
-dburl = 'dbname={} user={} password={}'
-dburl = dburl.format(db, user, password)
+dburl = 'dbname={} user={} password={} host={}, port={}'
+dburl = dburl.format(db, user, password, host, port)
 db = psycopg2.connect(dburl)
 
 # reflect an existing database into a new model
@@ -312,7 +320,7 @@ def getPositions(date):
 	# Save the reference to the `latest_positions` table as a variable called `table`
 	table = sqlalchemy.Table('latest_positions', metadata, autoload=True)
 
-	query_url = "http://edgaronline.api.mashery.com/v2/ownerships/currentownerholdings?ciks=%s&appkey=%s" % (config["sec13f_brkcik"], config["sec13f_appkey"])
+	query_url = "http://edgaronline.api.mashery.com/v2/ownerships/currentownerholdings?ciks=%s&appkey=%s" % (sec13f_brkcik, sec13f_appkey)
 	sec_data = req.get(query_url).json()
 
 
