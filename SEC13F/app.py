@@ -23,17 +23,9 @@ from flask import Flask, jsonify
 #################################################
 app = Flask(__name__)
 
-database_url = os.environ.get("DATABASE_URL")
-sec13f_appkey = os.environ.get("SEC13F_APPKEY")
-sec13f_brkcik = os.environ.get("SEC13F_BRKCIK")
-
-#connection_params = urlparse(os.environ["DATABASE_URL"])
-connection_params = urlparse(database_url)
-db = connection_params.path[1:]
-user = connection_params.username
-password = connection_params.password
-host = connection_params.hostname
-port = connection_params.port
+#################################################
+# Flask Routes
+#################################################
 
 @app.route('/')
 def index():
@@ -64,6 +56,16 @@ def reformat_date(str_date):
 # Database Setup
 #################################################
 # create an engine to postgresql db
+database_url = os.environ.get("DATABASE_URL")
+sec13f_appkey = os.environ.get("SEC13F_APPKEY")
+sec13f_brkcik = os.environ.get("SEC13F_BRKCIK")
+
+connection_params = urlparse(database_url)
+db = connection_params.path[1:]
+user = connection_params.username
+password = connection_params.password
+host = connection_params.hostname
+port = connection_params.port
 
 url = 'postgresql://{}:{}@{}:{}/{}'
 url = url.format(user, password, host, port, db)

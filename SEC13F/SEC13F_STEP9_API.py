@@ -6,6 +6,7 @@ import pandas as pd
 from datetime import datetime
 import os
 from urllib.parse import urlparse
+from config import *
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -23,24 +24,12 @@ from flask import Flask, jsonify
 #################################################
 app = Flask(__name__)
 
-database_url = "postgres://ojlfjznfjutcuy:b34c1967c47a5f3749aca820c904a9711651057d596aacbb1d902b7d65536bfa@ec2-54-163-255-181.compute-1.amazonaws.com:5432/d9hv65hdijka83"
-sec13f_appkey = os.environ.get("SEC13F_APPKEY")
-sec13f_brkcik = os.environ.get("SEC13F_BRKCIK")
-
-#connection_params = urlparse(os.environ["DATABASE_URL"])
-connection_params = urlparse(database_url)
-db = connection_params.path[1:]
-user = connection_params.username
-password = connection_params.password
-host = connection_params.hostname
-port = connection_params.port
-  
 #################################################
 # Flask Routes
 #################################################
 
-@app.route("/")
-def welcome():
+@app.route('/')
+def index():
 	"""List all available api routes."""
 	return (
 		f"Avalable Routes:<br/>"
@@ -56,7 +45,6 @@ def welcome():
 		f"- List of holdings on end_date with a simple rate of return<br/>"
 	)
 
-
 #################################################
 # Reformat date from 6/30/2017 12:00 AM to 2017-06-30
 #################################################
@@ -69,6 +57,11 @@ def reformat_date(str_date):
 # Database Setup
 #################################################
 # create an engine to postgresql db
+user = config['psql_user']
+password = config['psql_pwd']
+host = 'localhost'
+port = '5432'
+db = config['psql_db']
 
 url = 'postgresql://{}:{}@{}:{}/{}'
 url = url.format(user, password, host, port, db)
@@ -76,8 +69,8 @@ url = url.format(user, password, host, port, db)
 # The return value of create_engine() is our connection object
 engine = sqlalchemy.create_engine(url, client_encoding='utf8')
 
-dburl = 'dbname={} user={} password={} host={}, port={}'
-dburl = dburl.format(db, user, password, host, port)
+dburl = 'dbname={} user={} password={}'
+dburl = dburl.format(db, user, password)
 db = psycopg2.connect(dburl)
 
 # reflect an existing database into a new model
@@ -124,7 +117,7 @@ def getSRR(start_date, end_date):
 			'p2.mval as mval2, p2.shares as shares2, p2.price as price2, ' +
 			'case when p1.price = 0 then 0 ' +
 			'	when p2.shares = 0 then 0 ' +
-			'	else p2.price-p1.price/p1.price end as SSR ' +
+			'	else ((p2.price-p1.price)/p1.price) * 100 end as SSR ' +
 			'FROM vPositions as p2 ' +
 			'LEFT JOIN vPositions as p1 ON ' +
 			'p1.name = p2.name AND ' +
@@ -321,7 +314,7 @@ def getPositions(date):
 	# Save the reference to the `latest_positions` table as a variable called `table`
 	table = sqlalchemy.Table('latest_positions', metadata, autoload=True)
 
-	query_url = "http://edgaronline.api.mashery.com/v2/ownerships/currentownerholdings?ciks=%s&appkey=%s" % (sec13f_brkcik, sec13f_appkey)
+	query_url = "http://edgaronline.api.mashery.com/v2/ownerships/currentownerholdings?ciks=%s&appkey=%s" % (config['sec13f_brkcik'], config['sec13f_appkey'])
 	sec_data = req.get(query_url).json()
 
 
@@ -494,45 +487,44 @@ def getPositions(date):
 
 		conn.execute(table.insert(), securities)
 
-	if (file_date != date or len(results) == 0):
-		results = session.query(
-				ProcessedPositions.name,\
-				sqlalchemy.sql.expression.literal_column("''").label("ticker"),\
-				ProcessedPositions.cusip,\
-				func.sum(ProcessedPositions.mval).label('mval'),\
-				func.sum(ProcessedPositions.cmval).label('cmval'),\
-				func.sum(ProcessedPositions.shares).label('shares'),\
-				func.sum(ProcessedPositions.cshares).label('chares'))\
-			.group_by(ProcessedPositions.name, ProcessedPositions.cusip)\
-			.filter(ProcessedPositions.file_date == date).all()
+	sql = ("SELECT file_Date, name, ticker, mval, cmval, shares, cshares, price     " +
+		    " FROM vPositions                                                       " +
+			"  WHERE '" + date + "' = file_date;                               ")
 
-	# Create a dictionary from the row data and append to a list of all_passengers
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
 	positions = []
-	for result in results:
-		if result[3] is None:
+	for record in response:
+		if record[3] is None:
 			mval = None
 		else:
-			mval = float(result[3])
-		if result[4] is None:
+			mval = float(record[3])
+		if record[4] is None:
 			cmval = None
 		else:
-			cmval = float(result[4])
-		if result[5] is None:
+			cmval = float(record[4])
+		if record[5] is None:
 			shares = None
 		else:
-			shares = float(result[5])
-		if result[6] is None:
+			shares = float(record[5])
+		if record[6] is None:
 			cshares = None
 		else:
-			cshares = float(result[6])
+			cshares = float(record[6])
+		if record[7] is None:
+			price = None
+		else:
+			price = float(record[7])
 		positions.append({
-			"name": result[0],
-			"ticker": result[1],
-			"cusip": result[2],
+			"file_date": record[0],
+			"name": record[1],
+			"ticker": record[2],
 			"mval": mval,
 			"cmval": cmval,
 			"shares": shares,
-			"cshares": cshares
+			"cshares": cshares,
+			"price": price
 		})
 
 	return jsonify(positions)

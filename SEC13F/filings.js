@@ -15,7 +15,8 @@ $(document).ready(function () {
 			{ title: "Market Value", data: "mval", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
 			{ title: "Change in Market Value", data: "cmval", render: function(number){return number? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} },
 			{ title: "Shares", data: "shares", render: function(number){return number? number.toLocaleString(): null} },
-			{ title: "Change in Shares", data: "cshares", render: function(number){return number? number.toLocaleString(): null}}
+			{ title: "Change in Shares", data: "cshares", render: function(number){return number? number.toLocaleString(): null}},
+			{ title: "Price", data:"price", render: function(number){return number ? number.toLocaleString("en-US", { style: "currency", currency: "USD" }): null} }
 		]
 	});
 	
@@ -54,6 +55,7 @@ function setSelection(response) {
 
 // click event handler to update data
 function selectFileDateHandler(e) {
+	console.log(e.value)
 	populateTable(e.value);
 }
 
@@ -69,7 +71,7 @@ function populateTable(date) {
 		holdings = [];
 		for (var i=0; i < response.length; i++) {
 			item = response[i];
-			//console.log(item);
+			console.log(item);
 			holdings.push({
 				"name": item.name,
 				"ticker": item.ticker,
@@ -77,10 +79,11 @@ function populateTable(date) {
 				"mval": parseFloat(item.mval),
 				"cmval":  parseFloat(item.cmval),
 				"shares":  parseFloat(item.shares),
-				"cshares":  parseFloat(item.cshares)
+				"cshares":  parseFloat(item.cshares),
+				"price": parseFloat(item.price)
 			});
 		}
-		//console.log(holdings)
+		console.log(holdings)
 		
 		var datatable = $('#data_table').DataTable();
 		datatable.clear();
