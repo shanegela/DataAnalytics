@@ -46,7 +46,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							The purpose of this project was to analyze the holdings of Berkshire Hathaway to determine what securities and classifications the the company is invested in.
+							The purpose of this project was to analyze the holdings of Berkshire Hathaway to determine what securities the company is invested in.
 							</p>
 							<h4>Form SEC13F</h4>
 							<p class="card-text">
@@ -210,8 +210,14 @@
 						<div class="card-body">
 							<p class="card-text">
 								This python script uses Flask to create an API to retrieve data from SEC13F.
-								<br><br>
-								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/app.py">app.py</a>
+								<h6>API Endpoints</h6>
+								<ul>
+									<li><a href="http://localhost:5000/api/v1.0/dates">/api/v1.0/dates</a> - List available dates</li>
+									<li><a href="http://localhost:5000/api/v1.0/positions/2017-06-30">/api/v1.0/positions/filedate</a> - List of holdings from file date.  Will also hit the Edgar API to get positions from the latest file date and store them in the database</li>
+									<li><a href="http://localhost:5000/api/v1.0/positions/2017-06-30/2017-09-30">/api/v1.0/positions/startdate/enddate</a> - List of holdings from filings in the date range</li>
+									<li><a href="http://localhost:5000/api/v1.0/srr/2017-06-30/2017-09-30">/api/v1.0/srr/startdate/endate</a> - List of holdings on file end date with a simple rate of return</li>
+								</ul>
+								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API.py</a>
 							</p>
 						</div>
 					</div>
@@ -240,9 +246,28 @@
 						<div class="card-body">
 							<p class="card-text">
 							  Deploy application to Heroku
+							  <ul>
+								  <li><a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/app.py">app.py</a></li>
+								  <li>Issue: DNS Resolution Issue / Status: Open support ticket with Heroku</li>
+							  </ul>
 							</p>
 						</div>
 					</div>
+
+					<div class="card">
+							<div class="card-header">
+								<h3>Step 12: Issues</h3>
+							</div>
+							<div class="card-body">
+								<p class="card-text">
+								  <ul>
+									  <li>Industry Sector and Group are only supplied with latest holdings.  There is no consistency with other APIs for categorization</li>
+									  <li>Difficult to get data for securities that have undergone corporate reorganizations.</li>
+								  </ul>
+								</p>
+							</div>
+						</div>
+
 				</div>
 			</div>
 		</div>
