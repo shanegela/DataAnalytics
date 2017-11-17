@@ -109,8 +109,15 @@ function drawBubbleChart(data, value="shares") {
 
 function drawHorizontalBarChart(data, value="mval") {
 
-	top10 = data.sort(function(a, b) { return b.mval - a.mval })
-	.slice(0, 10);
+	if (value == "shares") {
+		top10 = data.sort(function(a, b) { return b.shares - a.shares }).filter(function(i) {return i.shares}).slice(0, 10);
+	} else if (value == "cmval") {
+		top10 = data.sort(function(a, b) { return b.cmval - a.cmval }).filter(function(i) {return i.cmval}).slice(0, 10);
+	} else if (value == "cshares") {
+		top10 = data.sort(function(a, b) { return b.cshares - a.cshares }).filter(function(i) {return i.cshares}).slice(0, 10);
+	} else {
+		top10 = data.sort(function(a, b) { return b.mval - a.mval }).filter(function(i) {return i.mval}).slice(0, 10); 
+	}
 
 	var order = top10.map(function(d){ return d[value]; });
 
