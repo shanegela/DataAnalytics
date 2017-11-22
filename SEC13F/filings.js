@@ -32,7 +32,7 @@ $(document).ready(function () {
 });
 
 // get available dates
-var queryURL = "http://localhost:5000/api/v1.0/dates";
+var queryURL = "https://sec13f-flask-heroku.herokuapp.com/api/v1.0/dates";
 d3.json(queryURL, function(error, response) {
 	if (error) return console.warn(error);
 	setSelection(response);
@@ -63,7 +63,7 @@ function selectFileDateHandler(e) {
 function populateTable(date) {
 	setRadioButtons(date);
 
-	var queryURL = "http://localhost:5000/api/v1.0/positions/" + date;
+	var queryURL = "https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/" + date;
 	d3.json(queryURL, function(error, response) {
 
 		if (error) return console.warn(error);

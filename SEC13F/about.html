@@ -212,10 +212,10 @@
 								This python script uses Flask to create an API to retrieve data from SEC13F.
 								<h6>API Endpoints</h6>
 								<ul>
-									<li><a href="http://localhost:5000/api/v1.0/dates">/api/v1.0/dates</a> - List available dates</li>
-									<li><a href="http://localhost:5000/api/v1.0/positions/2017-06-30">/api/v1.0/positions/filedate</a> - List of holdings from file date.  Will also hit the Edgar API to get positions from the latest file date and store them in the database</li>
-									<li><a href="http://localhost:5000/api/v1.0/positions/2017-06-30/2017-09-30">/api/v1.0/positions/startdate/enddate</a> - List of holdings from filings in the date range</li>
-									<li><a href="http://localhost:5000/api/v1.0/srr/2017-06-30/2017-09-30">/api/v1.0/srr/startdate/endate</a> - List of holdings on file end date with a simple rate of return</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/dates">/api/v1.0/dates</a> - List available dates</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30">/api/v1.0/positions/filedate</a> - List of holdings from file date.  Will also hit the Edgar API to get positions from the latest file date and store them in the database</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30/2017-09-30">/api/v1.0/positions/startdate/enddate</a> - List of holdings from filings in the date range</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2017-06-30/2017-09-30">/api/v1.0/srr/startdate/endate</a> - List of holdings on file end date with a simple rate of return</li>
 								</ul>
 								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API.py</a>
 							</p>
@@ -248,7 +248,7 @@
 							  Deploy application to Heroku
 							  <ul>
 								  <li><a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/app.py">app.py</a></li>
-								  <li>Issue: DNS Resolution Issue / Status: Open support ticket with Heroku</li>
+								  <li>Reference <a href="https://github.com/agopez/flask-heroku">FLASK-HEROKU</a></li>
 							  </ul>
 							</p>
 						</div>
