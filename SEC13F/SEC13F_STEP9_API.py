@@ -7,6 +7,7 @@ from datetime import datetime
 import os
 from urllib.parse import urlparse
 from config import *
+from flask_cors import CORS
 
 import sqlalchemy
 from sqlalchemy.ext.automap import automap_base
@@ -23,6 +24,7 @@ from flask import Flask, jsonify
 # Flask Setup
 #################################################
 app = Flask(__name__)
+CORS(app)
 
 #################################################
 # Flask Routes

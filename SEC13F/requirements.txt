@@ -11,3 +11,4 @@ requests-oauthlib==0.8.0
 numpy==1.11.3
 jsonschema==2.5.1
 pandas==0.19.2
+Flask-Cors==3.0.2
