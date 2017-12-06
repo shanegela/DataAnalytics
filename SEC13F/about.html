@@ -52,7 +52,7 @@
 							<p class="card-text">
 							The SEC Form 13F is a filing with the Securities and Exchange Commission (SEC) also known as the Information Required of Institutional Investment Managers Form. It is a quarterly filing required of institutional investment managers with over $100 million in qualifying assets. Companies required to file SEC Form 13F may include insurance companies, banks, pension funds, investment advisers and broker-dealers.
 							<br><br>
-							SEC Form 13F, which must be filed within 45 days of the end of each quarter, contains information about the investment manager and potentially a list of their recent investment holdings. **It provides investors with an inside look at the holdings of Wall Street's largest investment managers.**
+							SEC Form 13F, which must be filed within 45 days of the end of each quarter, contains information about the investment manager and potentially a list of their recent investment holdings. These filings provide insight into the holdings of investment managers.
 							<br><br>
 							Companies submit their SEC13F filings using the <a href="https://www.sec.gov/page/everythingedgar">EDGAR System</a>.  These filings are made public on the <a href="https://www.sec.gov/edgar/searchedgar/companysearch.html">SEC website</a>.
 							</p>
@@ -72,7 +72,7 @@
 							<p class="card-text">
 							The EDGAR system also has an <a href="http://developer.edgar-online.com/">API</a>
 							<br><br>
-							Jupyter Notebok: <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_API.ipynb">SEC13F_API</a>
+							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_API.ipynb">SEC13F_API</a>
 							This notebook was developed to explore the API.
 							<br><br>
 							<strong>API Limitation</strong> The API only has current holdings available.  My communications with the API contact confirmed that no historical data is available and the request is not on their roadmap.  So using the API for information was not a possibility.
@@ -86,9 +86,9 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP1_SaveFilings.ipynb">SEC13F_STEP1_SaveFilings</a>
+							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP1_SaveFilings.ipynb">SEC13F_STEP1_SaveFilings</a>
 							<br><br>
-							Since all the SEC13F filings are available online.  I used BeautifulSoup to save the xml filings from onine to the filings directory.
+							Since all the SEC13F filings are available online.  I used BeautifulSoup to save the xml filings from online to a local directory named <a href="https://github.com/shanegela/DataAnalytics/tree/master/SEC13F/filings">filings</a>.
 							<br><br>
 							<strong>API Limitations</strong>
 							<ul>
@@ -105,13 +105,13 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP2_CleanFilings.ipynb">SEC13F_STEP2_CleanFilings</a>
+							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP2_CleanFilings.ipynb">SEC13F_STEP2_CleanFilings</a>
 							<br><br>
 							This notebook opens each xml file and parses the data for the following fields
 							<ul>
 								<li>file date: SEC13F quarter end submission date</li>
 								<li>name: security name</li>
-								<li>cusip: cusip of the security</li>
+								<li>cusip: CUSIP of the security</li>
 								<li>mval: market value of the shares held</li>
 								<li>shares: shares or principal held</li>
 							</ul>
@@ -127,7 +127,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP3_SaveDataToDB.ipynb">SEC13F_STEP3_SaveDataToDB</a>
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP3_SaveDataToDB.ipynb">SEC13F_STEP3_SaveDataToDB</a>
 							<br><br>
 							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a positions table.
 							</p>
@@ -140,7 +140,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP4_GetDecoratedData.ipynb">SEC13F_STEP4_GetDecoratedData</a>
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP4_GetDecoratedData.ipynb">SEC13F_STEP4_GetDecoratedData</a>
 							<br><br>
 							This notebook reads the positions table in the PostgreSQL database: sec13f to get a unique list of CUSIP.  The notebook then scrapes the <a href="https://search13f.com/securities/neighbors/">Search13F</a> website to get decorated information such as the Industry Sector and Industry Group.
 							<br><br>
@@ -155,7 +155,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP5_SaveDecoratedDataToDB.ipynb">SEC13F_STEP5_SaveDecoratedDataToDB</a>
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP5_SaveDecoratedDataToDB.ipynb">SEC13F_STEP5_SaveDecoratedDataToDB</a>
 							<br><br>
 							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a indsectorindgroup table.
 							</p>
@@ -168,7 +168,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP6_HandleMissingData.ipynb">SEC13F_STEP6_HandleMissingData</a>
+							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP6_HandleMissingData.ipynb">SEC13F_STEP6_HandleMissingData</a>
 							<br><br>
 							Some CUSIP have missing Industry Sector or Industry Group because they are no longer traded due to corporation reorganizations like mergers, exchanges, or spinoffs.
 							<br><br>
@@ -183,7 +183,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb">SEC13F_STEP7_AnalyzeData</a>
+								Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP7_AnalyzeData.ipynb">SEC13F_STEP7_AnalyzeData</a>
 							</p>
 						</div>
 					</div>
@@ -194,11 +194,11 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								SEC13F data from sec13f.xml filings only include name, cusip, market value and shares held.  Where as, data attained from the SEC13F API is more comprehensive and includes derived values like change in market value and change in shares held.
+								SEC13F data from sec13f.xml filings only include name, CUSIP, market value and shares held.  Where as, data attained from the SEC13F API is more comprehensive and includes derived values like change in market value and change in shares held.
 								<br><br>
-								This notebook uses Pandas Dataframes to join data to get the prior quarter filing to get derived values for change in market value and change in shares held.  These values are not available for the first date, 2013-06-30.
+								This notebook uses Pandas dataframes to join data to get the prior quarter filing to get derived values for change in market value and change in shares held.  These values are not available for the first date, 2013-06-30.  The processed data is stored in a new postgresql tabled called processed_positions.
 								<br><br>
-								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP8_ProcessPositions.py">SEC13F_STEP8_ProcessPositions</a>
+								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP8_ProcessPositions.ipynb">SEC13F_STEP8_ProcessPositions</a>
 							</p>
 						</div>
 					</div>
@@ -209,15 +209,16 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								This python script uses Flask to create an API to retrieve data from SEC13F.
+								This python script uses Flask to create APIs to retrieve data from the SEC13F postgresql DB.
 								<h6>API Endpoints</h6>
 								<ul>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/">root</a></li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/dates">/api/v1.0/dates</a> - List available dates</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30">/api/v1.0/positions/filedate</a> - List of holdings from file date.  Will also hit the Edgar API to get positions from the latest file date and store them in the database</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30/2017-09-30">/api/v1.0/positions/startdate/enddate</a> - List of holdings from filings in the date range</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2017-06-30/2017-09-30">/api/v1.0/srr/startdate/endate</a> - List of holdings on file end date with a simple rate of return</li>
 								</ul>
-								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API.py</a>
+								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API.py</a>
 							</p>
 						</div>
 					</div>
@@ -228,7 +229,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								<a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.html">index.html</a> and <a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/index.js">index.js</a> uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathway according to the SEC13F form filed.
+								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/index.html">index.html</a> and <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/index.js">index.js</a> uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathaway according to the SEC13F form filed.
 								<br><br>
 								<strong>Issue</strong>
 								Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
@@ -248,9 +249,9 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-							  Deploy application to Heroku
+							  Deploy application to Heroku to host the application and database
 							  <ul>
-								  <li><a href="https://github.com/shanegela/DataAnalytics/blob/gh-pages/SEC13F/app.py">app.py</a></li>
+								  <li><a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/app.py">app.py </a>(in synch with SEC13F_STEP9_API)</li>
 								  <li>Reference <a href="https://github.com/agopez/flask-heroku">FLASK-HEROKU</a></li>
 							  </ul>
 							</p>
@@ -264,8 +265,8 @@
 							<div class="card-body">
 								<p class="card-text">
 								  <ul>
-									  <li>Industry Sector and Group are only supplied with latest holdings.  There is no consistency with other APIs for categorization</li>
-									  <li>Difficult to get data for securities that have undergone corporate reorganizations.</li>
+									  <li>Industry Sector and Group classifications are available through the Edgar API for the latest holdings.  However these classifications are different from the classifications I'm able to retrieve from the scraping done in Step 4.  So classification analysis was not performed.</li>
+									  <li>After analyzing the filings, I wanted to analyze what my potential gain if I were to purchase stocks that have a positive change in shares. See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy01.ipynb">SEC13F_Strategy01</a>.  It was difficult to grab historical prices for securities that had corporate reorgnizations and prices were not correctly reflected because of the possibility of splits.  So additional split information is needed.</li>
 								  </ul>
 								</p>
 							</div>
