@@ -1,3 +1,5 @@
+
+
 var $date1 = document.querySelector("#date1");
 var $date2 = document.querySelector("#date2");
 var $top_chart = document.querySelector("#top_chart");

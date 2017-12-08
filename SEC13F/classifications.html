@@ -42,84 +42,64 @@
 		</nav>
 
 		<div style="margin: 20px;">
+			<fieldset class="form-group">
+				<label style="float:left; padding: 0px 5px 0px 0px;font-weight:bold;">Classification:</label>
+				<div class="form-check" style="padding: 0px 5px; display: inline;">
+					<label class="form-check-label">
+						<input type="radio" class="form-check-input" name="lineChartTypeRadio" id="lineChartTypeRadio1" value="indsec" checked>
+						Industry Sector
+					</label>
+				</div>
+				<div class="form-check" style="padding: 0px 5px; display: inline;">
+					<label class="form-check-label">
+						<input type="radio" class="form-check-input" name="lineChartTypeRadio" id="lineChartTypeRadio2" value="indgrp" >
+						Industry Group
+					</label>
+				</div>
+			</fieldset>
 			<div class="row form-group">
-				<label for="date1" class="col-sm-2 col-form-label">Select date:</label>
+				<label for="date1" class="col-sm-2 col-form-label">From date:</label>
 				<div class="col-sm-3">
-						<select class="form-control" id="date1" onchange="selectFileDateHandler(this)">
+						<select class="form-control" id="date1">
 						</select>
 				</div>
 			</div>
-			<div class="row">
-				<div class="col-md-4" style="padding-left:0px">
-					<div class="card">
-						<div class="card-header">
-							<h3>Chart Options</h3>
-						</div>
-						<div class="card-body">
-							<fieldset class="form-group">
-								<legend>Chart Type</legend>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="chartTypeRadio" id="chartTypeRadio1" value="bubble" onclick="drawChart(this)" checked>
-										Bubble Chart
-									</label>
-								</div>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="chartTypeRadio" id="chartTypeRadio2" value="bar" onclick="drawChart(this)">
-										Bar Chart
-									</label>
-								</div>
-							</fieldset>
-							<fieldset class="form-group">
-								<legend>Chart Value</legend>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio1" value="mval" onclick="drawChart(this)">
-										Market Value
-									</label>
-								</div>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio2" value="cmval" onclick="drawChart(this)">
-										Change in Market Value
-									</label>
-								</div>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio3" value="shares" onclick="drawChart(this)" checked>
-										Shares Held
-									</label>
-								</div>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="chartValueRadio" id="chartValueRadio4" value="cshares" onclick="drawChart(this)">
-										Change in Shares Held
-									</label>
-								</div>
-							</fieldset>
-						</div>
-					</div>
+			<div class="row form-group">
+				<label for="date2" class="col-sm-2 col-form-label">To date:</label>
+				<div class="col-sm-3">
+						<select class="form-control" id="date2">
+						</select>
 				</div>
-				<div class="col-md-8">
-					<div class="card">
-						<div class="card-header">
-							<h3 id="chartTitle"></h3>
-						</div>
-						<div class="card-body">
-							<div id="chart" style="height:500px;">
-							</div>
-						</div>
-					</div>
-				</div>
+				<button onclick="btnSubmitHandler()">Submit</button>	
 			</div>
-			<div class="card">
-				<div class="card-header">
-					<h3>SEC13F Data</h3>
-				</div>
-				<div class="card-body">
-					<table id="data_table" class="display">
-					</table>
+			<div id="errmsg" style="display: none">
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header">
+						<h3 id="lineChartTitle">Market Value by Industry Sector Over Time</h3>
+						<fieldset class="form-group">
+							<label style="float:left; padding: 0px 5px;font-weight:bold;">Chart Value:</label>
+							<div class="form-check" style="padding: 0px 5px; display: inline;">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="lineChartValueRadio" id="chartValueRadio1" value="mval" onclick="drawChart(this)" checked>
+									Market Value
+								</label>
+							</div>
+							<div class="form-check" style="padding: 0px 5px; display: inline;">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="lineChartValueRadio" id="chartValueRadio2" value="shares" onclick="drawChart(this)">
+									Shares Held
+								</label>
+							</div>
+						</fieldset>
+					</div>
+					<div class="card-body">
+						<div id="line_chart" style="height:500px;">
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -133,7 +113,7 @@
 		<script src="https://d3plus.org/js/d3plus.js"></script>
 		<!-- load DataTables -->
 		<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-		<!-- filings javascript -->
-		<script src="filings.js" type="text/javascript"></script>
+		<!-- comparison javascript -->
+		<script src="classifications.js" type="text/javascript"></script>
 	</body>
 </html>

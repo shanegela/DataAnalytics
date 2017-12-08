@@ -32,17 +32,37 @@ CORS(app)
 def index():
 	"""List all available api routes."""
 	return (
-		f"Avalable Routes:<br/>"
-		f"/api/v1.0/dates - List available dates<br/>"
-
-		f"/api/v1.0/positions/<date>"
-		f"- List of holdings from file date<br/>"
-
-		f"/api/v1.0/positions/<start_date>/<end_date>"
-		f"- List of holdings from filings in the date range<br/>"
-
-		f"/api/v1.0/srr/<start_date>/<end_date>"
-		f"- List of holdings on end_date with a simple rate of return<br/>"
+		f"Avalable Routes:<br><br>"
+		f"<ul>"
+		f"	<li>/api/v1.0/dates</li>"
+		f"		<ul>"
+		f"			<li>List available dates</li>"
+		f"		</ul>"
+		f"	<li>/api/v1.0/positions/&lt;date&gt;"
+		f"		<ul>"
+		f"			<li>List of holdings from file date</li>"
+		f"		</ul>"
+		f"	<li>/api/v1.0/positions/&lt;start date&gt;/&lt;end date&gt;</li>"
+		f"		<ul>"
+		f"			<li>List of holdings from filings in the date range</li>"
+		f"		</ul>"
+		f"	<li>/api/v1.0/srr/&lt;start date&gt;/&lt;end date&gt;</li>"
+		f"		<ul>"
+		f"			<li>List of holdings on end_date with a simple rate of return</li>"
+		f"		</ul>"
+		f"	<li>/api/v1.0/indgrp/&lt;start date&gt;/&lt;end date&gt;"
+		f"		<ul>"
+		f"			<li>List of industry groups held from filings in the date range</li>"
+		f"		</ul>"
+		f"	<li>api/v1.0/indsec/&lt;start date&gt;/&lt;end date&gt;</li>"
+		f"		<ul>"
+		f"			<li>List of industry sectors held from filings in the date range</li>"
+		f"		</ul>"
+		f"	<li>/api/v1.0/classification_dates</li>"
+		f"		<ul>"
+		f"			<li>List of filing dates with industry sector and industry group information</li>"
+		f"		</ul>"
+		f"</ul>"
 	)
 
 #################################################
@@ -86,6 +106,7 @@ Base.prepare(engine, reflect=True)
 # Save references to the invoices and invoice_items tables
 SecuritiesEx = Base.classes.securitiesex
 ProcessedPositions = Base.classes.processed_positions
+Positions = Base.classes.positions
 LatestPositions = Base.classes.latest_positions
 
 # Create our session (link) from Python to the DB
@@ -111,6 +132,28 @@ def getDates():
 	dates_list.sort()
 	return jsonify(dates_list)
 
+#################################################
+@app.route("/api/v1.0/classification_dates")
+def getClassificationDates():
+	"""Return a list of available older file dates that table SecuritieEx is based on"""
+	# can't filter by date string using sqlalchemy!!!!!11
+	# results = session.query(Positions.file_date).\
+	# 	group_by(Positions.file_date).having(Positions.file_date <= '2017-03-31')
+
+	# dates_list = list(np.ravel(results))
+	# dates_list.sort()
+	# return jsonify(dates_list)
+
+	sql = ("SELECT DISTINCT file_date from positions where file_date <= '2017-03-31' order by file_date")
+	print(sql)
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		positions.append(record[0])
+
+	return jsonify(positions)
 
 #################################################
 
@@ -179,6 +222,77 @@ def getSRR(start_date, end_date):
 		})
 
 	return jsonify(positions)
+
+#################################################
+
+@app.route("/api/v1.0/indsec/<start_date>/<end_date>")
+def getIndSector(start_date, end_date):
+	## List of market values by industry sector for a date range
+	sql = ('SELECT p.file_date, s.indsec, SUM(p.mval) as mval, SUM(p.shares) as shares ' +
+			'FROM vPositions as p ' +
+			'JOIN securitiesex as s ON p.ticker = s.ticker ' +
+			"WHERE indsec <> 'Nan' and '" + start_date + "' <= p.file_date and p.file_date <= '" + end_date + "' " +
+			"GROUP BY p.file_date, s.indsec " +
+			"HAVING '" + start_date + "' <= file_date and file_date <= '" + end_date + "' " +
+			"ORDER BY indsec, file_date;")
+	print(sql)
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		if record[2] is None: 
+			mval = None 
+		else: 
+			mval = int(record[2])
+		if record[3] is None: 
+			shares = None 
+		else: 
+			shares = int(record[3])
+		positions.append({
+			"file_date": record[0],
+			"indsec": record[1],
+			"mval": mval,
+			"shares":shares
+		})
+
+	return jsonify(positions)
+
+#################################################
+
+@app.route("/api/v1.0/indgrp/<start_date>/<end_date>")
+def getIndGroup(start_date, end_date):
+	## List of market values by industry group for a date range
+	sql = ('SELECT p.file_date, s.indgrp, SUM(p.mval) as mval, SUM(p.shares) as shares ' +
+			'FROM vPositions as p ' +
+			'JOIN securitiesex as s ON p.ticker = s.ticker ' +
+			"WHERE indgrp <> 'Nan' and '" + start_date + "' <= p.file_date and p.file_date <= '" + end_date + "' " +
+			"GROUP BY p.file_date, s.indgrp " +
+			"HAVING '" + start_date + "' <= file_date and file_date <= '" + end_date + "' " +
+			"ORDER BY indgrp, file_date;")
+	print(sql)
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		if record[2] is None: 
+			mval = None 
+		else: 
+			mval = int(record[2])
+		if record[3] is None: 
+			shares = None 
+		else: 
+			shares = int(record[3])
+		positions.append({
+			"file_date": record[0],
+			"indgrp": record[1],
+			"mval": mval,
+			"shares": shares
+		})
+
+	return jsonify(positions)
+
 
 #################################################
 # WITH data AS
