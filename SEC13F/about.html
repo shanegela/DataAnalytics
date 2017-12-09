@@ -91,9 +91,9 @@
 							<p class="card-text">
 							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP1_SaveFilings.ipynb">SEC13F_STEP1_SaveFilings</a>
 							<br><br>
-							Since all the SEC13F filings are available online.  I used BeautifulSoup to save the xml filings from online to a local directory named <a href="https://github.com/shanegela/DataAnalytics/tree/master/SEC13F/filings">filings</a>.
+							Since all the SEC13F <a href="https://www.sec.gov/Archives/edgar/data/1067983/">filings</a> are available online.  I used BeautifulSoup to save the xml filings from online to a local directory named <a href="https://github.com/shanegela/DataAnalytics/tree/master/SEC13F/filings">filings</a>.
 							<br><br>
-							<strong>API Limitations</strong>
+							<strong>Limitations</strong>
 							<ul>
 								<li>XML formation for SEC13F submission was implemented as of 06/30/2013.  Prior filings are in a text fixed width submission.  This project will only analyze xml submissions.</li>
 								<li>SEC13F amendments are not analyzed</li>
@@ -119,7 +119,7 @@
 								<li>shares: shares or principal held</li>
 							</ul>
 							<br>
-							The aggregate data for all xml files is saved to a csv file, sec13f_clean_data.csv.
+							The aggregate data for all xml files is saved to a csv file, <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/sec13f_clean_data.csv">sec13f_clean_data.csv</a>.
 							</p>
 						</div>
 					</div>
@@ -132,8 +132,9 @@
 							<p class="card-text">
 							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP3_SaveDataToDB.ipynb">SEC13F_STEP3_SaveDataToDB</a>
 							<br><br>
-							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a positions table.
+							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchemy's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a positions table.
 							</p>
+							<img src="./images/positions.png">
 						</div>
 					</div>
 
@@ -145,9 +146,9 @@
 							<p class="card-text">
 							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP4_GetDecoratedData.ipynb">SEC13F_STEP4_GetDecoratedData</a>
 							<br><br>
-							This notebook reads the positions table in the PostgreSQL database: sec13f to get a unique list of CUSIP.  The notebook then scrapes the <a href="https://search13f.com/securities/neighbors/">Search13F</a> website to get decorated information such as the Industry Sector and Industry Group.
+							This notebook reads the positions table in the PostgreSQL database: sec13f to get a unique list of CUSIP.  The notebook then scrapes the <a href="https://search13f.com/securities/neighbors/">Search13F</a> website to get classification information such as the Industry Sector and Industry Group.
 							<br><br>
-							The CUSIP, Industry Sector, and Industry Group data are then stored into a csv file, decorated_data.csv
+							The CUSIP, Industry Sector, and Industry Group data are then stored into a csv file, <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/decorated_data.csv">decorated_data.csv</a>.
 							</p>
 						</div>
 					</div>
@@ -160,8 +161,9 @@
 							<p class="card-text">
 							Jupyter Notebook <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP5_SaveDecoratedDataToDB.ipynb">SEC13F_STEP5_SaveDecoratedDataToDB</a>
 							<br><br>
-							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a indsectorindgroup table.
+							This notebook reads the csv file into a Pandas dataframe and uses SQLAlchmey's ORM functionality to save the data to a PostgreSQL database.  The csv data is saved to a securitiesEX table.
 							</p>
+							<img src="./images/securitiesex.png">
 						</div>
 					</div>
 
@@ -202,6 +204,8 @@
 								This notebook uses Pandas dataframes to join data to get the prior quarter filing to get derived values for change in market value and change in shares held.  These values are not available for the first date, 2013-06-30.  The processed data is stored in a new postgresql tabled called processed_positions.
 								<br><br>
 								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP8_ProcessPositions.ipynb">SEC13F_STEP8_ProcessPositions</a>
+								<br><br>
+								<img src="./images/processed_positions.png">
 							</p>
 						</div>
 					</div>
@@ -213,7 +217,7 @@
 						<div class="card-body">
 							<p class="card-text">
 								This python script uses Flask to create APIs to retrieve data from the SEC13F postgresql DB.
-								<h6>API Endpoints</h6>
+								<h6>API Endpoints to Heroku API</h6>
 								<ul>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/">root</a></li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/dates">/api/v1.0/dates</a> - List available dates</li>
@@ -224,7 +228,17 @@
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2016-12-31/2017-03-31">/api/v1.0/indsec/&lt;start date&gt;/&lt;end date&gt;</a> - List of industry sectors held from filings in the date range</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/classification_dates">/api/v1.0/classification_dates</a> - List of filing dates with industry sector and industry group information</li>
 								</ul>
-								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API.py</a>
+								<h6>API Files</h6>
+								<ul>
+									<li>Flask API: 
+											<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API.py</a>
+									</li>
+									<li>Heroku API: 
+											<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/app.py">app.py</a>
+									</li>
+								</ul>
+								<br><br>
+								Heroku Deployment Reference: <a href="https://github.com/agopez/flask-heroku">FLASK-HEROKU</a>
 							</p>
 						</div>
 					</div>
@@ -235,7 +249,7 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/index.html">index.html</a> uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathaway according to the SEC13F form filed.
+								The web dashboard uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathaway according to the SEC13F form filed.
 								<br><br>
 								<strong>Issue</strong>
 								Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
@@ -250,30 +264,14 @@
 					</div>
 
 					<div class="card">
-						<div class="card-header">
-							<h3>Step 11: Heroku</h3>
-						</div>
-						<div class="card-body">
-							<p class="card-text">
-							  Deploy application to Heroku to host the application and database
-							  <ul>
-								  <li><a href="https://sec13f-flask-heroku.herokuapp.com/">Heroku SEC13F APP</a></li>
-								  <li><a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/app.py">app.py </a>(in synch with SEC13F_STEP9_API)</li>
-								  <li>Reference <a href="https://github.com/agopez/flask-heroku">FLASK-HEROKU</a></li>
-							  </ul>
-							</p>
-						</div>
-					</div>
-
-					<div class="card">
 							<div class="card-header">
-								<h3>Step 12: Issues</h3>
+								<h3>Step 11: Issues</h3>
 							</div>
 							<div class="card-body">
 								<p class="card-text">
 								  <ul>
 									  <li>Industry Sector and Group classifications are available through the Edgar API for the latest holdings.  However these classifications are different from the classifications I'm able to retrieve from the scraping done in Step 4.  So classification analysis is only available up to 2017-03-31.</li>
-									  <li>After analyzing the filings, I wanted to analyze what my potential gain if I were to purchase stocks that have a positive change in shares. See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy01.ipynb">SEC13F_Strategy01</a>.  It was difficult to grab historical prices for securities that had corporate reorgnizations and prices were not correctly reflected because of the possibility of splits.  So additional split information is needed.</li>
+									  <li>After analyzing the filings, I wanted to analyze what my potential gain if I were to purchase stocks that have a positive change in shares. See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy01.ipynb">SEC13F_Strategy01</a>.  It was difficult to grab historical prices for securities that had corporate reorgnizations and prices were not correctly reflected because of the possibility of splits.  So additional split information is needed to complete the strategy.</li>
 								  </ul>
 								</p>
 							</div>
