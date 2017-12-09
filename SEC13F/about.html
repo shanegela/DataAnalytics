@@ -217,9 +217,12 @@
 								<ul>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/">root</a></li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/dates">/api/v1.0/dates</a> - List available dates</li>
-									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30">/api/v1.0/positions/filedate</a> - List of holdings from file date.  Will also hit the Edgar API to get positions from the latest file date and store them in the database</li>
-									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30/2017-09-30">/api/v1.0/positions/startdate/enddate</a> - List of holdings from filings in the date range</li>
-									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2017-06-30/2017-09-30">/api/v1.0/srr/startdate/endate</a> - List of holdings on file end date with a simple rate of return</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30">/api/v1.0/positions/&lt;filedate&gt;</a> - List of holdings from file date.  Will also hit the Edgar API to get positions from the latest file date and store them in the database</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30/2017-09-30">/api/v1.0/positions/&lt;startdate&gt;/&lt;enddate&gt;</a> - List of holdings from filings in the date range</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2017-06-30/2017-09-30">/api/v1.0/srr/&lt;startdate&gt;/&lt;endate&gt;</a> - List of holdings on file end date with a simple rate of return</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/indgrp/2016-12-31/2017-03-31">/api/v1.0/indgrp/&lt;start date&gt;/&lt;end date&gt;</a> - List of industry groups held from filings in the date range</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2016-12-31/2017-03-31">/api/v1.0/indsec/&lt;start date&gt;/&lt;end date&gt;</a> - List of industry sectors held from filings in the date range</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/classification_dates">/api/v1.0/classification_dates</a> - List of filing dates with industry sector and industry group information</li>
 								</ul>
 								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_STEP9_API.py">SEC13F_STEP9_API.py</a>
 							</p>
@@ -232,16 +235,16 @@
 						</div>
 						<div class="card-body">
 							<p class="card-text">
-								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/index.html">index.html</a> and <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/index.js">index.js</a> uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathaway according to the SEC13F form filed.
+								<a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/index.html">index.html</a> uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathaway according to the SEC13F form filed.
 								<br><br>
 								<strong>Issue</strong>
 								Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
-								<br><br>
-								<strong>Solution</strong>
-								Import flask-cors into the flask app.
-								<br><br>
-								<strong>Alternate Solution</strong>
-								Enabled CORS through Chrome extension: <a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en">Allow-Control-Allow-Origin</a>
+								<ul>
+									<li><strong>Solution:</strong> Import flask-cors into the flask app, <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/app.py">app.py</a>.
+									</li>
+									<li><strong>Alternate Solution: </strong> Enabled CORS through Chrome extension: <a href="https://chrome.google.com/webstore/detail/allow-control-allow-origi/nlfbmbojpeacfghkpbjhddihlkkiljbi?hl=en">Allow-Control-Allow-Origin</a>
+									</li>
+								</ul>
 							</p>
 						</div>
 					</div>
@@ -254,6 +257,7 @@
 							<p class="card-text">
 							  Deploy application to Heroku to host the application and database
 							  <ul>
+								  <li><a href="https://sec13f-flask-heroku.herokuapp.com/">Heroku SEC13F APP</a></li>
 								  <li><a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/app.py">app.py </a>(in synch with SEC13F_STEP9_API)</li>
 								  <li>Reference <a href="https://github.com/agopez/flask-heroku">FLASK-HEROKU</a></li>
 							  </ul>
