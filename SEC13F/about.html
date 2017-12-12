@@ -252,6 +252,10 @@
 							<p class="card-text">
 								The web dashboard uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathaway according to the SEC13F form filed.
 								<br><br>
+								<strong>Limitations</strong>
+								<ul>
+									<li>Industry Sector and Group classifications are available through the Edgar API for the latest holdings.  However these classifications are different from the classifications I'm able to retrieve from the scraping done in Step 4.  So classification analysis is only available up to 2017-03-31.</li>
+								</ul>
 								<strong>Issue</strong>
 								Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
 								<ul>
@@ -266,13 +270,19 @@
 
 					<div class="card">
 							<div class="card-header">
-								<h3>Step 11: Issues</h3>
+								<h3>Step 11: Observations and Strategy</h3>
 							</div>
 							<div class="card-body">
 								<p class="card-text">
 								  <ul>
-									  <li>Industry Sector and Group classifications are available through the Edgar API for the latest holdings.  However these classifications are different from the classifications I'm able to retrieve from the scraping done in Step 4.  So classification analysis is only available up to 2017-03-31.</li>
-									  <li>After analyzing the filings, I wanted to analyze what my potential gain if I were to purchase stocks that have a positive change in shares. See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy01.ipynb">SEC13F_Strategy01</a>.  It was difficult to grab historical prices for securities that had corporate reorgnizations and prices were not correctly reflected because of the possibility of splits.  So additional split information is needed to complete the strategy.</li>
+									  <li>Analyzed the top 10 performers YTD and looked at change in shares and made <a href="https://shanegela.github.io/DataAnalytics/SEC13F/index.html">observations</a>.</li>
+									  <li>After analyzing the filings, I wanted to analyze what my potential gain if I were to purchase stocks that have a positive change in shares for each quarter.
+										<ul>
+											<li>See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy01.ipynb">SEC13F_Strategy01</a></li>
+											<li>See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy02.ipynb">SEC13F_Strategy02</a></li>
+											<li>See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/cshares_strategy.xlsc">SEC13F Excel Analysis</a></li>
+											<li> It was difficult to grab historical prices for securities that had corporate reorgnizations and prices were not correctly reflected because of the possibility of splits.  So security Charter Communicates Inc (LBRDA) was excluded.</li>
+										</ul>
 								  </ul>
 								</p>
 							</div>
