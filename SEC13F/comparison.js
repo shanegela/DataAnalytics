@@ -54,7 +54,7 @@ function setDateRange(response) {
 		$date2.appendChild($option2);
 	}
 	
-	$date1.value = response[response.length-2].trim();
+	$date1.value = response[response.length-5].trim();
 	$date2.value = response[response.length-1].trim();
 }
 
