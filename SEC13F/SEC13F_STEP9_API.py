@@ -60,9 +60,17 @@ def index():
 		f"		<ul>"
 		f"			<li>List of industry sectors held from filings in the date range</li>"
 		f"		</ul>"
-		f"	<li>/api/v1.0/classification_dates</li>"
+		f"	<li>/api/v1.0/ticker/&lt;ticker&gt;</li>"
 		f"		<ul>"
-		f"			<li>List of filing dates with industry sector and industry group information</li>"
+		f"			<li>List of all holdings across all filings for a specific ticker.</li>"
+		f"		</ul>"
+		f"	<li>/api/v1.0/cshares/negative/&lt;file date&gt;</li>"
+		f"		<ul>"
+		f"			<li>List of holdings with a negative change of shares from filings on or after the specified file date.</li>"
+		f"		</ul>"
+		f"	<li>/api/v1.0/cshares/positive/&lt;file date&gt;</li>"
+		f"		<ul>"
+		f"			<li>List of holdings with a positive change of shares from filings on or after the specified file date.</li>"
 		f"		</ul>"
 		f"</ul>"
 	)
@@ -129,29 +137,6 @@ def getDates():
 	return jsonify(dates_list)
 
 #################################################
-@app.route("/api/v1.0/classification_dates")
-def getClassificationDates():
-	"""Return a list of available older file dates that table SecuritieEx is based on"""
-	# can't filter by date string using sqlalchemy!!!!!11
-	# results = session.query(Positions.file_date).\
-	# 	group_by(Positions.file_date).having(Positions.file_date <= '2017-03-31')
-
-	# dates_list = list(np.ravel(results))
-	# dates_list.sort()
-	# return jsonify(dates_list)
-
-	sql = ("SELECT DISTINCT file_date from positions where file_date <= '2017-03-31' order by file_date")
-	print(sql)
-	cursor = db.cursor()
-	cursor.execute(sql)
-	response = cursor.fetchall()
-	positions = []
-	for record in response:
-		positions.append(record[0])
-
-	return jsonify(positions)
-
-#################################################
 
 @app.route("/api/v1.0/srr/<start_date>/<end_date>")
 def getSRR(start_date, end_date):
@@ -169,7 +154,6 @@ def getSRR(start_date, end_date):
 			'p1.ticker = p2.ticker AND ' +
 			"p1.file_date = '" + start_date + "' " +
 			"WHERE p2.file_date = '" + end_date + "';")
-	print(sql)
 	cursor = db.cursor()
 	cursor.execute(sql)
 	response = cursor.fetchall()
@@ -218,7 +202,6 @@ def getSRR(start_date, end_date):
 		})
 
 	return jsonify(positions)
-
 
 #################################################
 
@@ -375,238 +358,386 @@ def getPositionsOverTime(start_date, end_date):
 def getPositions(date):
 	## Get current holdings
 
-	# Use `declarative_base` from SQLAlchemy to connect your class to your PostgreSQL database
-	Base2 = declarative_base()
+	# # Use `declarative_base` from SQLAlchemy to connect your class to your PostgreSQL database
+	# Base2 = declarative_base()
 
-	class Lastest_Positions(Base2):
-		__tablename__ = 'latest_positions'
-		id = Column(Integer, primary_key=True)
-		querydate = Column(Text)
-		filerid = Column(Text)
-		cik = Column(Text)
-		currentreportdate = Column(Text)
-		priorreportdate = Column(Text)
-		ownername = Column(Text)
-		issueid = Column(Text)
-		ticker = Column(Text)
-		companyname = Column(Text)
-		issuetitle = Column(Text)
-		exchangeid = Column(Text)
-		street1 = Column(Text)
-		city = Column(Text)
-		state = Column(Text)
-		zipcode = Column(Text)
-		country = Column(Text)
-		phonecountrycode = Column(Text)
-		phoneareacode = Column(Text)
-		phonenumber = Column(Text)
-		sharesout = Column(Text)
-		sharesoutdate = Column(Text)
-		price = Column(Text)
-		pricedate = Column(Text)
-		sharesheld = Column(Text)
-		sharesheldchange = Column(Text)
-		sharesheldpercentchange = Column(Text)
-		marketvalue = Column(Text)
-		marketvaluechange = Column(Text)
-		portfoliopercent = Column(Text)
-		sharesoutpercent = Column(Text)
-		marketoperator = Column(Text)
-		marketoperatorid = Column(Text)
-		markettier = Column(Text)
-		markettierid = Column(Text)
+	# class Lastest_Positions(Base2):
+	# 	__tablename__ = 'latest_positions'
+	# 	id = Column(Integer, primary_key=True)
+	# 	querydate = Column(Text)
+	# 	filerid = Column(Text)
+	# 	cik = Column(Text)
+	# 	currentreportdate = Column(Text)
+	# 	priorreportdate = Column(Text)
+	# 	ownername = Column(Text)
+	# 	issueid = Column(Text)
+	# 	ticker = Column(Text)
+	# 	companyname = Column(Text)
+	# 	issuetitle = Column(Text)
+	# 	exchangeid = Column(Text)
+	# 	street1 = Column(Text)
+	# 	city = Column(Text)
+	# 	state = Column(Text)
+	# 	zipcode = Column(Text)
+	# 	country = Column(Text)
+	# 	phonecountrycode = Column(Text)
+	# 	phoneareacode = Column(Text)
+	# 	phonenumber = Column(Text)
+	# 	sharesout = Column(Text)
+	# 	sharesoutdate = Column(Text)
+	# 	price = Column(Text)
+	# 	pricedate = Column(Text)
+	# 	sharesheld = Column(Text)
+	# 	sharesheldchange = Column(Text)
+	# 	sharesheldpercentchange = Column(Text)
+	# 	marketvalue = Column(Text)
+	# 	marketvaluechange = Column(Text)
+	# 	portfoliopercent = Column(Text)
+	# 	sharesoutpercent = Column(Text)
+	# 	marketoperator = Column(Text)
+	# 	marketoperatorid = Column(Text)
+	# 	markettier = Column(Text)
+	# 	markettierid = Column(Text)
 
-		def __repr__(self):
-			return f"companyname={self.companyname}, ticker={self.ticker}, marketvalue={self.marketvalue}, sharesheld={self.sharesheld}"
-
-
-	# Use `create_all` to create the latest_positions table in the database
-	Base2.metadata.create_all(engine)
-
-	# Use MetaData from SQLAlchemy to reflect the tables\n",
-	metadata = MetaData(bind=engine)
-	metadata.reflect()
-
-	# Save the reference to the `latest_positions` table as a variable called `table`
-	table = sqlalchemy.Table('latest_positions', metadata, autoload=True)
-
-	query_url = "http://edgaronline.api.mashery.com/v2/ownerships/currentownerholdings?ciks=%s&appkey=%s" % (config['sec13f_brkcik'], config['sec13f_appkey'])
-	sec_data = req.get(query_url).json()
+	# 	def __repr__(self):
+	# 		return f"companyname={self.companyname}, ticker={self.ticker}, marketvalue={self.marketvalue}, sharesheld={self.sharesheld}"
 
 
-	file_date = None
-	securities = []
-	for row in sec_data["result"]["rows"]:
-		querydate = None
-		filerid = None
-		cik = None
-		currentreportdate = None
-		priorreportdate = None
-		ownername = None
-		issueid = None
-		ticker = None
-		companyname = None
-		issuetitle = None
-		exchangeid = None
-		street1 = None
-		city = None
-		state = None
-		zipcode = None
-		country = None
-		phonecountrycode = None
-		phoneareacode = None
-		phonenumber = None
-		sharesout = None
-		sharesoutdate = None
-		price = None
-		pricedate = None
-		sharesheld = None
-		sharesheldchange = None
-		sharesheldpercentchange = None
-		marketvalue = None
-		marketvaluechange = None
-		portfoliopercent = None
-		sharesoutpercent = None
-		marketoperator = None
-		marketoperatorid = None
-		markettier = None
-		markettierid = None
-		for value in row["values"]:
-			if not(file_date) and value["field"] == "currentreportdate":
-				file_date = reformat_date(value["value"])
-			if value["field"] == "querydate":
-				querydate = reformat_date(value["value"])
-			if value["field"] == "filerid":
-				filerid = value["value"]
-			if value["field"] == "cik":
-				cik = value["value"]
-			if value["field"] == "currentreportdate":
-				currentreportdate = reformat_date(value["value"])
-			if value["field"] == "priorreportdate":
-				 priorreportdate = reformat_date(value["value"])
-			if value["field"] == "owername":
-				ownername = value["value"]
-			if value["field"] == "issueid":
-				issueid = value["value"]
-			if value["field"] == "ticker":
-				ticker = value["value"]
-			if value["field"] == "companyname":
-				companyname = value["value"]
-			if value["field"] == "issuetitle":
-				issuetitle = value["value"]
-			if value["field"] == "exchangeid":
-				exchangeid = value["value"]
-			if value["field"] == "street1":
-				street1 = value["value"]
-			if value["field"] == "city":
-				city = value["value"]
-			if value["field"] == "state":
-				state = value["value"]
-			if value["field"] == "zip":
-				zipcode = value["value"]
-			if value["field"] == "country":
-				country = value["value"]
-			if value["field"] == "phonecountrycode":
-				phonecountrycode = value["value"]
-			if value["field"] == "phoneareacode":
-				phoneareacode = value["value"]
-			if value["field"] == "phonenumber":
-				phonenumber = value["value"]
-			if value["field"] == "sharesout":
-				sharesout = value["value"]
-			if value["field"] == "sharesoutdate":
-				sharesoutdate = value["value"]
-			if value["field"] == "price":
-				price = value["value"]
-			if value["field"] == "pricedate":
-				pricedate = reformat_date(value["value"])
-			if value["field"] == "sharesheld":
-				sharesheld = value["value"]
-			if value["field"] == "sharesheldchange":
-				sharesheldchange = value["value"]
-			if value["field"] == "sharesheldpercentchange":
-				sharesheldpercentchange = value["value"]
-			if value["field"] == "marketvalue":
-				marketvalue = value["value"]
-			if value["field"] == "marketvaluechange":
-				marketvaluechange = value["value"]
-			if value["field"] == "portfoliopercent":
-				portfoliopercent = value["value"]
-			if value["field"] == "sharesoutpercent":
-				sharesoutpercent = value["value"]
-			if value["field"] == "marketoperator":
-				marketoperator = value["value"]
-			if value["field"] == "marketoperatorid":
-				marketoperatorid = value["value"]
-			if value["field"] == "markettier":
-				markettier = value["value"]
-			if value["field"] == "markettierid":
-				markettierid = value["value"]
-		securities.append({
-			 "querydate" :               querydate
-			,"filerid" :                 filerid
-			,"cik" :                     cik
-			,"currentreportdate" :       currentreportdate
-			,"priorreportdate" :         priorreportdate
-			,"ownername" :               ownername
-			,"issueid" :                 issueid
-			,"ticker" :                  ticker
-			,"companyname" :             companyname
-			,"issuetitle" :              issuetitle
-			,"exchangeid" :              exchangeid
-			,"street1" :                 street1
-			,"city" :                    city
-			,"state" :                   state
-			,"zipcode" :                 zipcode
-			,"country" :                 country
-			,"phonecountrycode" :        phonecountrycode
-			,"phoneareacode" :           phoneareacode
-			,"phonenumber" :             phonenumber
-			,"sharesout" :               sharesout
-			,"sharesoutdate" :           sharesoutdate
-			,"price" :                   price
-			,"pricedate" :               pricedate
-			,"sharesheld" :              sharesheld
-			,"sharesheldchange" :        sharesheldchange
-			,"sharesheldpercentchange" : sharesheldpercentchange
-			,"marketvalue" :             marketvalue
-			,"marketvaluechange" :       marketvaluechange
-			,"portfoliopercent" :        portfoliopercent
-			,"sharesoutpercent" :        sharesoutpercent
-			,"marketoperator" :          marketoperator
-			,"marketoperatorid" :        marketoperatorid
-			,"markettier" :              markettier
-			,"markettierid" :            markettierid
-		})
+	# # Use `create_all` to create the latest_positions table in the database
+	# Base2.metadata.create_all(engine)
+
+	# # Use MetaData from SQLAlchemy to reflect the tables\n",
+	# metadata = MetaData(bind=engine)
+	# metadata.reflect()
+
+	# # Save the reference to the `latest_positions` table as a variable called `table`
+	# table = sqlalchemy.Table('latest_positions', metadata, autoload=True)
+
+	# query_url = "http://edgaronline.api.mashery.com/v2/ownerships/currentownerholdings?ciks=%s&appkey=%s" % (config['sec13f_brkcik'], config['sec13f_appkey'])
+	# sec_data = req.get(query_url).json()
+
+	# #with open('data.txt', 'w') as outfile:
+	# #	json.dump(sec_data, outfile)
 	
-	# check if holdings for the date exist
-	results = session.query(
-			LatestPositions.companyname,\
-			LatestPositions.ticker,\
-			sqlalchemy.sql.expression.literal_column("''").label("cusip"),\
-			func.sum(func.cast(LatestPositions.marketvalue, Float)).label('mval'),\
-			func.sum(func.cast(LatestPositions.marketvaluechange, Float)).label('cmval'),\
-			func.sum(func.cast(LatestPositions.sharesheld, Float)).label('shares'),\
-			func.sum(func.cast(LatestPositions.sharesheldchange, Float)).label('cshares'))\
-		.group_by(LatestPositions.companyname, LatestPositions.ticker)\
-		.filter(LatestPositions.currentreportdate == file_date).all()
+	# file_date = None
+	# securities = []
+	# for row in sec_data["result"]["rows"]:
+	# 	querydate = None
+	# 	filerid = None
+	# 	cik = None
+	# 	currentreportdate = None
+	# 	priorreportdate = None
+	# 	ownername = None
+	# 	issueid = None
+	# 	ticker = None
+	# 	companyname = None
+	# 	issuetitle = None
+	# 	exchangeid = None
+	# 	street1 = None
+	# 	city = None
+	# 	state = None
+	# 	zipcode = None
+	# 	country = None
+	# 	phonecountrycode = None
+	# 	phoneareacode = None
+	# 	phonenumber = None
+	# 	sharesout = None
+	# 	sharesoutdate = None
+	# 	price = None
+	# 	pricedate = None
+	# 	sharesheld = None
+	# 	sharesheldchange = None
+	# 	sharesheldpercentchange = None
+	# 	marketvalue = None
+	# 	marketvaluechange = None
+	# 	portfoliopercent = None
+	# 	sharesoutpercent = None
+	# 	marketoperator = None
+	# 	marketoperatorid = None
+	# 	markettier = None
+	# 	markettierid = None
+	# 	for value in row["values"]:
+	# 		if not(file_date) and value["field"] == "currentreportdate":
+	# 			file_date = reformat_date(value["value"])
+	# 		if value["field"] == "querydate":
+	# 			querydate = reformat_date(value["value"])
+	# 		if value["field"] == "filerid":
+	# 			filerid = value["value"]
+	# 		if value["field"] == "cik":
+	# 			cik = value["value"]
+	# 		if value["field"] == "currentreportdate":
+	# 			currentreportdate = reformat_date(value["value"])
+	# 		if value["field"] == "priorreportdate":
+	# 			 priorreportdate = reformat_date(value["value"])
+	# 		if value["field"] == "owername":
+	# 			ownername = value["value"]
+	# 		if value["field"] == "issueid":
+	# 			issueid = value["value"]
+	# 		if value["field"] == "ticker":
+	# 			ticker = value["value"]
+	# 		if value["field"] == "companyname":
+	# 			companyname = value["value"]
+	# 		if value["field"] == "issuetitle":
+	# 			issuetitle = value["value"]
+	# 		if value["field"] == "exchangeid":
+	# 			exchangeid = value["value"]
+	# 		if value["field"] == "street1":
+	# 			street1 = value["value"]
+	# 		if value["field"] == "city":
+	# 			city = value["value"]
+	# 		if value["field"] == "state":
+	# 			state = value["value"]
+	# 		if value["field"] == "zip":
+	# 			zipcode = value["value"]
+	# 		if value["field"] == "country":
+	# 			country = value["value"]
+	# 		if value["field"] == "phonecountrycode":
+	# 			phonecountrycode = value["value"]
+	# 		if value["field"] == "phoneareacode":
+	# 			phoneareacode = value["value"]
+	# 		if value["field"] == "phonenumber":
+	# 			phonenumber = value["value"]
+	# 		if value["field"] == "sharesout":
+	# 			sharesout = value["value"]
+	# 		if value["field"] == "sharesoutdate":
+	# 			sharesoutdate = value["value"]
+	# 		if value["field"] == "price":
+	# 			price = value["value"]
+	# 		if value["field"] == "pricedate":
+	# 			pricedate = reformat_date(value["value"])
+	# 		if value["field"] == "sharesheld":
+	# 			sharesheld = value["value"]
+	# 		if value["field"] == "sharesheldchange":
+	# 			sharesheldchange = value["value"]
+	# 		if value["field"] == "sharesheldpercentchange":
+	# 			sharesheldpercentchange = value["value"]
+	# 		if value["field"] == "marketvalue":
+	# 			marketvalue = value["value"]
+	# 		if value["field"] == "marketvaluechange":
+	# 			marketvaluechange = value["value"]
+	# 		if value["field"] == "portfoliopercent":
+	# 			portfoliopercent = value["value"]
+	# 		if value["field"] == "sharesoutpercent":
+	# 			sharesoutpercent = value["value"]
+	# 		if value["field"] == "marketoperator":
+	# 			marketoperator = value["value"]
+	# 		if value["field"] == "marketoperatorid":
+	# 			marketoperatorid = value["value"]
+	# 		if value["field"] == "markettier":
+	# 			markettier = value["value"]
+	# 		if value["field"] == "markettierid":
+	# 			markettierid = value["value"]
+	# 	securities.append({
+	# 		 "querydate" :               querydate
+	# 		,"filerid" :                 filerid
+	# 		,"cik" :                     cik
+	# 		,"currentreportdate" :       currentreportdate
+	# 		,"priorreportdate" :         priorreportdate
+	# 		,"ownername" :               ownername
+	# 		,"issueid" :                 issueid
+	# 		,"ticker" :                  ticker
+	# 		,"companyname" :             companyname
+	# 		,"issuetitle" :              issuetitle
+	# 		,"exchangeid" :              exchangeid
+	# 		,"street1" :                 street1
+	# 		,"city" :                    city
+	# 		,"state" :                   state
+	# 		,"zipcode" :                 zipcode
+	# 		,"country" :                 country
+	# 		,"phonecountrycode" :        phonecountrycode
+	# 		,"phoneareacode" :           phoneareacode
+	# 		,"phonenumber" :             phonenumber
+	# 		,"sharesout" :               sharesout
+	# 		,"sharesoutdate" :           sharesoutdate
+	# 		,"price" :                   price
+	# 		,"pricedate" :               pricedate
+	# 		,"sharesheld" :              sharesheld
+	# 		,"sharesheldchange" :        sharesheldchange
+	# 		,"sharesheldpercentchange" : sharesheldpercentchange
+	# 		,"marketvalue" :             marketvalue
+	# 		,"marketvaluechange" :       marketvaluechange
+	# 		,"portfoliopercent" :        portfoliopercent
+	# 		,"sharesoutpercent" :        sharesoutpercent
+	# 		,"marketoperator" :          marketoperator
+	# 		,"marketoperatorid" :        marketoperatorid
+	# 		,"markettier" :              markettier
+	# 		,"markettierid" :            markettierid
+	# 	})
+	
+	# #with open('data_list.txt', 'w') as outfile:
+	# #	for item in securities:
+	# #		outfile.write("%s\n" % item)
+	
+	# # check if holdings for the date exist
+	# results = session.query(
+	# 		LatestPositions.companyname,\
+	# 		LatestPositions.ticker,\
+	# 		sqlalchemy.sql.expression.literal_column("''").label("cusip"),\
+	# 		func.sum(func.cast(LatestPositions.marketvalue, Float)).label('mval'),\
+	# 		func.sum(func.cast(LatestPositions.marketvaluechange, Float)).label('cmval'),\
+	# 		func.sum(func.cast(LatestPositions.sharesheld, Float)).label('shares'),\
+	# 		func.sum(func.cast(LatestPositions.sharesheldchange, Float)).label('cshares'))\
+	# 	.group_by(LatestPositions.companyname, LatestPositions.ticker)\
+	# 	.filter(LatestPositions.currentreportdate == file_date).all()
 
-	if (len(results) == 0):
+	# # delete existing file date data from table
+	# sql = f"DELETE FROM latest_positions WHERE currentreportdate = '{file_date}'"
+	# conn.execute(sql)
 
-		# delete existing file date data from table
-		sql = f"DELETE FROM latest_positions WHERE currentreportdate = '{file_date}'"
-		conn.execute(sql)
-
-		sql = f"DELETE FROM processed_positions WHERE file_date = '{file_date}'"
-		conn.execute(sql)
+	# sql = f"DELETE FROM processed_positions WHERE file_date = '{file_date}'"
+	# conn.execute(sql)
 
 
-		conn.execute(table.insert(), securities)
+	# conn.execute(table.insert(), securities)
 
 	sql = ("SELECT file_Date, name, ticker, mval, cmval, shares, cshares, price     " +
 		    " FROM vPositions                                                       " +
 			"  WHERE '" + date + "' = file_date;                               ")
 
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		if record[3] is None:
+			mval = None
+		else:
+			mval = float(record[3])
+		if record[4] is None:
+			cmval = None
+		else:
+			cmval = float(record[4])
+		if record[5] is None:
+			shares = None
+		else:
+			shares = float(record[5])
+		if record[6] is None:
+			cshares = None
+		else:
+			cshares = float(record[6])
+		if record[7] is None:
+			price = None
+		else:
+			price = float(record[7])
+		positions.append({
+			"file_date": record[0],
+			"name": record[1],
+			"ticker": record[2],
+			"mval": mval,
+			"cmval": cmval,
+			"shares": shares,
+			"cshares": cshares,
+			"price": price
+		})
+
+	return jsonify(positions)
+
+#################################################
+@app.route("/api/v1.0/ticker/<ticker>")
+def getTickerPositions(ticker):
+	## Get current holdings for a specific ticker
+
+
+	sql = ("SELECT file_Date, name, ticker, mval, cmval, shares, cshares, price     " +
+		    " FROM vPositions                                                       " +
+			"  WHERE  ticker ilike '%" + ticker + "%' ORDER BY file_date;")
+	print(sql)
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		if record[3] is None:
+			mval = None
+		else:
+			mval = float(record[3])
+		if record[4] is None:
+			cmval = None
+		else:
+			cmval = float(record[4])
+		if record[5] is None:
+			shares = None
+		else:
+			shares = float(record[5])
+		if record[6] is None:
+			cshares = None
+		else:
+			cshares = float(record[6])
+		if record[7] is None:
+			price = None
+		else:
+			price = float(record[7])
+		positions.append({
+			"file_date": record[0],
+			"name": record[1],
+			"ticker": record[2],
+			"mval": mval,
+			"cmval": cmval,
+			"shares": shares,
+			"cshares": cshares,
+			"price": price
+		})
+
+	return jsonify(positions)
+
+#################################################
+@app.route("/api/v1.0/cshares/negative/<date>")
+def getNegativeCShares(date):
+	## Get current holdings for securities with a negative change in shares as of a specific date
+
+
+	sql = ("SELECT file_Date, name, ticker, mval, cmval, shares, cshares, price     " +
+		    " FROM vPositions                                                       " +
+			"  WHERE  cshares < 0 and file_date >= '" + date + "' ORDER BY ticker, file_date;")
+	print(sql)
+	cursor = db.cursor()
+	cursor.execute(sql)
+	response = cursor.fetchall()
+	positions = []
+	for record in response:
+		if record[3] is None:
+			mval = None
+		else:
+			mval = float(record[3])
+		if record[4] is None:
+			cmval = None
+		else:
+			cmval = float(record[4])
+		if record[5] is None:
+			shares = None
+		else:
+			shares = float(record[5])
+		if record[6] is None:
+			cshares = None
+		else:
+			cshares = float(record[6])
+		if record[7] is None:
+			price = None
+		else:
+			price = float(record[7])
+		positions.append({
+			"file_date": record[0],
+			"name": record[1],
+			"ticker": record[2],
+			"mval": mval,
+			"cmval": cmval,
+			"shares": shares,
+			"cshares": cshares,
+			"price": price
+		})
+
+	return jsonify(positions)
+
+#################################################
+@app.route("/api/v1.0/cshares/positive/<date>")
+def getPositiveCShares(date):
+	## Get current holdings for securities with a positive change in shares as of a specific date
+
+
+	sql = ("SELECT file_Date, name, ticker, mval, cmval, shares, cshares, price     " +
+		    " FROM vPositions                                                       " +
+			"  WHERE  cshares > 0 and file_date >= '" + date + "' ORDER BY ticker, file_date;")
+	print(sql)
 	cursor = db.cursor()
 	cursor.execute(sql)
 	response = cursor.fetchall()
@@ -662,8 +793,7 @@ if __name__ == '__main__':
 #   FROM (                                                                       
 #     SELECT p.file_date, p.name, s.ticker, CAST(p.mval AS NUMERIC) as mval,     
 #       CAST(p.cmval AS NUMERIC) as cmval, CAST(p.shares AS NUMERIC) as shares,  
-#       CAST(p.cshares AS NUMERIC) as cshares, CAST(p.price AS NUMERIC) as price,
-#       CAST(p.prior_price AS NUMERIC) as pprice                                 
+#       CAST(p.cshares AS NUMERIC) as cshares, CAST(p.price AS NUMERIC) as price 
 #     FROM processed_positions p                                                 
 #     LEFT JOIN securitiesex s ON p.cusip = s.cusip
 #   ) x                                                                         
@@ -672,6 +802,6 @@ if __name__ == '__main__':
 #   SELECT lp.currentreportdate, lp.companyname, lp.ticker,                      
 #     CAST(lp.marketvalue AS NUMERIC), CAST(lp.marketvaluechange AS NUMERIC),    
 #     CAST(lp.sharesheld AS NUMERIC), CAST(lp.sharesheldchange AS NUMERIC),       
-#     case when CAST(lp.sharesheld AS NUMERIC) = 0 then 0 else  CAST(lp.marketvalue AS NUMERIC)/( CAST(lp.sharesheld AS NUMERIC) * 1.0) end
+#     CAST(lp.price AS NUMERIC)
 #   FROM latest_positions lp                                                     
 # ) t;

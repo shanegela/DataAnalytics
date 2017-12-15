@@ -78,7 +78,11 @@
 							Jupyter Notebook: <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_API.ipynb">SEC13F_API</a>
 							This notebook was developed to explore the API.
 							<br><br>
-							<strong>API Limitation</strong> The API only has current holdings available.  My communications with the API contact confirmed that no historical data is available and the request is not on their roadmap.  So using the API for information was not a possibility.
+							<strong>API Limitation</strong> 
+							<ul>
+								<li>The API only has current holdings available.  My communications with the API contact confirmed that no historical data is available and the request is not on their roadmap.  So using the API for information was not a possibility.</li>
+								<li>BUG: The API returns inconsistent results.  <strong>So project analysis is from 06/30/2013 - 06/30/2017.</strong></li>
+							</ul>
 							</p>
 						</div>
 					</div>
@@ -221,12 +225,14 @@
 								<ul>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/">root</a></li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/dates">/api/v1.0/dates</a> - List available dates</li>
-									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30">/api/v1.0/positions/&lt;filedate&gt;</a> - List of holdings from file date. <strong>Will also hit the Edgar API to get positions from the latest file date and store them in the database.</strong></li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30">/api/v1.0/positions/&lt;filedate&gt;</a> - List of holdings from file date.</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/positions/2017-06-30/2017-09-30">/api/v1.0/positions/&lt;startdate&gt;/&lt;enddate&gt;</a> - List of holdings from filings in the date range</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2017-06-30/2017-09-30">/api/v1.0/srr/&lt;startdate&gt;/&lt;endate&gt;</a> - List of holdings on file end date with a simple rate of return</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/indgrp/2016-12-31/2017-03-31">/api/v1.0/indgrp/&lt;start date&gt;/&lt;end date&gt;</a> - List of industry groups held from filings in the date range</li>
 									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/srr/2016-12-31/2017-03-31">/api/v1.0/indsec/&lt;start date&gt;/&lt;end date&gt;</a> - List of industry sectors held from filings in the date range</li>
-									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/classification_dates">/api/v1.0/classification_dates</a> - List of filing dates with industry sector and industry group information</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/ticker/aapl">/api/v1.0/ticker/&lt;ticker&gt;</a> - List of all holdings across all filings for a specific ticker.</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/cshares/negative/2016-03-31">/api/v1.0/cshares/negative/&lt;file date&gt;</a> - List of holdings with a negative change of shares from filings on or after the specified file date.</li>
+									<li><a href="https://sec13f-flask-heroku.herokuapp.com/api/v1.0/cshares/positive/2016-03-31">/api/v1.0/cshares/positive/&lt;file date&gt;</a> - List of holdings with a positive change of shares from filings on or after the specified file date.</li>
 								</ul>
 								<br>
 								<h6>API Files</h6>
@@ -239,7 +245,14 @@
 									</li>
 								</ul>
 								<br>
-								Heroku Deployment Reference: <a href="https://github.com/agopez/flask-heroku">FLASK-HEROKU</a>
+								<h6>Herokup DB Deployment</h6>
+								<ol>
+									<li>Heroku Deployment Reference: <a href="https://github.com/agopez/flask-heroku">FLASK-HEROKU</a></li>
+									<li>Dump Postgresql SEC13F database using PgAdmin</li>
+									<li>Upload dump file to publicly assible server like dropbox</li>
+									<li>Use heroku pg:backups:restore to push the data</li>
+									<li>heroku pg:backups:restore 'https://www.dropbox.com/s/hpru6v5f6urrfcc/sec13f.dump?dl=0' DATABASE_URL -a sec13f-flask-heroku</li>
+								</ol>
 							</p>
 						</div>
 					</div>
@@ -252,10 +265,6 @@
 							<p class="card-text">
 								The web dashboard uses bootstrap, D3, D3Plus, and DataTables to allow the user to select a file date and display the positions held by Berkshire Hathaway according to the SEC13F form filed.
 								<br><br>
-								<strong>Limitations</strong>
-								<ul>
-									<li>Industry Sector and Group classifications are available through the Edgar API for the latest holdings.  However these classifications are different from the classifications I'm able to retrieve from the scraping done in Step 4.  So classification analysis is only available up to 2017-03-31.</li>
-								</ul>
 								<strong>Issue</strong>
 								Ran into CORS Not Allowed (Cross-Origin Resource Sharing) when querying the API.
 								<ul>
@@ -281,7 +290,14 @@
 											<li>See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy01.ipynb">SEC13F_Strategy01</a></li>
 											<li>See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/SEC13F_Strategy02.ipynb">SEC13F_Strategy02</a></li>
 											<li>See <a href="https://github.com/shanegela/DataAnalytics/blob/master/SEC13F/cshares_strategy.xlsc">SEC13F Excel Analysis</a></li>
-											<li> It was difficult to grab historical prices for securities that had corporate reorgnizations and prices were not correctly reflected because of the possibility of splits.  So security Charter Communicates Inc (LBRDA) was excluded.</li>
+											<li>Excluding securities with huge price fluctations either due to splits or corporate reorganizations.
+												<ul>
+													<li>Charter Communicates Inc (LBRDA)</li>
+													<li>DirectTV</li>
+													<li>Precision Castparts Corp</li>
+													<li>Visa Inc (V)</li>
+												</ul>
+											</li>
 										</ul>
 								  </ul>
 								</p>

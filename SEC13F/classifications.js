@@ -17,8 +17,7 @@ $(document).ready(function () {
 
 
 // get available dates
-//var queryURL = "http://localhost:5000/api/v1.0/classification_dates";
-var queryURL = "https://sec13f-flask-heroku.herokuapp.com/api/v1.0/classification_dates";
+var queryURL = "https://sec13f-flask-heroku.herokuapp.com/api/v1.0/dates";
 d3.json(queryURL, function(error, response) {
 	if (error) return console.warn(error);
 	setDateRange(response);
