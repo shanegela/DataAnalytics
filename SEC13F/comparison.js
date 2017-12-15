@@ -155,7 +155,7 @@ function drawCharts() {
 	topchart_visualization
 		.data(top10)  // data to use with the visualization
 		.x({"value": "srr", "label":""})
-		.y({"scale": "discrete", "value": "name", "label": "Security Name"})
+		.y({"scale": "discrete", "value": "ticker", "label": "Security Name"})
 		.shape("square")
 		.order({
 			"sort": "asc",
@@ -166,7 +166,7 @@ function drawCharts() {
 	botchart_visualization
 		.data(bot10)  // data to use with the visualization
 		.x({"value": "srr", "label":""})
-		.y({"scale": "discrete", "value": "name", "label": "Security Name"})
+		.y({"scale": "discrete", "value": "ticker", "label": "Security Name"})
 		.shape("square")
 		.order({
 			"sort": "asc",

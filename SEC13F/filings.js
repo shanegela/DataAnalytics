@@ -126,7 +126,7 @@ function drawHorizontalBarChart(data, value="mval") {
 		.type("bar")       // visualization type
 		.id("name")         // key for which our data is unique on
 		.text("name")       // key to use for display text
-		.y({"scale": "discrete", "value": "name", "label": "Security Name"})         // key to use for y-axis
+		.y({"scale": "discrete", "value": "ticker", "label": "Security Name"})         // key to use for y-axis
 		.x({"value": value, "label":""})          // key to use for x-axis
 		.order({
 			"sort": "asc",
